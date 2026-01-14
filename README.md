@@ -2,6 +2,8 @@
 
 p5.riso simulates the RISOGRAPH printing process, where each color is printed as a separate layer using stencil-based ink application. Unlike CMYK printing, Risograph uses spot colors (like screen printing) and prints one color at a time.
 
+**Documentation**: [antiboredom.github.io/p5.riso](https://antiboredom.github.io/p5.riso)
+
 ## KEY CONCEPTS
 
 1. **Color Channels**: Each Riso() object represents one ink color
