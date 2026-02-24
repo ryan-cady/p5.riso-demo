@@ -63,6 +63,7 @@ function setup() {
     red = new Riso('red');
     yellow = new Riso('yellow');
     black = new Riso('black');
+
     noLoop(); // Draw once, click to redraw
 }
 
@@ -77,7 +78,7 @@ function draw() {
 
     // --- EXAMPLE 1: Basic Color Mixing ---
     // Demonstrates how colors blend optically
-    // basicColorMixing();
+    basicColorMixing();
 
     // --- EXAMPLE 2: Halftone Gradients ---
     // Creates smooth gradients using ink density
@@ -89,11 +90,11 @@ function draw() {
 
     // --- EXAMPLE 4: Geometric Patterns ---
     // Grid-based designs with color interaction
-      geometricPatterns();
+    //   geometricPatterns();
 
     // --- EXAMPLE 5: Line Work and Hatching ---
     // Cross-hatching and line-based textures
-      lineWorkHatching();
+    //   lineWorkHatching();
 
     // --- EXAMPLE 6: Texture and Noise ---
     // Organic textures using Perlin noise
@@ -113,7 +114,7 @@ function draw() {
 
     // --- EXAMPLE 10: Dots and Stippling ---
     // Pointillist approach to tone
-    //   dotsStippling();
+      dotsStippling();
 
     drawRiso();
 }

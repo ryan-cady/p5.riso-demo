@@ -1,9 +1,6 @@
 // Demo 01: RISO Color Array
-// Explore the RISOCOLORS array and pick random colors
-//
-// RISOCOLORS is a global array with 81 Risograph ink colors.
-// Each entry has a .name (string) and .color ([r, g, b] array).
-//
+// The RISOCOLORS array has 81 Risograph ink colors.
+// Each one has a .name and a .color (RGB values).
 // Click to pick a new random color.
 
 function setup() {
@@ -13,38 +10,23 @@ function setup() {
 }
 
 function pickNewColor() {
-  // Pick a random color from the RISO palette
-  let randomIndex = floor(random(RISOCOLORS.length));
-  let risoColor = RISOCOLORS[randomIndex];
+  let i = floor(random(RISOCOLORS.length));
+  let c = RISOCOLORS[i];
 
-  // Log it to the console so students can see the data structure
-  console.log('Index: ' + randomIndex);
-  console.log('Name: ' + risoColor.name);
-  console.log('RGB: ' + risoColor.color);
-  console.log('---');
-
-  // Draw it
   background(255);
 
-  // Big color swatch
-  fill(risoColor.color);
+  // Draw a circle in the random RISO color
+  fill(c.color);
   noStroke();
   circle(200, 180, 250);
 
-  // Label
+  // Show the color name
   fill(0);
   textAlign(CENTER);
   textSize(18);
-  textStyle(BOLD);
-  text(risoColor.name, 200, 340);
-
+  text(c.name, 200, 340);
   textSize(12);
-  textStyle(NORMAL);
-  text('RGB: ' + risoColor.color.join(', '), 200, 365);
-  text('Click for a new color', 200, 390);
-
-  textSize(10);
-  text('RISOCOLORS[' + randomIndex + '] of ' + RISOCOLORS.length, 200, 20);
+  text("Click for a new color", 200, 375);
 }
 
 function mousePressed() {
