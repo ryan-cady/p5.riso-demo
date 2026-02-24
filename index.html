@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.riso Demos — Glitch &amp; Grain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --riso-pink: #ff48b0;
+      --riso-blue: #0078bf;
+      --riso-yellow: #ffe800;
+      --riso-orange: #ff6c2f;
+      --riso-black: #1a1a1a;
+      --riso-paper: #f5f0e8;
+      --riso-paper-dark: #ece5d8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--riso-paper);
+      color: var(--riso-black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grain texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      padding: 3rem 2rem 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+
+    h1 span.pink { color: var(--riso-pink); }
+    h1 span.blue { color: var(--riso-blue); }
+
+    .subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .intro {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 600px;
+      color: #555;
+    }
+
+    .intro a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid var(--riso-blue);
+    }
+
+    .intro a:hover {
+      color: var(--riso-pink);
+      border-color: var(--riso-pink);
+    }
+
+    .demos {
+      max-width: 860px;
+      margin: 2rem auto;
+      padding: 0 2rem 4rem;
+      display: grid;
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .demo-link {
+      display: grid;
+      grid-template-columns: 3.5rem 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.25rem;
+      background: var(--riso-paper);
+      text-decoration: none;
+      color: var(--riso-black);
+      transition: background 0.15s ease, padding-left 0.15s ease;
+    }
+
+    .demo-link:hover {
+      background: #fff;
+      padding-left: 1.75rem;
+    }
+
+    .demo-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .demo-link:nth-child(1) .demo-num { color: var(--riso-black); }
+    .demo-link:nth-child(2) .demo-num { color: var(--riso-pink); }
+    .demo-link:nth-child(3) .demo-num { color: var(--riso-orange); }
+    .demo-link:nth-child(4) .demo-num { color: var(--riso-blue); }
+    .demo-link:nth-child(5) .demo-num { color: var(--riso-black); }
+    .demo-link:nth-child(6) .demo-num { color: var(--riso-pink); }
+    .demo-link:nth-child(7) .demo-num { color: var(--riso-blue); }
+    .demo-link:nth-child(8) .demo-num { color: var(--riso-orange); }
+
+    .demo-info {
+      min-width: 0;
+    }
+
+    .demo-title {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .demo-desc {
+      font-size: 0.8rem;
+      color: #777;
+      line-height: 1.4;
+    }
+
+    .demo-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #ccc;
+      color: #999;
+      white-space: nowrap;
+      border-radius: 2px;
+    }
+
+    .demo-link:hover .demo-tag {
+      border-color: var(--riso-blue);
+      color: var(--riso-blue);
+    }
+
+    .note {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: #999;
+      line-height: 1.6;
+    }
+
+    .note code {
+      background: var(--riso-paper-dark);
+      padding: 0.1rem 0.35rem;
+      border-radius: 2px;
+      font-size: 0.7rem;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 2rem 1.25rem 1.5rem; }
+      .demos { padding: 0 1.25rem 3rem; margin: 1.5rem auto; }
+      .demo-link { grid-template-columns: 2.5rem 1fr; padding: 1rem; }
+      .demo-tag { display: none; }
+      .note { padding: 0 1.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><span class="pink">Glitch</span> &amp; <span class="blue">Grain</span></h1>
+    <div class="subtitle">p5.riso Demo Sketches</div>
+    <p class="intro">
+      Code demos for learning the <a href="https://antiboredom.github.io/p5.riso/">p5.riso</a> library — RISO color channels, image import, dithering, and halftone effects. Each folder is a standalone P5.js sketch.
+    </p>
+  </header>
+
+  <div class="demos">
+    <a href="00-intro/index.html" class="demo-link">
+      <div class="demo-num">00</div>
+      <div class="demo-info">
+        <div class="demo-title">Intro to p5.riso</div>
+        <div class="demo-desc">Color channels, drawing to layers, compositing with drawRiso()</div>
+      </div>
+      <div class="demo-tag">Basics</div>
+    </a>
+    <a href="01-color-array/index.html" class="demo-link">
+      <div class="demo-num">01</div>
+      <div class="demo-info">
+        <div class="demo-title">RISO Color Array</div>
+        <div class="demo-desc">Explore the RISOCOLORS array — 81 ink colors, random selection</div>
+      </div>
+      <div class="demo-tag">Colors</div>
+    </a>
+    <a href="02-curated-palette/index.html" class="demo-link">
+      <div class="demo-num">02</div>
+      <div class="demo-info">
+        <div class="demo-title">Curated Palette</div>
+        <div class="demo-desc">Build a custom subset of RISO colors and draw swatches</div>
+      </div>
+      <div class="demo-tag">Colors</div>
+    </a>
+    <a href="03-load-image/index.html" class="demo-link">
+      <div class="demo-num">03</div>
+      <div class="demo-info">
+        <div class="demo-title">Load Image</div>
+        <div class="demo-desc">Use preload() and loadImage() to bring images into P5</div>
+      </div>
+      <div class="demo-tag">Images</div>
+    </a>
+    <a href="04-basic-dither/index.html" class="demo-link">
+      <div class="demo-num">04</div>
+      <div class="demo-info">
+        <div class="demo-title">Basic Dither</div>
+        <div class="demo-desc">Apply Atkinson dither to an image on a Riso layer</div>
+      </div>
+      <div class="demo-tag">Dither</div>
+    </a>
+    <a href="05-dither-comparison/index.html" class="demo-link">
+      <div class="demo-num">05</div>
+      <div class="demo-info">
+        <div class="demo-title">Dither Comparison</div>
+        <div class="demo-desc">Compare all 4 algorithms — keys 1–4 to switch, mouse X for threshold</div>
+      </div>
+      <div class="demo-tag">Dither</div>
+    </a>
+    <a href="06-two-color-dither/index.html" class="demo-link">
+      <div class="demo-num">06</div>
+      <div class="demo-info">
+        <div class="demo-title">Two-Color Print</div>
+        <div class="demo-desc">Dither + halftone on two Riso layers — simulates a two-drum print</div>
+      </div>
+      <div class="demo-tag">Halftone</div>
+    </a>
+    <a href="07-data-driven/index.html" class="demo-link">
+      <div class="demo-num">07</div>
+      <div class="demo-info">
+        <div class="demo-title">Data-Driven</div>
+        <div class="demo-desc">Data controls color selection, dither threshold, and halftone frequency</div>
+      </div>
+      <div class="demo-tag">Data</div>
+    </a>
+  </div>
+
+  <div class="note">
+    Demos 03–07 require an image — upload one to your sketch and update the <code>loadImage()</code> path.<br>
+    See <a href="https://antiboredom.github.io/p5.riso/" style="color: #999;">p5.riso docs</a> for full reference.
+  </div>
+
+</body>
+</html>
