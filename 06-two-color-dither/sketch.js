@@ -11,7 +11,7 @@ let pink;
 let blue;
 
 function preload() {
-  img = loadImage("../images/lee-scratch-perry.jpg"); // <-- CHANGE THIS
+  img = loadImage("../images/lee-scratch-perry-color.png"); // <-- CHANGE THIS
 }
 
 function setup() {
@@ -20,6 +20,11 @@ function setup() {
   createCanvas(img.width, img.height);
   pink = new Riso("fluorescentpink");
   blue = new Riso("blue");
+  noLoop();
+}
+
+function mouseMoved() {
+  redraw();
 }
 
 function draw() {
