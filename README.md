@@ -2,11 +2,13 @@
 
 Demo sketches for learning the [p5.riso](https://antiboredom.github.io/p5.riso/) library. Covers RISO color arrays, importing images, dithering, and halftone effects.
 
+For more details on each demo, check out WALKTHROUGH.md as well!
+
 ## Setup
 
 Each folder is a standalone P5.js sketch. To run them:
 
-### Option A: P5.js Web Editor (Recommended)
+### Option A: P5.js Web Editor
 1. Go to [editor.p5js.org](https://editor.p5js.org) and log in
 2. Create a new sketch
 3. Open the file sidebar (click the `>` arrow)
@@ -21,9 +23,8 @@ Each folder is a standalone P5.js sketch. To run them:
 
 ### Option B: Run Locally
 1. Clone this repo
-2. Download [p5.riso.js](https://raw.githubusercontent.com/antiboredom/p5.riso/master/lib/p5.riso.js) and place it in each demo folder (or in a shared `lib/` folder and update the paths)
-3. For image demos, add a `data/` folder with a `.jpg` image and update the filename in `sketch.js`
-4. Run a local server (e.g., VS Code Live Server extension)
+2. For image demos, add a `data/` folder with a `.jpg` image and update the filename in `sketch.js`
+3. Run a local server (e.g., VS Code Live Server extension)
 
 ## Demos
 
