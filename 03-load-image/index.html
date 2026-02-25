@@ -202,13 +202,15 @@
 
       <h3>Loading in preload()</h3>
       <pre><code>function preload() {
-  img = loadImage("data/photo.jpg");
+  img = loadImage("../images/lee-scratch-perry.jpg");
 }</code></pre>
       <p><code>preload()</code> runs <strong>before</strong> <code>setup()</code>. P5 waits until everything inside it is fully loaded before continuing. If you load images in <code>setup()</code> instead, the image might not be ready yet and you'll get a blank canvas or an error.</p>
 
       <h3>Matching canvas to image</h3>
-      <pre><code>createCanvas(img.width, img.height);</code></pre>
-      <p>The canvas is sized to match the loaded image exactly.</p>
+      <pre><code>pixelDensity(1);
+img.resize(825, 0); // resize to half-letter width
+createCanvas(img.width, img.height);</code></pre>
+      <p><code>pixelDensity(1)</code> ensures consistent pixel behavior for p5.riso. The image is resized to 825px wide (half-letter at 150 DPI), and the canvas is then sized to match the resized image.</p>
 
       <h3>Common issues</h3>
       <p>This is the most common failure point — wrong filename, wrong folder path, or forgetting to use <code>preload()</code>. Always double-check the path matches your uploaded file.</p>

@@ -23,26 +23,28 @@ Each folder is a standalone P5.js sketch. To run them:
 
 ### Option B: Run Locally
 1. Clone this repo
-2. For image demos, add a `data/` folder with a `.jpg` image and update the filename in `sketch.js`
-3. Run a local server (e.g., VS Code Live Server extension)
+2. Images are in the shared `images/` folder at the project root — sketches reference them via `../images/`
+3. Run a local server from the project root (e.g., VS Code Live Server extension)
 
 ## Demos
 
 | # | Folder | Topic | Description |
 |---|--------|-------|-------------|
+| 00 | `00-intro` | Intro | Basic p5.riso setup: color mixing, halftone, text layering, and more |
+| 00 | `00-template` | Template | Boilerplate starter — half-letter at 150 DPI |
 | 01 | `01-color-array` | RISO Colors | Explore the `RISOCOLORS` array, pick random colors |
 | 02 | `02-curated-palette` | Color Palette | Build a custom subset of RISO colors, draw swatches |
 | 03 | `03-load-image` | Importing Images | Use `preload()` and `loadImage()` to bring images into P5 |
 | 04 | `04-basic-dither` | Dithering | Apply atkinson dither to an image on a Riso layer |
 | 05 | `05-dither-comparison` | Dither Types | Compare all 4 dither algorithms with keyboard + mouse control |
 | 06 | `06-two-color-dither` | Two-Color Print | Combine dither + halftone on two Riso layers |
-| 07 | `07-data-driven` | Data-Driven | Use data to control color selection and dither parameters |
+| 07 | `07-data-driven` | Data-Driven | Use data to control dither threshold, halftone frequency, intensity, and angle |
 
 ## Image Demos (03–07)
 
-These sketches require an image file. Add your own image:
-- Place it in a `data/` folder inside the sketch directory (or at the root of your P5 editor sketch)
-- Update the `loadImage()` path in `sketch.js` to match your filename
+These sketches require an image file. The repo includes images in the `images/` folder at the project root. To use your own:
+- Add your image to the `images/` folder
+- Update the `loadImage()` path in `sketch.js` to match your filename (e.g., `"../images/your-photo.jpg"`)
 - A high-contrast photo works best for dithering demos
 
 ## Key Concepts

@@ -2,7 +2,7 @@
 // Two Riso layers — one dithered, one halftoned.
 // This simulates a two-drum RISO print.
 //
-// Up/Down arrows = adjust dither threshold
+// Press 1/2 = adjust dither threshold
 // Press "e" to export layers as separate PNGs
 
 let img;
@@ -43,11 +43,11 @@ function keyReleased() {
   if (key == "e") {
     exportRiso();
   }
-  if (keyCode == UP_ARROW) {
+  if (key == "1") {
     threshold = constrain(threshold + 10, 50, 200);
     redraw();
   }
-  if (keyCode == DOWN_ARROW) {
+  if (key == "2") {
     threshold = constrain(threshold - 10, 50, 200);
     redraw();
   }

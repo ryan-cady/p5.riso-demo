@@ -193,24 +193,24 @@
       <h1>Two-Color Print</h1>
     </div>
   </header>
-  <p class="desc">Dither + halftone on two Riso layers — simulates a two-drum print. Up/Down arrows to adjust threshold.</p>
+  <p class="desc">Dither + halftone on two Riso layers — simulates a two-drum print. Press 1/2 to adjust threshold.</p>
   <script src="sketch.js"></script>
   <div class="explanation">
     
       <h2>How it works</h2>
-      <p>Two Riso layers overlapping — pink (dithered) and blue (halftoned) — simulating a two-drum print. Use the arrow keys to adjust the dither threshold and find a look you like, then press "e" to export.</p>
+      <p>Two Riso layers overlapping — pink (dithered) and blue (halftoned) — simulating a two-drum print. Press <strong>1</strong> to increase or <strong>2</strong> to decrease the dither threshold and find a look you like, then press "e" to export.</p>
 
       <h3>Two layers = two-color print</h3>
       <pre><code>pink = new Riso("fluorescentpink");
 blue = new Riso("blue");</code></pre>
       <p>Each layer becomes a separate PNG on export. On a real Risograph, each gets printed with a different ink drum. Where layers overlap, the colors mix — the on-screen preview simulates this.</p>
 
-      <h3>Arrow key controls</h3>
-      <pre><code>if (keyCode == UP_ARROW) {
+      <h3>Key controls</h3>
+      <pre><code>if (key == "1") {
   threshold = constrain(threshold + 10, 50, 200);
   redraw();
 }
-if (keyCode == DOWN_ARROW) {
+if (key == "2") {
   threshold = constrain(threshold - 10, 50, 200);
   redraw();
 }</code></pre>

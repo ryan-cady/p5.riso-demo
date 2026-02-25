@@ -5,8 +5,8 @@ A collection of 8 sketches introducing the [p5.riso](https://antiboredom.github.
 ## Setup
 
 1. Download or clone this repo
-2. For demos 03–07, add an image named `photo.jpg` inside a `data/` folder in each sketch directory
-3. Serve locally or copy individual sketches into the [P5.js web editor](https://editor.p5js.org/)
+2. Images are in the shared `images/` folder at the project root — sketches reference them via `../images/`
+3. Serve locally from the project root or copy individual sketches into the [P5.js web editor](https://editor.p5js.org/)
 
 > Every sketch includes `pixelDensity(1)` — this is required for p5.riso. Without it, dithering and halftone output will render incorrectly on retina screens.
 
@@ -70,13 +70,13 @@ Displays an uploaded image on the canvas. Simple, but the `preload()` pattern he
 
 ```js
 function preload() {
-  img = loadImage("data/photo.jpg");
+  img = loadImage("../images/lee-scratch-perry.jpg");
 }
 ```
 
 `preload()` runs **before** `setup()`. P5 waits until everything inside it is fully loaded before continuing. Loading images in `setup()` instead can result in a blank canvas or errors because the file isn't ready yet.
 
-The canvas is sized to match the image: `createCanvas(img.width, img.height)`.
+The image is resized to half-letter width and the canvas is sized to match: `pixelDensity(1); img.resize(825, 0); createCanvas(img.width, img.height)`.
 
 > This is the most common failure point — wrong filename, wrong folder path, or forgetting to use `preload()`.
 
@@ -139,7 +139,7 @@ Different types suit different images. Portraits often look best with `floydstei
 
 ## 06 — Two-Color Print
 
-Two Riso layers (pink dithered, blue halftoned) overlapping to simulate a two-drum print. Mouse X controls halftone density, Mouse Y controls dither threshold. Press `e` to export.
+Two Riso layers (pink dithered, blue halftoned) overlapping to simulate a two-drum print. Press `1` to increase or `2` to decrease dither threshold. Press `e` to export.
 
 ### Key concepts
 
