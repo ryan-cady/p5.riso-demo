@@ -33,7 +33,7 @@ function draw() {
   pink.image(dithered, 0, 0);
 
   // Blue layer: halftoned
-  let halftoned = halftoneImage(img, "circle", frequency, 45, 100);
+  let halftoned = halftoneImage(img, "square", frequency, 45, 100);
   blue.image(halftoned, 0, 0);
 
   drawRiso();
