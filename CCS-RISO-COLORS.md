@@ -1,6 +1,6 @@
 # Available RISO Ink Colors
 
-These are the ink drums currently available in our print shop. When planning your layers, keep in mind that each color requires a separate pass through the machine.
+These are the ink drums that should be available in the CDS RISO room. 
 
 ## 1-Drum Colors
 
