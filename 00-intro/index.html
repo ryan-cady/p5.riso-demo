@@ -97,9 +97,91 @@
       border: 1px solid var(--riso-paper-dark);
     }
 
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-pink);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-blue);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul, .explanation ol {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .explanation a:hover {
+      border-color: var(--riso-blue);
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
     @media (max-width: 600px) {
       header { padding: 1.25rem 1.25rem 0.75rem; }
       .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
     }
   </style>
 </head>
@@ -113,5 +195,20 @@
   </header>
   <p class="desc">Color channels, drawing to layers, compositing</p>
   <script src="sketch.js"></script>
+  <div class="explanation">
+    
+      <h2>How it works</h2>
+      <p>This sketch introduces the basic p5.riso workflow — creating color layers, drawing shapes to them, and compositing the result.</p>
+
+      <h3>The Riso workflow</h3>
+      <p>Every p5.riso sketch follows the same three steps inside <code>draw()</code>:</p>
+      <ol>
+        <li><code>clearRiso()</code> — wipe all layers clean</li>
+        <li>Draw to your Riso layers</li>
+        <li><code>drawRiso()</code> — blend all layers together and display the result</li>
+      </ol>
+      <p>If you forget <code>clearRiso()</code>, layers stack on themselves and go solid. If you forget <code>drawRiso()</code>, nothing shows up.</p>
+     
+  </div>
 </body>
 </html>

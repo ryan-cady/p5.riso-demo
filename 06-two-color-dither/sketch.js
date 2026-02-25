@@ -11,11 +11,12 @@ let pink;
 let blue;
 
 function preload() {
-  img = loadImage("data/photo.jpg"); // <-- CHANGE THIS
+  img = loadImage("../images/lee-scratch-perry.jpg"); // <-- CHANGE THIS
 }
 
 function setup() {
   pixelDensity(1);
+  img.resize(825, 0); // resize to half-letter
   createCanvas(img.width, img.height);
   pink = new Riso("fluorescentpink");
   blue = new Riso("blue");

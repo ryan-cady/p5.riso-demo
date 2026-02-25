@@ -97,9 +97,91 @@
       border: 1px solid var(--riso-paper-dark);
     }
 
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-pink);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-blue);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul, .explanation ol {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .explanation a:hover {
+      border-color: var(--riso-blue);
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
     @media (max-width: 600px) {
       header { padding: 1.25rem 1.25rem 0.75rem; }
       .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
     }
   </style>
 </head>
@@ -113,5 +195,26 @@
   </header>
   <p class="desc">Apply Atkinson dither to an image on a Riso layer</p>
   <script src="sketch.js"></script>
+  <div class="explanation">
+    
+      <h2>How it works</h2>
+      <p>Converts a photo into a dithered dot pattern on a single Riso layer — simulating a one-color RISO print.</p>
+
+      <h3>Creating a Riso layer</h3>
+      <pre><code>let black = new Riso("black");</code></pre>
+      <p>This creates a <strong>Riso layer</strong> — think of it as a separate transparency. Everything drawn to this layer becomes one color channel. On a real Risograph, each layer is one ink drum pass.</p>
+
+      <h3>The dither + draw workflow</h3>
+      <pre><code>clearRiso();
+let dithered = ditherImage(img, "atkinson");
+black.image(dithered, 0, 0);
+drawRiso();</code></pre>
+      <p><code>ditherImage()</code> converts a continuous-tone photo into pure black and white pixels using a pattern algorithm. <code>"atkinson"</code> is the classic Macintosh dither — high contrast with a retro, textured look.</p>
+      <p>Notice you're drawing to the Riso layer (<code>black.image()</code>), not the main canvas. That's the key difference from regular P5.</p>
+
+      <h3>Ink density, not color</h3>
+      <p>When using <code>fill()</code> on a Riso layer, the value (0–255) controls <strong>ink density</strong>, not color. The color was already set when you created the layer with <code>new Riso("black")</code>.</p>
+     
+  </div>
 </body>
 </html>

@@ -97,9 +97,91 @@
       border: 1px solid var(--riso-paper-dark);
     }
 
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-pink);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-blue);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul, .explanation ol {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .explanation a:hover {
+      border-color: var(--riso-blue);
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
     @media (max-width: 600px) {
       header { padding: 1.25rem 1.25rem 0.75rem; }
       .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
     }
   </style>
 </head>
@@ -113,5 +195,26 @@
   </header>
   <p class="desc">Compare all 4 algorithms — keys 1–4 to switch, mouse X for threshold</p>
   <script src="sketch.js"></script>
+  <div class="explanation">
+    
+      <h2>How it works</h2>
+      <p>Interactive comparison of all four dither algorithms. Press keys 1–4 to switch between them. Move the mouse left and right to change the threshold.</p>
+
+      <h3>Threshold control</h3>
+      <pre><code>let threshold = map(mouseX, 0, width, 0, 255);</code></pre>
+      <p><code>map()</code> converts one number range to another. Mouse X position (0 to canvas width) becomes a brightness threshold (0–255). Left side = low threshold (more dots, darker). Right side = high threshold (fewer dots, lighter).</p>
+
+      <h3>The four dither types</h3>
+      <ul>
+        <li><strong><code>"atkinson"</code></strong> — classic Mac look, high contrast, loses some shadow detail</li>
+        <li><strong><code>"floydsteinberg"</code></strong> — smoother gradients, most common in print</li>
+        <li><strong><code>"bayer"</code></strong> — ordered grid pattern, very mechanical/digital</li>
+        <li><strong><code>"none"</code></strong> — hard threshold, not real dithering — everything above the cutoff is white, below is black</li>
+      </ul>
+
+      <h3>Choosing a dither type</h3>
+      <p>Different types suit different images. Portraits often look best with <code>floydsteinberg</code>, while graphic content works well with <code>atkinson</code>.</p>
+     
+  </div>
 </body>
 </html>
