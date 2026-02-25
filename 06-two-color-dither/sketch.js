@@ -2,13 +2,14 @@
 // Two Riso layers — one dithered, one halftoned.
 // This simulates a two-drum RISO print.
 //
-// Mouse X = halftone dot density
-// Mouse Y = dither threshold
+// Up/Down arrows = adjust dither threshold
 // Press "e" to export layers as separate PNGs
 
 let img;
 let pink;
 let blue;
+let threshold = 125;
+let frequency = 8;
 
 function preload() {
   img = loadImage("../images/lee-scratch-perry-color.png"); // <-- CHANGE THIS
@@ -23,16 +24,9 @@ function setup() {
   noLoop();
 }
 
-function mouseMoved() {
-  redraw();
-}
-
 function draw() {
   background(220);
   clearRiso();
-
-  let threshold = map(mouseY, 0, height, 50, 200);
-  let frequency = map(mouseX, 0, width, 2, 15);
 
   // Pink layer: dithered
   let dithered = ditherImage(img, "atkinson", threshold);
@@ -48,5 +42,13 @@ function draw() {
 function keyReleased() {
   if (key == "e") {
     exportRiso();
+  }
+  if (keyCode == UP_ARROW) {
+    threshold = constrain(threshold + 10, 50, 200);
+    redraw();
+  }
+  if (keyCode == DOWN_ARROW) {
+    threshold = constrain(threshold - 10, 50, 200);
+    redraw();
   }
 }

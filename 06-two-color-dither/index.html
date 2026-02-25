@@ -193,17 +193,28 @@
       <h1>Two-Color Print</h1>
     </div>
   </header>
-  <p class="desc">Dither + halftone on two Riso layers — simulates a two-drum print</p>
+  <p class="desc">Dither + halftone on two Riso layers — simulates a two-drum print. Up/Down arrows to adjust threshold.</p>
   <script src="sketch.js"></script>
   <div class="explanation">
     
       <h2>How it works</h2>
-      <p>Two Riso layers overlapping — pink (dithered) and blue (halftoned) — simulating a two-drum print. Mouse X controls halftone density, Mouse Y controls dither threshold.</p>
+      <p>Two Riso layers overlapping — pink (dithered) and blue (halftoned) — simulating a two-drum print. Use the arrow keys to adjust the dither threshold and find a look you like, then press "e" to export.</p>
 
       <h3>Two layers = two-color print</h3>
       <pre><code>pink = new Riso("fluorescentpink");
 blue = new Riso("blue");</code></pre>
       <p>Each layer becomes a separate PNG on export. On a real Risograph, each gets printed with a different ink drum. Where layers overlap, the colors mix — the on-screen preview simulates this.</p>
+
+      <h3>Arrow key controls</h3>
+      <pre><code>if (keyCode == UP_ARROW) {
+  threshold = constrain(threshold + 10, 50, 200);
+  redraw();
+}
+if (keyCode == DOWN_ARROW) {
+  threshold = constrain(threshold - 10, 50, 200);
+  redraw();
+}</code></pre>
+      <p><code>threshold</code> starts at 125 and steps by 10 each key press. <code>constrain()</code> keeps it clamped between 50 and 200 so it can't go out of range. The sketch uses <code>noLoop()</code> so it only redraws when you press a key — this prevents the browser from processing the dither and halftone 60 times per second.</p>
 
       <h3>Halftone parameters</h3>
       <pre><code>let halftoned = halftoneImage(img, "circle", frequency, 45, 100);</code></pre>
