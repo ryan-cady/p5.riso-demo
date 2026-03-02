@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 — CSV Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --riso-pink: #ff48b0;
+      --riso-blue: #0078bf;
+      --riso-yellow: #ffe800;
+      --riso-orange: #ff6c2f;
+      --riso-black: #1a1a1a;
+      --riso-paper: #f5f0e8;
+      --riso-paper-dark: #ece5d8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--riso-paper);
+      color: var(--riso-black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      padding: 1.5rem 2rem 1rem;
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #999;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      flex-shrink: 0;
+    }
+
+    .back:hover {
+      color: var(--riso-blue);
+      border-color: var(--riso-blue);
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .demo-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--riso-blue);
+    }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .desc {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1.25rem;
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto 2rem;
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-blue);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-blue);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul, .explanation ol {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .explanation a:hover {
+      border-color: var(--riso-blue);
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 1.25rem 1.25rem 0.75rem; }
+      .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">10</span>
+      <h1>CSV Data</h1>
+    </div>
+  </header>
+  <p class="desc">10 records from a CSV file — each column is one row of data. BPM controls dot density, energy controls dot size, warmth selects the ink. Press r to toggle labels.</p>
+  <script src="sketch.js"></script>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>
+      A CSV (Comma-Separated Values) file is the most universal data format — any spreadsheet can export one. p5's <code>loadTable()</code> reads a CSV and turns it into a structured object you can loop through. Each row becomes one visual column in the print; each column in the spreadsheet controls a different visual property.
+    </p>
+
+    <h3>The CSV file (data.csv)</h3>
+    <pre><code>title,artist,year,bpm,energy,warmth
+Bitches Brew,Miles Davis,1970,116,87,72
+Trans-Europe Express,Kraftwerk,1977,116,61,40
+Planet Rock,Afrika Bambaataa,1982,128,95,55
+Blue Lines,Massive Attack,1991,92,68,58
+...</code></pre>
+    <p>
+      The first row is the <strong>header</strong> — the column names. Every row below it is one data record. Numbers stay as numbers, text stays as text. CSVs can hold any data: survey responses, sensor readings, census numbers, sports stats. Swap in your own spreadsheet and the pattern changes completely.
+    </p>
+
+    <h3>Step 1: load the table in preload()</h3>
+    <pre><code>let table;
+
+function preload() {
+  // "csv"    = parse as comma-separated values
+  // "header" = treat the first row as column names
+  table = loadTable("data.csv", "csv", "header");
+}</code></pre>
+    <p>
+      Like <code>loadJSON()</code> and <code>loadImage()</code>, <code>loadTable()</code> inside <code>preload()</code> finishes before <code>setup()</code> runs. The resulting <code>table</code> object holds all the rows.
+    </p>
+
+    <h3>Step 2: loop through the rows</h3>
+    <pre><code>let rowCount = table.getRowCount();  // number of data rows (not counting header)
+
+for (let i = 0; i < rowCount; i++) {
+  let row = table.getRow(i);  // one row at a time
+  ...
+}</code></pre>
+    <p>
+      <code>getRowCount()</code> gives you the number of rows. <code>getRow(i)</code> returns a <code>p5.TableRow</code> object — a single record from your spreadsheet. <code>i</code> is the row index, starting at 0.
+    </p>
+
+    <h3>Step 3: read values from a row</h3>
+    <pre><code>let title  = row.getString("title");   // text column → string
+let bpm    = row.getNum("bpm");        // numeric column → number
+let energy = row.getNum("energy");
+let warmth = row.getNum("warmth");</code></pre>
+    <p>
+      Use <code>getString()</code> for text values and <code>getNum()</code> for numbers. The argument is the column name from your header row — so the column order in the file doesn't matter, only the names do. If you rename a column in your CSV, you rename it here too and everything still works.
+    </p>
+
+    <h3>Step 4: map values to visual parameters</h3>
+    <pre><code>let dotSize = map(energy, 0, 100, 3, 26);  // energy → dot diameter
+let spacing = map(bpm,   60, 180, 40, 9);  // BPM → gap between dots
+
+// warmth > 55 → pink layer, warmth ≤ 55 → blue layer
+let layer = (warmth > 55) ? pink : blue;</code></pre>
+    <p>
+      The same <code>map()</code> pattern from earlier demos converts raw data into drawing parameters. The ranges (0–100 for energy, 60–180 for BPM) come from the actual data min/max — look at your CSV to find the right input range. The <strong>ternary operator</strong> (<code>? :</code>) is a compact if/else: if warmth is above 55, use pink; otherwise use blue.
+    </p>
+
+    <h3>Step 5: draw one column per row</h3>
+    <pre><code>let x = (i + 0.5) * colW;  // center of this column
+let layer = (warmth > 55) ? pink : blue;
+
+layer.noStroke();
+layer.fill(220);
+
+let y = spacing / 2;
+while (y < height - 55) {   // dots from top to bottom of the column
+  layer.circle(x, y, dotSize);
+  y += spacing;
+}</code></pre>
+    <p>
+      Each row in the table becomes one vertical column on the canvas. The <code>while</code> loop places dots from the top of the canvas downward, incrementing <code>y</code> by <code>spacing</code> each time. High BPM → small spacing → many dots per column. Low BPM → large spacing → few dots, more open.
+    </p>
+
+    <h3>What the data says</h3>
+    <p>
+      Press <strong>r</strong> to toggle between record titles and raw numbers. You can read the pattern like a chart:
+    </p>
+    <ul>
+      <li><strong>Dense columns</strong> (many small gaps) = high BPM records — Aphex Twin (145), Burial (138), M.I.A. (140)</li>
+      <li><strong>Sparse columns</strong> (large gaps) = slow records — Madvillainy (88), Donuts (93), Blue Lines (92)</li>
+      <li><strong>Large dots</strong> = high energy — M.I.A. (98), Madvillainy (90), Planet Rock (95)</li>
+      <li><strong>Pink</strong> = warm records — Bitches Brew, Since I Left You, Arular, Donuts</li>
+      <li><strong>Blue</strong> = cool records — Kraftwerk, Aphex Twin, Burial</li>
+    </ul>
+    <p>
+      Swap in your own CSV and the same sketch becomes a completely different print. The structure stays the same — only the data changes.
+    </p>
+
+    <h3>Using your own data</h3>
+    <p>
+      To use your own dataset, replace <code>data.csv</code> with any CSV file. The rules:
+    </p>
+    <ol>
+      <li>First row must be column names (the header)</li>
+      <li>Numeric columns should contain only numbers — no units, no % signs</li>
+      <li>Update the column names in <code>row.getString()</code> / <code>row.getNum()</code> to match your header</li>
+      <li>Update the <code>map()</code> input ranges to match your data's actual min/max</li>
+    </ol>
+    <p>
+      Google Sheets → File → Download → CSV. Excel → Save As → CSV. Any tool that handles data can export a CSV.
+    </p>
+
+  </div>
+</body>
+</html>

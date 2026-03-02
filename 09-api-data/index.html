@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09 — API Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --riso-pink: #ff48b0;
+      --riso-blue: #0078bf;
+      --riso-yellow: #ffe800;
+      --riso-orange: #ff6c2f;
+      --riso-black: #1a1a1a;
+      --riso-paper: #f5f0e8;
+      --riso-paper-dark: #ece5d8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--riso-paper);
+      color: var(--riso-black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      padding: 1.5rem 2rem 1rem;
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #999;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      flex-shrink: 0;
+    }
+
+    .back:hover {
+      color: var(--riso-blue);
+      border-color: var(--riso-blue);
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .demo-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--riso-orange);
+    }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .desc {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1.25rem;
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto 2rem;
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-orange);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-blue);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul, .explanation ol {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .explanation a:hover {
+      border-color: var(--riso-blue);
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 1.25rem 1.25rem 0.75rem; }
+      .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">09</span>
+      <h1>API Data</h1>
+    </div>
+  </header>
+  <p class="desc">Pokémon base stats fetched live from the PokéAPI drive grid density, shape size, and rotation. Press 1–5 to switch Pokémon.</p>
+  <script src="sketch.js"></script>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>
+      <code>loadJSON()</code> fetches any URL that returns JSON and automatically parses it into a JavaScript object. No extra libraries needed — p5 handles the request and the parsing. Each Pokémon's stats then map directly to visual parameters: speed controls grid density, attack controls circle size, defense controls square size, and HP controls rotation angle.
+    </p>
+
+    <h3>Step 1: fetch the data in preload()</h3>
+    <pre><code>let pokemon = null;
+
+function preload() {
+  // p5 waits here until the request finishes before running setup()
+  pokemon = loadJSON("https://pokeapi.co/api/v2/pokemon/bulbasaur");
+}</code></pre>
+    <p>
+      <code>preload()</code> is p5's built-in loading phase — it runs before <code>setup()</code> and blocks until every <code>loadJSON()</code>, <code>loadImage()</code>, or <code>loadTable()</code> call inside it completes. By the time your code reaches <code>setup()</code>, <code>pokemon</code> is fully loaded.
+    </p>
+
+    <h3>Step 2: understand the JSON structure</h3>
+    <p>The PokéAPI returns a large JSON object. The part we care about looks like this:</p>
+    <pre><code>{
+  "name": "bulbasaur",
+  "stats": [
+    { "base_stat": 45, "stat": { "name": "hp" } },
+    { "base_stat": 49, "stat": { "name": "attack" } },
+    { "base_stat": 49, "stat": { "name": "defense" } },
+    { "base_stat": 90, "stat": { "name": "speed" } }
+  ]
+}</code></pre>
+    <p>
+      <code>pokemon.name</code> is a string. <code>pokemon.stats</code> is an <strong>array of objects</strong>. Each object has two keys: <code>base_stat</code> (a number) and <code>stat</code> (another object with a <code>name</code> field). You navigate nested objects with dot notation, just like any other JavaScript object.
+    </p>
+
+    <h3>Step 3: extract values with a helper function</h3>
+    <pre><code>function getStat(name) {
+  for (let s of pokemon.stats) {
+    if (s.stat.name === name) return s.base_stat;
+  }
+  return 50; // fallback
+}
+
+// Usage:
+let attack = getStat("attack");  // 49 for bulbasaur</code></pre>
+    <p>
+      Because stats are stored in an array (not a named object), we can't just write <code>pokemon.stats.attack</code>. We loop through the array and check each element's <code>stat.name</code> field. When we find a match, we <code>return</code> the <code>base_stat</code>. This is a common real-world pattern when working with APIs.
+    </p>
+
+    <h3>Step 4: map stat values to visual parameters</h3>
+    <pre><code>let cols     = floor(map(speed,   5, 180,  3, 10));
+let pinkSize = map(attack,  5, 190,  8, 56);
+let blueSize = map(defense, 5, 230,  6, 48);
+let angle    = map(hp,      1, 255,  0, HALF_PI);</code></pre>
+    <p>
+      <code>map()</code> converts a value from one range to another. The stat ranges (5–180, 5–190, etc.) come from the actual min/max values in the PokéAPI. A Pokémon with speed 180 gets 10 grid columns; one with speed 5 gets 3. This is the same technique from Demo 07 — the stat becomes the data, and the visual parameters follow.
+    </p>
+
+    <h3>Step 5: draw directly to Riso layers</h3>
+    <pre><code>// Pink layer: grid of circles
+pink.noStroke();
+pink.fill(220);  // opacity 220/255
+for (let c = 0; c < cols; c++) {
+  for (let r = 0; r < cols; r++) {
+    pink.circle((c + 0.5) * cellW, (r + 0.5) * cellH, pinkSize);
+  }
+}
+
+// Blue layer: offset grid of rotated squares
+blue.rectMode(CENTER);
+for (let c = 0; c < cols; c++) {
+  for (let r = 0; r < cols; r++) {
+    blue.push();
+    blue.translate((c + 1) * cellW, (r + 1) * cellH);
+    blue.rotate(angle);
+    blue.rect(0, 0, blueSize, blueSize);
+    blue.pop();
+  }
+}</code></pre>
+    <p>
+      Riso layers (<code>pink</code>, <code>blue</code>) are graphics buffers — you can call drawing methods directly on them. <code>push()</code> and <code>pop()</code> save and restore the transformation state, so each square can be rotated around its own center without affecting neighboring squares. The offset grid (blue squares offset by half a cell) is a classic two-color RISO registration pattern.
+    </p>
+
+    <h3>Step 6: reload data with a callback</h3>
+    <pre><code>// When used outside preload(), loadJSON() needs a callback
+loadJSON(
+  "https://pokeapi.co/api/v2/pokemon/" + names[idx],
+  function(data) {   // runs when the request finishes
+    pokemon = data;
+    redraw();
+  }
+);</code></pre>
+    <p>
+      Outside of <code>preload()</code>, <code>loadJSON()</code> is <strong>asynchronous</strong> — it starts the request and immediately moves on. The callback function runs when the data arrives, possibly seconds later. This is why we set <code>loading = true</code> first and show a "fetching..." message: the canvas needs to communicate what's happening while we wait.
+    </p>
+
+    <h3>The five Pokémon compared</h3>
+    <ul>
+      <li><strong>Bulbasaur</strong> (hp:45 atk:49 def:49 spd:45) — slow, small, gentle rotation</li>
+      <li><strong>Snorlax</strong> (hp:160 atk:110 def:65 spd:30) — sparse grid, large circles, heavy rotation</li>
+      <li><strong>Jolteon</strong> (hp:65 atk:65 def:60 spd:130) — dense grid, medium shapes</li>
+      <li><strong>Mewtwo</strong> (hp:106 atk:110 def:90 spd:130) — dense grid, large shapes, strong rotation</li>
+      <li><strong>Dragonite</strong> (hp:91 atk:134 def:95 spd:80) — medium density, biggest circles</li>
+    </ul>
+    <p>
+      Same code, same two Riso colors — but each dataset produces a structurally different print. That's the core idea: the data <em>is</em> the design.
+    </p>
+
+  </div>
+</body>
+</html>
