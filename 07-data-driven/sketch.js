@@ -11,7 +11,7 @@ let pink;
 let blue;
 
 // Sample data — try replacing these with your own numbers!
-let data = [42, 87, 15, 63];
+let data = [1, 2, 4, 8, 10, 20, 40, 80];
 
 function preload() {
   img = loadImage("../images/lee-scratch-perry.jpg"); // <-- CHANGE THIS

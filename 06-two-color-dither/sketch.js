@@ -9,7 +9,7 @@ let img;
 let pink;
 let blue;
 let threshold = 125;
-let frequency = 8;
+let frequency = 4;
 
 function preload() {
   img = loadImage("../images/lee-scratch-perry-color.png"); // <-- CHANGE THIS
@@ -33,7 +33,7 @@ function draw() {
   pink.image(dithered, 0, 0);
 
   // Blue layer: halftoned
-  let halftoned = halftoneImage(img, "square", frequency, 45, 100);
+  let halftoned = halftoneImage(img, "circle", frequency, 45, 100);
   blue.image(halftoned, 0, 0);
 
   drawRiso();

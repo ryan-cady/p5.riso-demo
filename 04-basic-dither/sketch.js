@@ -6,7 +6,7 @@
 // what it looks like in a different ink.
 
 let img;
-let black;
+let teal;
 
 function preload() {
   img = loadImage("../images/lee-scratch-perry.jpg"); // <-- CHANGE THIS
@@ -16,7 +16,7 @@ function setup() {
   pixelDensity(1);
   img.resize(825, 0); // resize to half-letter
   createCanvas(img.width, img.height);
-  black = new Riso("black");
+  teal = new Riso("teal");
 }
 
 function draw() {
@@ -24,7 +24,7 @@ function draw() {
   clearRiso();
 
   let dithered = ditherImage(img, "atkinson");
-  black.image(dithered, 0, 0);
+  teal.image(dithered, 0, 0);
 
   drawRiso();
 }
