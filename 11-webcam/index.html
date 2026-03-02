@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11 — Webcam Riso</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --riso-pink: #ff48b0;
+      --riso-blue: #0078bf;
+      --riso-yellow: #ffe800;
+      --riso-orange: #ff6c2f;
+      --riso-black: #1a1a1a;
+      --riso-paper: #f5f0e8;
+      --riso-paper-dark: #ece5d8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--riso-paper);
+      color: var(--riso-black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      padding: 1.5rem 2rem 1rem;
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #999;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      flex-shrink: 0;
+    }
+
+    .back:hover {
+      color: var(--riso-blue);
+      border-color: var(--riso-blue);
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .demo-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--riso-blue);
+    }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .desc {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1.25rem;
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto 2rem;
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-blue);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-pink);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 1.25rem 1.25rem 0.75rem; }
+      .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">11</span>
+      <h1>Webcam Riso</h1>
+    </div>
+  </header>
+  <p class="desc">
+    Live webcam feed processed in real time — pink = Atkinson dither, blue = halftone circles.
+    Press <strong>f</strong> to freeze a frame, then <strong>e</strong> to export separate Riso layers.
+  </p>
+  <script src="sketch.js"></script>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>
+      <code>createCapture(VIDEO)</code> asks the browser for webcam access and returns a live video element. Each frame, we call <code>capture.get()</code> to snapshot the current video into a <code>p5.Image</code> — the same format that <code>ditherImage()</code> and <code>halftoneImage()</code> expect. From there the pipeline is identical to the static image demos.
+    </p>
+
+    <h3>Step 1: request camera access</h3>
+    <pre><code>function setup() {
+  capture = createCapture(VIDEO);
+  capture.size(640, 480);
+  capture.hide(); // hide the raw &lt;video&gt; element — we draw to canvas instead
+}</code></pre>
+    <p>
+      <code>createCapture(VIDEO)</code> creates a hidden <code>&lt;video&gt;</code> element and starts streaming from the default camera. <code>capture.hide()</code> removes it from the page — we'll render the processed output onto the p5 canvas instead.
+    </p>
+
+    <h3>Step 2: snapshot each frame and process it</h3>
+    <pre><code>function draw() {
+  clearRiso();
+
+  let frame = capture.get(); // snapshot current video frame → p5.Image
+
+  // Pink layer: Atkinson dither
+  let dithered = ditherImage(frame, "atkinson", threshold);
+  pink.image(dithered, 0, 0);
+
+  // Blue layer: halftone circles
+  let halftoned = halftoneImage(frame, "circle", frequency, 45, 100);
+  blue.image(halftoned, 0, 0);
+
+  drawRiso();
+}</code></pre>
+    <p>
+      <code>capture.get()</code> returns a static <code>p5.Image</code> copy of the video at that instant. Processing two full-frame images every tick is expensive, so we run at <code>frameRate(6)</code> — slow enough to stay smooth, fast enough to feel live.
+    </p>
+
+    <h3>Step 3: mirror the frame</h3>
+    <pre><code>let mirrorBuffer = createGraphics(640, 480); // reusable off-screen buffer
+
+function getFrame() {
+  if (!mirrored) return capture.get();
+  mirrorBuffer.clear();
+  mirrorBuffer.push();
+  mirrorBuffer.translate(640, 0); // move origin to right edge
+  mirrorBuffer.scale(-1, 1);      // flip horizontally
+  mirrorBuffer.image(capture, 0, 0);
+  mirrorBuffer.pop();
+  return mirrorBuffer.get();      // snapshot the flipped result
+}</code></pre>
+    <p>
+      Browsers don't expose a built-in flip for video captures, so we draw into an off-screen <code>createGraphics</code> buffer with <code>scale(-1, 1)</code> applied. The buffer is created once in <code>setup()</code> and reused every frame to avoid repeated allocation. <code>translate(640, 0)</code> shifts the origin to the right edge first, so the flipped image lands in the correct position.
+    </p>
+
+    <h3>Step 4: freeze, tweak, export</h3>
+    <pre><code>// Press "f" to freeze
+if (!frozen) {
+  frozenFrame = getFrame(); // snapshot the live stream
+  frozen = true;
+  noLoop();  // stop the draw loop
+  redraw();  // render once with the snapshot
+}
+
+// Press "1" to raise threshold while frozen
+if (key === "1") {
+  threshold = constrain(threshold + 10, 50, 220);
+  if (frozen) redraw(); // reprocess the same snapshot with new settings
+}
+
+// Press "e" to export
+if (frozen) exportRiso();</code></pre>
+    <p>
+      <code>noLoop()</code> stops the animation loop. While frozen, adjusting <strong>1/2</strong> (threshold) or <strong>3/4</strong> (halftone frequency) calls <code>redraw()</code>, which runs <code>draw()</code> once using the stored <code>frozenFrame</code>. This lets you dial in the look before committing to an export. Press <strong>f</strong> again to resume the live feed.
+    </p>
+
+    <h3>Keys at a glance</h3>
+    <ul>
+      <li><strong>f</strong> — freeze the current frame / resume live view</li>
+      <li><strong>e</strong> — export Riso layers as separate PNGs (frozen only)</li>
+      <li><strong>m</strong> — toggle mirror / selfie mode (live only)</li>
+      <li><strong>1 / 2</strong> — raise / lower Atkinson dither threshold</li>
+      <li><strong>3 / 4</strong> — raise / lower halftone dot frequency</li>
+    </ul>
+
+  </div>
+</body>
+</html>
