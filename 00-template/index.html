@@ -91,15 +91,69 @@
       line-height: 1.5;
     }
 
-    canvas {
+    .download-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem;
+    }
+
+    .download-box {
+      background: var(--riso-paper-dark);
+      border: 1px solid #d8d0c4;
+      border-radius: 6px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .download-info {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .download-info strong {
       display: block;
-      margin: 0 auto 2rem;
-      border: 1px solid var(--riso-paper-dark);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--riso-black);
+      margin-bottom: 0.35rem;
+    }
+
+    .download-info code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: rgba(0,0,0,0.06);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+
+    .download-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--riso-paper);
+      background: var(--riso-blue);
+      text-decoration: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .download-btn:hover {
+      background: #005f99;
     }
 
     @media (max-width: 600px) {
       header { padding: 1.25rem 1.25rem 0.75rem; }
       .desc { padding: 0 1.25rem 1rem; }
+      .download-section { padding: 1rem 1.25rem 2rem; }
+      .download-box { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
