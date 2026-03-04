@@ -178,9 +178,29 @@
       color: var(--riso-black);
     }
 
+    .data-download {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1rem;
+    }
+
+    .data-download a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid var(--riso-blue);
+    }
+
+    .data-download a:hover {
+      color: var(--riso-pink);
+      border-color: var(--riso-pink);
+    }
+
     @media (max-width: 600px) {
       header { padding: 1.25rem 1.25rem 0.75rem; }
       .desc { padding: 0 1.25rem 1rem; }
+      .data-download { padding: 0 1.25rem 1rem; }
       .explanation { padding: 0 1.25rem 2rem; }
     }
   </style>
@@ -194,6 +214,7 @@
     </div>
   </header>
   <p class="desc">10 records from a CSV file — each column is one row of data. BPM controls dot density, energy controls dot size, warmth selects the ink. Press r to toggle labels.</p>
+  <div class="data-download"><a href="data.csv" download>↓ data.csv</a></div>
   <script src="sketch.js"></script>
   <div class="explanation">
 

@@ -178,9 +178,29 @@
       color: var(--riso-black);
     }
 
+    .data-download {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1rem;
+    }
+
+    .data-download a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--riso-orange);
+      text-decoration: none;
+      border-bottom: 1px solid var(--riso-orange);
+    }
+
+    .data-download a:hover {
+      color: var(--riso-pink);
+      border-color: var(--riso-pink);
+    }
+
     @media (max-width: 600px) {
       header { padding: 1.25rem 1.25rem 0.75rem; }
       .desc { padding: 0 1.25rem 1rem; }
+      .data-download { padding: 0 1.25rem 1rem; }
       .explanation { padding: 0 1.25rem 2rem; }
     }
   </style>
@@ -194,6 +214,7 @@
     </div>
   </header>
   <p class="desc">Same dataset as demo 10 — but shuffled and sampled each time. Press <strong>space</strong> to regenerate. Each seed picks 5 random records and scatters them into a new composition.</p>
+  <div class="data-download"><a href="data.csv" download>↓ data.csv</a></div>
   <script src="sketch.js"></script>
   <div class="explanation">
 
