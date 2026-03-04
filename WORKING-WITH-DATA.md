@@ -302,9 +302,34 @@ function mousePressed() {
 
 ## The `map()` Formula
 
+`map()` translates a number from one range into another. In data visualization, you're always mapping **a data value → a visual property** — turning raw numbers into positions, sizes, and opacities.
+
 ```javascript
 // map(value, dataMin, dataMax, visualMin, visualMax)
+//           |______________|  |___________________|
+//             where your         where you want
+//             data lives         it to land visually
+```
 
+Real examples from this sketch:
+
+```javascript
+// Temperature (20–80°F) → x position on a 600px canvas
+let x = map(temp, 20, 80, 50, 550);
+// temp=20 → x=50 (left),  temp=50 → x=300 (center),  temp=80 → x=550 (right)
+
+// Humidity (40–90%) → circle diameter in pixels
+let d = map(humidity, 40, 90, 20, 100);
+// low humidity → small circle,  high humidity → large circle
+
+// Temperature → RISO ink opacity
+let opacity = map(temp, 20, 80, 60, 220);
+// low temp → faint ink,  high temp → bold ink
+```
+
+The same pattern works for any visual property:
+
+```javascript
 let x       = map(value, 0, 255,  40, width - 40);  // position
 let barH    = map(value, 0, 255,  10, 300);          // height
 let opacity = map(value, 0, 255,  60, 220);          // RISO ink density
