@@ -85,9 +85,9 @@ function setup() {
     let temp     = data.getNum(i, 'temp');
     let humidity = data.getNum(i, 'humidity');
 
-    let x       = map(temp, 20, 80, 50, 550);
-    let d       = map(humidity, 40, 90, 20, 100);
-    let opacity = map(temp, 20, 80, 60, 220);
+    let x       = map(temp, 20, 80, 50, 550);     // temp data (20–80°F) → x position (50–550px) across canvas
+    let d       = map(humidity, 40, 90, 20, 100); // humidity data (40–90%) → circle diameter (20–100px)
+    let opacity = map(temp, 20, 80, 60, 220);     // temp data (20–80°F) → ink opacity (faint to bold)
 
     let ink = (i % 2 === 0) ? inkA : inkB;
     ink.noStroke();
@@ -134,9 +134,9 @@ function drawComposition() {
     let row     = sample[i];
     let val     = data.getNum(row, 'temp');
 
-    let x       = map(i, 0, sample.length, 40, width - 40);
-    let barH    = map(val, 20, 80, 10, 300);
-    let opacity = map(val, 20, 80, 60, 220);
+    let x       = map(i, 0, sample.length, 40, width - 40); // loop index (0–9) → evenly spaced x positions across canvas
+    let barH    = map(val, 20, 80, 10, 300);                // temp data (20–80°F) → bar height (10–300px)
+    let opacity = map(val, 20, 80, 60, 220);                // temp data (20–80°F) → ink opacity (faint to bold)
 
     let ink = (i % 2 === 0) ? inkA : inkB;
     ink.noStroke();
@@ -186,9 +186,9 @@ function drawComposition() {
     let row     = sample[i];
     let val     = data.getNum(row, 'temp');
 
-    let x       = map(i, 0, sample.length, 40, width - 40);
-    let barH    = map(val, 20, 80, 10, 300);
-    let opacity = map(val, 20, 80, 60, 220);
+    let x       = map(i, 0, sample.length, 40, width - 40); // loop index (0–9) → evenly spaced x positions across canvas
+    let barH    = map(val, 20, 80, 10, 300);                // temp data (20–80°F) → bar height (10–300px)
+    let opacity = map(val, 20, 80, 60, 220);                // temp data (20–80°F) → ink opacity (faint to bold)
 
     let ink = (i % 2 === 0) ? inkA : inkB;
     ink.noStroke();
@@ -258,9 +258,9 @@ function setup() {
   for (let i = 0; i < stats.length; i++) {
     let statValue = stats[i].base_stat;
 
-    let x       = map(i, 0, stats.length, 40, width - 40);
-    let barH    = map(statValue, 0, 255, 10, 300);
-    let opacity = map(statValue, 0, 255, 60, 220);
+    let x       = map(i, 0, stats.length, 40, width - 40); // loop index (0–5 stats) → evenly spaced x positions across canvas
+    let barH    = map(statValue, 0, 255, 10, 300);         // stat value (0–255 Pokémon range) → bar height (10–300px)
+    let opacity = map(statValue, 0, 255, 60, 220);         // stat value (0–255 Pokémon range) → ink opacity (faint to bold)
 
     let ink = (i % 2 === 0) ? inkA : inkB;
     ink.noStroke();
