@@ -108,7 +108,10 @@ function keyReleased() {
 
   // e — export (only when frozen)
   if (key === "e" || key === "E") {
-    if (frozen) exportRiso();
+    if (frozen) {
+      exportRiso();
+      saveCanvas("riso-composite", "png");
+    }
   }
 
   // m — toggle mirror (live only)
