@@ -42,7 +42,7 @@ function getFrame() {
 }
 
 function draw() {
-  background(20);
+  background(240);
 
   if (!capture || !capture.elt.videoWidth) {
     fill(180);
