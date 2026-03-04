@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11 — Random Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --riso-pink: #ff48b0;
+      --riso-blue: #0078bf;
+      --riso-yellow: #ffe800;
+      --riso-orange: #ff6c2f;
+      --riso-black: #1a1a1a;
+      --riso-paper: #f5f0e8;
+      --riso-paper-dark: #ece5d8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--riso-paper);
+      color: var(--riso-black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      padding: 1.5rem 2rem 1rem;
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #999;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      flex-shrink: 0;
+    }
+
+    .back:hover {
+      color: var(--riso-blue);
+      border-color: var(--riso-blue);
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .demo-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--riso-orange);
+    }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .desc {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1.25rem;
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto 2rem;
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .explanation {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+
+    .explanation h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--riso-orange);
+      display: inline-block;
+    }
+
+    .explanation h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--riso-orange);
+    }
+
+    .explanation p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 0.6rem;
+      color: #444;
+    }
+
+    .explanation code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      background: var(--riso-paper-dark);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+    }
+
+    .explanation pre {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 0.5rem 0 1rem;
+      overflow-x: auto;
+    }
+
+    .explanation pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .explanation ul, .explanation ol {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0.4rem 0 0.8rem 1.25rem;
+    }
+
+    .explanation li {
+      margin-bottom: 0.35rem;
+    }
+
+    .explanation a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .explanation a:hover {
+      border-color: var(--riso-blue);
+    }
+
+    .explanation strong {
+      color: var(--riso-black);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 1.25rem 1.25rem 0.75rem; }
+      .desc { padding: 0 1.25rem 1rem; }
+      .explanation { padding: 0 1.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">11</span>
+      <h1>Random Data</h1>
+    </div>
+  </header>
+  <p class="desc">Same dataset as demo 10 — but shuffled and sampled each time. Press <strong>space</strong> to regenerate. Each seed picks 5 random records and scatters them into a new composition.</p>
+  <script src="sketch.js"></script>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>
+      Demo 10 mapped every CSV row to a fixed column — deterministic, one layout. This demo asks a different question: what if you <em>randomly sample</em> the data and place it freely? The same dataset becomes a generative system: one seed, one print. Change the seed, get a completely different poster.
+    </p>
+
+    <h3>random(low, high) — a value in a range</h3>
+    <pre><code>let x = random(80, width - 80);   // a random x position
+let y = random(80, height - 80);  // a random y position</code></pre>
+    <p>
+      <code>random(low, high)</code> returns a float anywhere between <code>low</code> and <code>high</code>. Each call is independent — calling it twice gives two different numbers. This is how we scatter cluster centers unpredictably across the canvas.
+    </p>
+
+    <h3>random(array) — pick one element</h3>
+    <pre><code>let names = ["bulbasaur", "snorlax", "jolteon"];
+let pick = random(names);  // one of the three, chosen at random</code></pre>
+    <p>
+      Pass an array to <code>random()</code> and it returns one element chosen at random — equivalent to <code>names[floor(random(names.length))]</code> but much shorter. Useful for picking a random color, a random record from a dataset, or a random word from a list.
+    </p>
+
+    <h3>shuffle(array) — reorder randomly</h3>
+    <pre><code>let rows = [];
+for (let i = 0; i < table.getRowCount(); i++) {
+  rows.push(table.getRow(i));
+}
+
+// shuffle() returns a new array — the original is unchanged
+let shuffled = shuffle(rows);
+
+// Take the first 5 of the shuffled list = a random subset
+let selected = shuffled.slice(0, 5);</code></pre>
+    <p>
+      <code>shuffle()</code> returns a new array with the same items in a random order. Slicing the first N elements after shuffling is a clean way to pick a random subset without repetition — each element appears at most once. Here we pick 5 of the 10 records; which 5 depends entirely on the current seed.
+    </p>
+
+    <h3>randomSeed(n) — reproducible randomness</h3>
+    <pre><code>let seed = 42;
+
+function draw() {
+  randomSeed(seed);  // reset the sequence at the start of every draw
+  // ...every random() call now follows the same path for this seed
+}
+
+function keyReleased() {
+  if (key === " ") {
+    seed = floor(random(9999)); // pick a genuinely new seed
+    redraw();
+  }
+}</code></pre>
+    <p>
+      Without <code>randomSeed()</code>, every call to <code>random()</code> pulls from a different point in an unpredictable sequence — good for live animation, bad for reproducible prints. <code>randomSeed(n)</code> resets the sequence to a known starting point, so calling the same code with the same seed always produces the same result. Calling <code>randomSeed()</code> at the top of <code>draw()</code> ensures the whole composition is locked to one seed.
+    </p>
+    <p>
+      The key insight: the final <code>seed = floor(random(9999))</code> in the keypress handler runs <em>outside</em> the seeded context (after <code>draw()</code> has finished), so it draws from the system's unseeded RNG — truly random, giving a new unpredictable seed each time.
+    </p>
+
+    <h3>Mapping data to a scattered layout</h3>
+    <pre><code>let clusterR = map(energy, 0, 100, 20, 80);      // energy → cluster spread
+let dotCount = floor(map(bpm, 60, 180, 5, 22));  // BPM → dot count
+let dotSize  = map(energy, 0, 100, 4, 18);       // energy → dot size
+
+for (let i = 0; i < dotCount; i++) {
+  let a = random(TWO_PI);   // random angle
+  let d = random(clusterR); // random distance from center
+  layer.circle(x + cos(a) * d, y + sin(a) * d, dotSize);
+}</code></pre>
+    <p>
+      The data still controls the visual properties — energy drives cluster size and dot diameter, BPM drives how many dots appear. But now position is free. The same record placed with seed 100 looks completely different from seed 200 because <code>x</code> and <code>y</code> are random. The data is the <em>shape</em>; the seed is the <em>composition</em>.
+    </p>
+
+    <h3>Using your own data</h3>
+    <p>
+      Swap in any CSV or JSON array. The key pattern is:
+    </p>
+    <ol>
+      <li>Load your data (CSV or JSON) in <code>preload()</code></li>
+      <li>Convert rows/items into a plain JS array</li>
+      <li><code>shuffle()</code> the array and <code>slice()</code> a subset</li>
+      <li>Use <code>random()</code> for position and <code>map()</code> for size/shape driven by data values</li>
+      <li>Wrap everything in <code>randomSeed(seed)</code> so any composition can be reproduced</li>
+    </ol>
+
+  </div>
+</body>
+</html>
