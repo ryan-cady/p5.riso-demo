@@ -3,6 +3,41 @@
 
 ---
 
+## How Loading Works
+
+Both CSV and JSON use the same core mechanism: **`preload()` pauses the sketch until loading finishes.**
+
+p5.js runs in this order: `preload()` → `setup()` → `draw()`. Loading data takes time — the computer has to read a file or make a network request. `preload()` holds everything until loading is done, so by the time `setup()` runs, your data is guaranteed to be ready.
+
+### Why you can't load in `setup()`
+
+```javascript
+function setup() {
+  data = loadTable('data.csv', 'csv', 'header'); // ❌ data isn't ready yet
+  console.log(data.getRowCount());               // crashes — data is undefined
+}
+```
+
+Without `preload()` pausing the sketch, `setup()` runs immediately and tries to use data that hasn't arrived yet. `preload()` is the fix.
+
+### Loading outside `preload()` — callbacks
+
+When you load data dynamically (e.g. on a mouse click), you can't pause and wait. Instead, you use a **callback** — a function you hand to `loadJSON()` that runs automatically when the data arrives:
+
+```javascript
+function mousePressed() {
+  loadJSON('https://pokeapi.co/api/v2/pokemon/pikachu', (data) => {
+    pokemon = data; // runs AFTER the request finishes
+    redraw();
+  });
+  // anything here runs IMMEDIATELY, before the data arrives
+}
+```
+
+Think of it like leaving your number at a restaurant — you go do other things, and they call you when your table is ready.
+
+---
+
 ## Part 1: CSV with `loadTable()`
 
 Upload your `.csv` file to the p5 editor, then load it in `preload()`.
