@@ -68,8 +68,13 @@ let temp = data.getNum(0, 'temp');    // numeric value
 ### Loop through all rows and draw
 
 ```javascript
+let data;  // declared globally so preload() and setup() can both access it
 let inkA;
 let inkB;
+
+function preload() {
+  data = loadTable('data.csv', 'csv', 'header');
+}
 
 function setup() {
   createCanvas(600, 400);
@@ -106,6 +111,14 @@ function setup() {
 ### Sample a random subset of rows
 
 ```javascript
+let data;  // global so preload() and drawComposition() can both reach it
+let inkA;  // global so drawComposition() (outside setup) can use them
+let inkB;
+
+function preload() {
+  data = loadTable('data.csv', 'csv', 'header');
+}
+
 function setup() {
   createCanvas(600, 400);
   pixelDensity(1);
@@ -156,7 +169,14 @@ function keyPressed() {
 ### Lock a composition with `randomSeed()`
 
 ```javascript
+let data;
+let inkA;
+let inkB;
 let currentSeed;
+
+function preload() {
+  data = loadTable('data.csv', 'csv', 'header');
+}
 
 function setup() {
   createCanvas(600, 400);
@@ -242,8 +262,13 @@ function setup() {
 ### Draw stats as a bar chart with RISO inks
 
 ```javascript
+let pokemon;  // global so preload() and setup() can both access it
 let inkA;
 let inkB;
+
+function preload() {
+  pokemon = loadJSON('https://pokeapi.co/api/v2/pokemon/pikachu');
+}
 
 function setup() {
   createCanvas(400, 400);
@@ -280,8 +305,12 @@ function setup() {
 
 ### Load a different Pokémon on click
 
+`redraw()` calls `draw()` once on demand — but it requires you to actually have a `draw()` function. The previous example put everything in `setup()`, which runs once and stops. To update the sketch when new data arrives, move the drawing logic into `draw()` and use `noLoop()` to prevent it from running constantly.
+
 ```javascript
 let pokemon;
+let inkA;
+let inkB;
 let names = ['bulbasaur', 'charmander', 'squirtle', 'pikachu', 'gengar', 'snorlax'];
 let current = 0;
 
@@ -289,11 +318,49 @@ function preload() {
   pokemon = loadJSON('https://pokeapi.co/api/v2/pokemon/' + names[current]);
 }
 
+function setup() {
+  createCanvas(400, 400);
+  pixelDensity(1);
+  noLoop(); // stop draw() from running on its own — we'll trigger it manually
+
+  inkA = new Riso('fluorescentpink');
+  inkB = new Riso('blue');
+}
+
+function draw() {
+  background(240);
+  clearRiso(); // clear the RISO layers before drawing new data
+
+  let stats = pokemon.stats;
+
+  for (let i = 0; i < stats.length; i++) {
+    let statValue = stats[i].base_stat;
+
+    let x       = map(i, 0, stats.length, 40, width - 40); // loop index (0–5) → evenly spaced x positions
+    let barH    = map(statValue, 0, 255, 10, 300);         // stat value (0–255) → bar height
+    let opacity = map(statValue, 0, 255, 60, 220);         // stat value → ink opacity
+
+    let ink = (i % 2 === 0) ? inkA : inkB;
+    ink.noStroke();
+    ink.fill(opacity);
+    ink.rect(x - 25, height - barH - 20, 50, barH);
+  }
+
+  drawRiso();
+
+  fill(30);
+  noStroke();
+  textAlign(CENTER);
+  textSize(14);
+  text(pokemon.name.toUpperCase(), width / 2, 20);
+}
+
+// Click anywhere to advance to the next Pokémon
 function mousePressed() {
   current = (current + 1) % names.length;
-  loadJSON('https://pokeapi.co/api/v2/pokemon/' + names[current], (data) => {
-    pokemon = data;
-    redraw();
+  loadJSON('https://pokeapi.co/api/v2/pokemon/' + names[current], (newData) => {
+    pokemon = newData; // update pokemon when the request finishes
+    redraw();          // call draw() once with the new data
   });
 }
 ```
