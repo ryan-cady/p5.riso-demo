@@ -95,6 +95,26 @@ header {
   border-color: var(--riso-pink);
 }
 
+.header-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.header-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: #999;
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+}
+
+.header-links a:hover {
+  color: var(--riso-blue);
+  border-color: var(--riso-blue);
+}
+
 .demos {
   max-width: 860px;
   margin: 2rem auto;
