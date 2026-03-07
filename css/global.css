@@ -185,6 +185,17 @@ header {
   line-height: 1.6;
 }
 
+.note a {
+  color: #999;
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+}
+
+.note a:hover {
+  color: var(--riso-blue);
+  border-color: var(--riso-blue);
+}
+
 .note code {
   background: var(--riso-paper-dark);
   padding: 0.1rem 0.35rem;

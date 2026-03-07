@@ -2,7 +2,10 @@
 
 Demo sketches for learning the [p5.riso](https://antiboredom.github.io/p5.riso/) library. Covers RISO color arrays, importing images, dithering, and halftone effects.
 
-For more details on each demo, check out WALKTHROUGH.md as well!
+Additional docs:
+- [WALKTHROUGH.md](WALKTHROUGH.md) — detailed notes and code explanations for every demo
+- [WORKING-WITH-DATA.md](WORKING-WITH-DATA.md) — reference for CSV, JSON/APIs, and randomization in p5.js
+- [CCS-RISO-COLORS.md](CCS-RISO-COLORS.md) — full list of available RISO ink colors
 
 ## Setup
 
