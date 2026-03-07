@@ -26,19 +26,41 @@ Each folder is a standalone P5.js sketch. To run them:
 2. Images are in the shared `images/` folder at the project root — sketches reference them via `../images/`
 3. Run a local server from the project root (e.g., VS Code Live Server extension)
 
+### Project Structure
+
+```
+p5.riso demo/
+├── css/
+│   └── global.css        # shared styles for all pages
+├── lib/
+│   └── p5.riso.js
+├── images/               # shared image assets
+├── 00-template/
+├── 00-intro/
+├── 01-color-array/
+│   ├── index.html
+│   └── sketch.js
+└── ...                   # same structure for each demo
+```
+
 ## Demos
 
 | # | Folder | Topic | Description |
 |---|--------|-------|-------------|
-| 00 | `00-intro` | Intro | Basic p5.riso setup: color mixing, halftone, text layering, and more |
 | 00 | `00-template` | Template | Boilerplate starter — half-letter at 150 DPI |
+| 00 | `00-intro` | Intro | Basic p5.riso setup: color channels, drawing to layers, compositing |
 | 01 | `01-color-array` | RISO Colors | Explore the `RISOCOLORS` array, pick random colors |
 | 02 | `02-curated-palette` | Color Palette | Build a custom subset of RISO colors, draw swatches |
 | 03 | `03-load-image` | Importing Images | Use `preload()` and `loadImage()` to bring images into P5 |
-| 04 | `04-basic-dither` | Dithering | Apply atkinson dither to an image on a Riso layer |
-| 05 | `05-dither-comparison` | Dither Types | Compare all 4 dither algorithms with keyboard + mouse control |
-| 06 | `06-two-color-dither` | Two-Color Print | Combine dither + halftone on two Riso layers |
+| 04 | `04-basic-dither` | Dithering | Apply Atkinson dither to an image on a Riso layer |
+| 05 | `05-dither-comparison` | Dither Types | Compare all 4 dither algorithms — press 1–4 to switch |
+| 06 | `06-two-color-dither` | Two-Color Print | Dither + halftone on two Riso layers |
 | 07 | `07-data-driven` | Data-Driven | Use data to control dither threshold, halftone frequency, intensity, and angle |
+| 08 | `08-functions` | Functions | Defining functions, parameters, and return values |
+| 09 | `09-api-data` | API Data | `loadJSON()` fetches live Pokémon stats to drive visual output |
+| 10 | `10-csv-data` | CSV Data | `loadTable()` reads a spreadsheet — each row becomes a column of dots |
+| 11 | `11-random-data` | Random Data | `shuffle()` + `randomSeed()` — sample a CSV dataset, press space for a new composition |
+| 12 | `12-webcam` | Webcam | Live camera feed with dither + halftone on two Riso layers |
 
 ## Image Demos (03–07)
 
@@ -46,6 +68,11 @@ These sketches require an image file. The repo includes images in the `images/` 
 - Add your image to the `images/` folder
 - Update the `loadImage()` path in `sketch.js` to match your filename (e.g., `"../images/your-photo.jpg"`)
 - A high-contrast photo works best for dithering demos
+
+## Data Demos (09–11)
+
+- **09** fetches live data from the PokéAPI — requires an internet connection
+- **10 and 11** read from a local `data.csv` file included in each folder. To use your own spreadsheet, replace `data.csv` and update the column names in `sketch.js`
 
 ## Key Concepts
 
