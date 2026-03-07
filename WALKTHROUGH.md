@@ -1,6 +1,6 @@
 # p5.riso Demo Walkthrough
 
-A collection of 8 sketches introducing the [p5.riso](https://antiboredom.github.io/p5.riso/) library for Risograph printing with P5.js. Each demo builds on the last, moving from basic color exploration to data-driven generative output.
+A collection of 14 sketches introducing the [p5.riso](https://antiboredom.github.io/p5.riso/) library for Risograph printing with P5.js. Each demo builds on the last, moving from basic color exploration through data-driven and live-input generative output.
 
 ## Setup
 
@@ -9,6 +9,12 @@ A collection of 8 sketches introducing the [p5.riso](https://antiboredom.github.
 3. Serve locally from the project root or copy individual sketches into the [P5.js web editor](https://editor.p5js.org/)
 
 > Every sketch includes `pixelDensity(1)` — this is required for p5.riso. Without it, dithering and halftone output will render incorrectly on retina screens.
+
+---
+
+## 00 — Template
+
+Boilerplate starter — half-letter canvas at 150 DPI. Press `e` to export Riso layers, `c` to toggle the composite view. Download the `.zip` from the demo page to start a new sketch from scratch.
 
 ---
 
@@ -199,6 +205,234 @@ The core idea: same image, same colors, but every data set produces a different 
 
 ---
 
+## 08 — Functions
+
+Three levels of functions — press 1, 2, 3 to switch modes. Press `r` to redraw.
+
+### Key concepts
+
+**Mode 1: Basic function** — a named block of code you define once and call whenever you want.
+
+```js
+function drawCircleStamp() {
+  fill(255, 72, 176, 180);
+  circle(width / 2, height / 2, 200);
+}
+```
+
+Called three times, it draws in the same spot every time because nothing varies. Useful for organization, but limited without parameters.
+
+**Mode 2: Parameters** — variables that get filled in at call time, making the same function produce different results.
+
+```js
+function drawRing(x, y, size, col) {
+  fill(col);
+  circle(x, y, size);
+}
+
+drawRing(150, 200, 80, color(255, 72, 176));  // small pink ring
+drawRing(300, 350, 140, color(0, 120, 191));  // big blue ring
+```
+
+One function, many outputs. Write the recipe once, change the ingredients each time.
+
+**Mode 3: Return values** — a function that hands a result back to the caller.
+
+```js
+function pickColor() {
+  let colors = [color(255,72,176,180), color(0,120,191,180), color(255,108,47,180)];
+  return colors[floor(random(colors.length))];
+}
+
+let col = pickColor();
+drawRing(x, y, size, col);
+```
+
+`return` sends a value back to wherever the function was called. Mode 3 combines both concepts — `pickColor()` returns a color, `drawRing()` uses it as a parameter.
+
+You've been using functions all along — `setup()`, `draw()`, `random()`, and `map()` are all functions. Now you can write your own.
+
+---
+
+## 09 — API Data
+
+Fetches live Pokémon stats from the PokéAPI. Press 1–5 to switch Pokémon. Requires an internet connection.
+
+### Key concepts
+
+```js
+function preload() {
+  pokemon = loadJSON("https://pokeapi.co/api/v2/pokemon/bulbasaur");
+}
+```
+
+`loadJSON()` fetches any URL that returns JSON and parses it automatically. Inside `preload()`, p5 waits for the request to finish before `setup()` runs — `pokemon` is fully loaded by the time you need it.
+
+The API returns a nested object. Stats are in an array of objects, not a named field, so we use a helper function to extract them:
+
+```js
+function getStat(name) {
+  for (let s of pokemon.stats) {
+    if (s.stat.name === name) return s.base_stat;
+  }
+  return 50; // fallback
+}
+```
+
+This is a common real-world pattern — API responses rarely organize data the way you want it, so you write a small function to find what you need.
+
+Stats are then mapped to visual parameters the same way as Demo 07:
+
+```js
+let cols     = floor(map(speed,   5, 180, 3, 10));
+let pinkSize = map(attack,  5, 190, 8, 56);
+let blueSize = map(defense, 5, 230, 6, 48);
+let angle    = map(hp,      1, 255, 0, HALF_PI);
+```
+
+When switching Pokémon after setup, `loadJSON()` is **asynchronous** — it starts the request and moves on immediately. A callback function runs when the data arrives:
+
+```js
+loadJSON(url, function(data) {
+  pokemon = data;
+  redraw();
+});
+```
+
+Same code, same two Riso colors — Bulbasaur (slow, small) looks nothing like Mewtwo (dense grid, large shapes, heavy rotation). The data *is* the design.
+
+---
+
+## 10 — CSV Data
+
+Reads a local `data.csv` file with `loadTable()`. Each row becomes one visual column of dots. Press `r` to toggle record labels.
+
+### Key concepts
+
+```js
+function preload() {
+  table = loadTable("data.csv", "csv", "header");
+}
+```
+
+`loadTable()` reads a CSV and gives you a structured object. The `"header"` argument treats the first row as column names so you can access values by name instead of index.
+
+```js
+let rowCount = table.getRowCount();
+for (let i = 0; i < rowCount; i++) {
+  let row = table.getRow(i);
+  let bpm    = row.getNum("bpm");
+  let energy = row.getNum("energy");
+  let warmth = row.getNum("warmth");
+}
+```
+
+`getRow(i)` returns a single record. `getNum()` reads a numeric column, `getString()` reads text. Column names come from your header row — rename a column in the CSV and rename it here, and everything still works.
+
+```js
+let dotSize = map(energy, 0, 100, 3, 26);  // energy → dot diameter
+let spacing = map(bpm,   60, 180, 40, 9);  // BPM → gap between dots
+let layer   = (warmth > 55) ? pink : blue; // warmth → ink color
+```
+
+The **ternary operator** (`? :`) is a compact if/else: if warmth is above 55, use pink; otherwise blue. High BPM → small spacing → many dots. Low BPM → large spacing → open, airy column.
+
+To use your own data: replace `data.csv` with any spreadsheet (Google Sheets → File → Download → CSV), update the column names in `getNum()`, and adjust the `map()` input ranges to match your data's actual min/max.
+
+---
+
+## 11 — Random Data
+
+Same dataset as Demo 10, but shuffled and randomly sampled each time. Press `space` for a new composition.
+
+### Key concepts
+
+```js
+let shuffled = shuffle(rows);
+let selected = shuffled.slice(0, 5);
+```
+
+`shuffle()` returns a new array with the same items in a random order. Slicing the first N elements after shuffling picks a random subset without repetition — each record appears at most once.
+
+```js
+let seed = 42;
+
+function draw() {
+  randomSeed(seed);
+  // ...
+}
+
+function keyReleased() {
+  if (key === " ") {
+    seed = floor(random(9999));
+    redraw();
+  }
+}
+```
+
+Without `randomSeed()`, every call to `random()` pulls from an unpredictable sequence — good for animation, bad for reproducible prints. `randomSeed(n)` locks the sequence to a known starting point, so the same seed always produces the same composition.
+
+The key insight: `seed = floor(random(9999))` in the keypress handler runs *outside* the seeded context, so it draws from the system's unseeded RNG — genuinely random, giving a new seed each time.
+
+Where Demo 10 places each record in a fixed column, Demo 11 scatters them freely:
+
+```js
+let x = random(80, width - 80);
+let y = random(80, height - 80);
+```
+
+The data controls the *shape* (dot count, cluster size from BPM and energy). The seed controls the *composition* (where clusters land).
+
+---
+
+## 12 — Webcam
+
+Live camera feed processed in real time — pink = Atkinson dither, blue = halftone circles. Press `f` to freeze, `e` to export.
+
+### Key concepts
+
+```js
+function setup() {
+  capture = createCapture(VIDEO);
+  capture.size(640, 480);
+  capture.hide();
+}
+```
+
+`createCapture(VIDEO)` asks the browser for camera access and returns a live video element. `hide()` removes it from the DOM — we draw the processed output to the p5 canvas instead.
+
+```js
+function draw() {
+  clearRiso();
+  let frame = capture.get(); // snapshot current video → p5.Image
+  let dithered  = ditherImage(frame, "atkinson", threshold);
+  let halftoned = halftoneImage(frame, "circle", frequency, 45, 100);
+  pink.image(dithered, 0, 0);
+  blue.image(halftoned, 0, 0);
+  drawRiso();
+}
+```
+
+`capture.get()` returns a static `p5.Image` copy of the video at that instant — the same format `ditherImage()` and `halftoneImage()` expect. The pipeline is identical to the static image demos; only the image source changes.
+
+Processing two full frames every tick is expensive, so the sketch runs at `frameRate(6)` — slow enough to stay smooth, fast enough to feel live.
+
+**Freeze, tweak, export:**
+
+```js
+if (!frozen) {
+  frozenFrame = getFrame();
+  frozen = true;
+  noLoop();
+}
+```
+
+`noLoop()` stops the animation loop. While frozen, pressing `1`/`2` (threshold) or `3`/`4` (halftone frequency) calls `redraw()` once using the stored frame — so you can dial in the look before exporting. Press `f` again to resume live view.
+
+Keys: `f` freeze/resume · `e` export (frozen only) · `m` mirror · `1/2` dither threshold · `3/4` halftone frequency
+
+---
+
 ## Recurring Patterns
 
 ### The Riso workflow
@@ -223,7 +457,7 @@ Forgetting `clearRiso()` causes layers to stack and go solid. Forgetting `drawRi
 
 ### `map()` for range conversion
 
-Converts a value from one range to another. Appears in demos 05, 06, and 07. It's the bridge between input (mouse position, data values) and visual parameters (threshold, frequency, intensity).
+Converts a value from one range to another. Appears in demos 05–11. It's the bridge between input (mouse position, data values, API stats) and visual parameters (threshold, frequency, dot size, intensity).
 
 ### Exporting for print
 
