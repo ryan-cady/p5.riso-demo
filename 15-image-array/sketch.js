@@ -7,19 +7,24 @@
 //
 // Press space for a new layout. Press e to export.
 
-// ── Add or remove image paths here ───────────────────────────────
+// ── Add new image paths here whenever you add files to the folder ─
 const imagePaths = [
   "../images/lee-scratch-perry.jpg",
   "../images/lee-scratch-perry-color.png",
-  // "../images/your-image.jpg",
+  "../images/lee-scratch-perry2.jpg",
+  "../images/lee-scratch-perry3.jpg",
+  "../images/lee-scratch-perry4.jpg",
+  "../images/lee-scratch-perry5.jpg",
 ];
+
+const SHOW_COUNT = 3; // how many images to show at once
 
 let images = [];
 let pink, blue;
 let seed = 42;
 
 function preload() {
-  // Loop through the paths and load each one.
+  // Load every image in the list upfront.
   // images[i] corresponds to imagePaths[i] — same index, two arrays in sync.
   for (let i = 0; i < imagePaths.length; i++) {
     images[i] = loadImage(imagePaths[i]);
@@ -48,8 +53,12 @@ function draw() {
   // randomSeed locks the layout — same seed always produces the same result.
   randomSeed(seed);
 
-  for (let i = 0; i < images.length; i++) {
-    let img = images[i];
+  // shuffle() reorders the array randomly, then slice() picks the first N.
+  // This picks SHOW_COUNT images at random without repeating any.
+  let selected = shuffle(images).slice(0, SHOW_COUNT);
+
+  for (let i = 0; i < selected.length; i++) {
+    let img = selected[i];
 
     // Alternate layers: even indexes → pink, odd → blue.
     let layer = i % 2 === 0 ? pink : blue;

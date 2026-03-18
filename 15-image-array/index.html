@@ -35,7 +35,10 @@
   "photo-1.jpg",
   "photo-2.jpg",
   "photo-3.jpg",
+  // add more here
 ];
+
+const SHOW_COUNT = 2; // how many to show at once
 
 let images = [];
 
@@ -45,7 +48,16 @@ function preload() {
   }
 }</code></pre>
     <p>
-      <code>imagePaths</code> is an array of file paths. The loop loads each one and stores it in <code>images[i]</code> at the same index. Add more paths to the array and the sketch automatically handles them — you never touch the loop.
+      All images are loaded upfront in <code>preload()</code>. Add new paths to <code>imagePaths</code> and the loop handles them automatically. <code>SHOW_COUNT</code> controls how many appear on each draw — the rest are loaded but not used until the next shuffle.
+    </p>
+
+    <h3>Picking a random subset</h3>
+    <pre><code>// shuffle() reorders the array randomly.
+// slice(0, SHOW_COUNT) takes the first N from the shuffled list —
+// a random subset with no repeats.
+let selected = shuffle(images).slice(0, SHOW_COUNT);</code></pre>
+    <p>
+      This is the same pattern from demo 14. Every press of space picks a new seed, which means a new shuffle — different images, different positions, different sizes.
     </p>
 
     <h3>Resizing once in setup()</h3>
