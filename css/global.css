@@ -163,6 +163,7 @@ header {
 .demo-link:nth-child(15) .demo-num { color: var(--riso-blue); }
 .demo-link:nth-child(16) .demo-num { color: var(--riso-orange); }
 .demo-link:nth-child(17) .demo-num { color: var(--riso-pink); }
+.demo-link:nth-child(18) .demo-num { color: var(--riso-blue); }
 
 .demo-info {
   min-width: 0;

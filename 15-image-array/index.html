@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 — Image Array</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-orange); }</style>
+</head>
+<body class="demo-page">
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">15</span>
+      <h1>Image Array</h1>
+    </div>
+  </header>
+  <p class="desc">Multiple images loaded into an array, dithered, and scattered randomly across the canvas. Press <strong>space</strong> for a new layout — each seed is a different composition.</p>
+  <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>
+      Earlier demos load one image. This demo puts multiple images into an array and loops through them — the same pattern you'd use for a zine, poster, or any layout with more than one photo. Each image is dithered and placed on a Riso layer at a random position and size.
+    </p>
+
+    <h3>Loading multiple images in preload()</h3>
+    <pre><code>const imagePaths = [
+  "photo-1.jpg",
+  "photo-2.jpg",
+  "photo-3.jpg",
+];
+
+let images = [];
+
+function preload() {
+  for (let i = 0; i < imagePaths.length; i++) {
+    images[i] = loadImage(imagePaths[i]);
+  }
+}</code></pre>
+    <p>
+      <code>imagePaths</code> is an array of file paths. The loop loads each one and stores it in <code>images[i]</code> at the same index. Add more paths to the array and the sketch automatically handles them — you never touch the loop.
+    </p>
+
+    <h3>Resizing once in setup()</h3>
+    <pre><code>function setup() {
+  // ...
+  for (let i = 0; i < images.length; i++) {
+    images[i].resize(400, 0); // 400px wide, height scales automatically
+  }
+}</code></pre>
+    <p>
+      Resizing in <code>setup()</code> means it happens once, not on every frame. Passing <code>0</code> as the second argument preserves the aspect ratio — p5 calculates the height automatically.
+    </p>
+
+    <h3>Dithering and drawing each image</h3>
+    <pre><code>for (let i = 0; i < images.length; i++) {
+  let img = images[i];
+
+  // Even indexes → pink layer, odd → blue
+  let layer = i % 2 === 0 ? pink : blue;
+
+  // Convert the photo to a 1-bit dot pattern
+  let dithered = ditherImage(img, "atkinson");
+
+  // Random display size — doesn't change the image data
+  let w = random(250, 600);
+  let h = img.height * (w / img.width);
+
+  // Random position
+  let x = random(-50, width - w + 50);
+  let y = random(-50, height - h + 50);
+
+  layer.image(dithered, x, y, w, h);
+}</code></pre>
+    <p>
+      The loop body is the same for every image. <code>i % 2</code> alternates between 0 and 1 as <code>i</code> steps through the array — a simple way to split images across two ink layers. <code>layer.image(img, x, y, w, h)</code> works exactly like p5's <code>image()</code> but draws to the Riso layer instead of the main canvas.
+    </p>
+
+    <h3>Random layout with a seed</h3>
+    <pre><code>randomSeed(seed); // at the top of draw()
+
+// ...all random() calls follow the same sequence for this seed
+
+function keyReleased() {
+  if (key === " ") {
+    seed = floor(random(9999)); // new seed from unseeded RNG
+    redraw();
+  }
+}</code></pre>
+    <p>
+      <code>randomSeed()</code> at the top of <code>draw()</code> locks every <code>random()</code> call in the loop to a reproducible sequence. Press space to pick a new seed — each one is a unique composition you can export and print.
+    </p>
+
+    <h3>Using your own images</h3>
+    <p>
+      Upload your image files to the sketch folder, then update <code>imagePaths</code> at the top of <code>sketch.js</code>. Add as many paths as you like — the loop handles any number automatically.
+    </p>
+
+    <h3>Reference</h3>
+    <p><a href="https://p5js.org/reference/p5/loadImage/">p5 loadImage()</a> &nbsp;·&nbsp; <a href="https://antiboredom.github.io/p5.riso/">p5.riso docs</a></p>
+
+  </div>
+</body>
+</html>
