@@ -21,6 +21,7 @@
   </header>
   <p class="desc">Data controls dither threshold, halftone frequency, intensity, and angle</p>
   <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
   <div class="explanation">
     
       <h2>How it works</h2>
@@ -45,6 +46,9 @@ let angle     = map(data[3], 0, 100, 0, 90);</code></pre>
 
       <h3>The big idea</h3>
       <p>Same image, same colors, but every data set produces a different print. Click a few times to see how dramatically different values change the output. This is the core concept behind Project 2.</p>
+      <p>
+        Ready to drive this with real data instead of random numbers? See <a href="../10-csv-data/index.html">demo 10</a> for CSV loading, or use the <a href="../15-data-cruncher/index.html">Data Cruncher</a> to prep your own dataset.
+      </p>
 
       <h3>Reference</h3>
       <p><a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WORKING-WITH-DATA.md">Working with Data in p5.js</a> — full reference for CSV, randomization, and JSON/APIs.</p>

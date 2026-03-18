@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 — Data Cruncher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    :root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-blue); }
+
+    /* ── Full-viewport two-column layout ── */
+    body.demo-page {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header { flex-shrink: 0; }
+    .desc  { flex-shrink: 0; padding-bottom: 0; margin-bottom: 0; }
+
+    .cruncher {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--riso-paper-dark);
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .panel {
+      overflow-y: auto;
+      padding: 1.1rem 1.4rem;
+    }
+
+    .panel-left  { border-right: 1px solid var(--riso-paper-dark); }
+
+    /* ── Shared labels & buttons ── */
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #bbb;
+      margin-bottom: 0.55rem;
+    }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+      line-height: 1;
+    }
+    .btn-primary { background: var(--riso-orange); color: #fff; }
+    .btn-primary:hover { background: #c84800; }
+    .btn-ghost {
+      background: transparent;
+      color: #888;
+      border: 1px solid #ccc;
+    }
+    .btn-ghost:hover { color: var(--riso-blue); border-color: var(--riso-blue); }
+
+    /* ── Drop zone ── */
+    .drop-area {
+      border: 2px dashed var(--riso-orange);
+      border-radius: 6px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 0.6rem;
+    }
+    .drop-area.drag-over { background: #fff8f0; border-color: #c04a00; }
+    .drop-area input[type="file"] { display: none; }
+
+    .drop-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-bottom: 0.65rem;
+    }
+    .drop-text strong { color: var(--riso-orange); }
+
+    .drop-btns { display: flex; justify-content: center; gap: 0.5rem; }
+
+    /* ── Paste section ── */
+    .paste-toggle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      color: #bbb;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .paste-toggle:hover { color: var(--riso-blue); }
+
+    .paste-section { display: none; margin-bottom: 0.6rem; }
+    .paste-section.open { display: block; }
+
+    textarea.csv-paste {
+      width: 100%;
+      height: 110px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 4px;
+      background: #fff;
+      color: var(--riso-black);
+      resize: vertical;
+      line-height: 1.5;
+    }
+    textarea.csv-paste:focus { outline: none; border-color: var(--riso-blue); }
+
+    .paste-actions { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
+
+    /* ── Stats section ── */
+    .stats-section { display: none; margin-top: 1rem; }
+    .stats-section.visible { display: block; }
+
+    .stats-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+    }
+    .stats-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      color: #aaa;
+    }
+    .stats-meta strong { color: var(--riso-orange); }
+
+    .stats-header .clear-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      color: #bbb;
+      cursor: pointer;
+      padding: 0.15rem 0.45rem;
+    }
+    .stats-header .clear-btn:hover { color: #555; border-color: #999; }
+
+    /* column cards */
+    .col-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 7px;
+      margin-bottom: 0.9rem;
+    }
+
+    .col-card {
+      background: #fff;
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 5px;
+      padding: 0.6rem 0.65rem;
+    }
+    .col-card-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.67rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .col-type {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.52rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.08rem 0.28rem;
+      border-radius: 2px;
+      margin-bottom: 0.35rem;
+    }
+    .col-type.numeric { background: #e8f4ff; color: var(--riso-blue); }
+    .col-type.text    { background: #fff0e8; color: var(--riso-orange); }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.05rem 0.35rem;
+      align-items: baseline;
+    }
+    .stat-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      color: #ccc;
+      text-transform: uppercase;
+    }
+    .stat-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--riso-black);
+      font-weight: 700;
+    }
+    .text-samples {
+      font-size: 0.62rem;
+      color: #bbb;
+      line-height: 1.35;
+      margin-top: 0.15rem;
+      word-break: break-word;
+    }
+
+    /* preview table */
+    .preview-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 4px;
+    }
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+    }
+    .preview-table th {
+      background: var(--riso-paper-dark);
+      padding: 0.3rem 0.55rem;
+      text-align: left;
+      font-weight: 700;
+      color: var(--riso-black);
+      border-bottom: 1px solid #d8d0c4;
+      white-space: nowrap;
+    }
+    .preview-table td {
+      padding: 0.25rem 0.55rem;
+      border-bottom: 1px solid var(--riso-paper-dark);
+      color: #555;
+      white-space: nowrap;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .preview-table tr:last-child td { border-bottom: none; }
+    .preview-more {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #bbb;
+      padding: 0.3rem 0.55rem;
+      text-align: center;
+      border-top: 1px solid var(--riso-paper-dark);
+    }
+
+    /* ── Right panel: empty state ── */
+    .empty-state {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #ccc;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    /* ── Right panel: output ── */
+    .output-section { display: none; }
+    .output-section.visible { display: block; }
+
+    /* options panel */
+    .options-panel {
+      background: #fff;
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 6px;
+      padding: 0.8rem 0.9rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .opt-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .opt-row:last-child { margin-bottom: 0; }
+
+    .opt-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: #aaa;
+      min-width: 44px;
+      flex-shrink: 0;
+    }
+
+    .chk-label {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      color: #555;
+      cursor: pointer;
+    }
+    .chk-label input[type="checkbox"] { accent-color: var(--riso-orange); }
+
+    .icon-btn {
+      font-size: 0.85rem;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      color: #aaa;
+      cursor: pointer;
+      padding: 0.05rem 0.35rem;
+      line-height: 1.4;
+      transition: all 0.1s;
+    }
+    .icon-btn:hover { border-color: #999; color: #333; }
+
+    .seed-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #ccc;
+    }
+
+    .num-input {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      width: 52px;
+      padding: 0.2rem 0.35rem;
+      border: 1px solid #d0c8bc;
+      border-radius: 3px;
+      text-align: center;
+      background: var(--riso-paper);
+    }
+    .num-input:focus { outline: none; border-color: var(--riso-blue); }
+
+    .of-total {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      color: #ccc;
+    }
+
+    /* filter divider */
+    .filter-divider {
+      border-top: 1px solid var(--riso-paper-dark);
+      margin: 0.55rem 0;
+    }
+
+    .filter-sublabel {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #ccc;
+      margin-bottom: 0.45rem;
+    }
+
+    .filter-col-block {
+      margin-bottom: 0.6rem;
+    }
+    .filter-col-block:last-child { margin-bottom: 0; }
+
+    .filter-col-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .filter-col-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.63rem;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+    }
+
+    /* column on/off toggle switch */
+    .col-toggle {
+      position: relative;
+      width: 26px;
+      height: 14px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .col-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+    .col-toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #d8d0c8;
+      border-radius: 14px;
+      transition: background 0.15s;
+    }
+    .col-toggle-track::before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.15s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .col-toggle input:checked + .col-toggle-track { background: var(--riso-orange); }
+    .col-toggle input:checked + .col-toggle-track::before { transform: translateX(12px); }
+
+    .col-name-off { color: #ccc; }
+
+    .pills-off { opacity: 0.35; pointer-events: none; }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 20px;
+      border: 1px solid #d0c8bc;
+      background: transparent;
+      color: #999;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s, border-color 0.1s;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .pill:hover { border-color: #aaa; color: #444; }
+    .pill.on {
+      background: var(--riso-orange);
+      border-color: var(--riso-orange);
+      color: #fff;
+    }
+
+    /* code output */
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+    }
+
+    .code-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.63rem;
+      color: #bbb;
+    }
+    .code-meta .hl { color: var(--riso-orange); font-weight: 700; }
+
+    .copy-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      background: none;
+      border: 1px solid #555;
+      border-radius: 3px;
+      color: #aaa;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { color: #e8e1d5; border-color: #aaa; }
+    .copy-btn.copied { color: #7ec8a0; border-color: #7ec8a0; }
+
+    .warn-bar {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--riso-orange);
+      background: #fff8f0;
+      border: 1px solid #ffd0a0;
+      border-radius: 4px;
+      padding: 0.4rem 0.7rem;
+      margin-bottom: 0.5rem;
+      display: none;
+    }
+    .warn-bar.visible { display: block; }
+
+    .code-block {
+      background: var(--riso-black);
+      color: #e8e1d5;
+      padding: 0.9rem 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      line-height: 1.65;
+      white-space: pre;
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    /* syntax colors */
+    .tok-kw  { color: #ff9966; }
+    .tok-fn  { color: #88d4ff; }
+    .tok-str { color: #b5e8a0; }
+    .tok-num { color: #ffdb88; }
+    .tok-cmt { color: #666; font-style: italic; }
+
+    /* ── Sketch preview ── */
+    .preview-section {
+      margin-top: 1.1rem;
+      border-top: 1px solid var(--riso-paper-dark);
+      padding-top: 0.9rem;
+    }
+
+    .preview-legend {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #bbb;
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+
+    #previewContainer canvas {
+      display: block;
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 6px;
+      width: 100% !important;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 720px) {
+      body.demo-page { height: auto; overflow: auto; }
+      .cruncher { grid-template-columns: 1fr; height: auto; overflow: visible; }
+      .panel { overflow-y: visible; }
+      .panel-left { border-right: none; border-bottom: 1px solid var(--riso-paper-dark); }
+    }
+  </style>
+</head>
+<body class="demo-page">
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">15</span>
+      <h1>Data Cruncher</h1>
+    </div>
+  </header>
+  <p class="desc">Upload or paste a CSV — filter and shuffle rows, then copy the ready-to-paste p5.js sketch with your data embedded.</p>
+
+  <div class="cruncher">
+
+    <!-- ═══════════════════════════════════════════ LEFT PANEL ═══ -->
+    <div class="panel panel-left">
+
+      <div class="section-label">Input</div>
+
+      <!-- Drop zone -->
+      <div class="drop-area" id="dropArea">
+        <div class="drop-text"><strong>Drop a CSV here</strong></div>
+        <input type="file" id="fileInput" accept=".csv,text/csv">
+        <div class="drop-btns">
+          <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Choose file</button>
+          <button class="btn btn-ghost" id="sampleBtn">Try sample</button>
+        </div>
+      </div>
+
+      <!-- Paste toggle -->
+      <button class="paste-toggle" id="pasteToggle">▶ or paste CSV text</button>
+      <div class="paste-section" id="pasteSection">
+        <textarea class="csv-paste" id="pasteArea"
+          placeholder="title,artist,bpm&#10;Bitches Brew,Miles Davis,116&#10;..."></textarea>
+        <div class="paste-actions">
+          <button class="btn btn-primary" id="parseBtn">Parse</button>
+          <button class="btn btn-ghost" id="clearPasteBtn">Clear</button>
+        </div>
+      </div>
+
+      <!-- Stats (shown after load) -->
+      <div class="stats-section" id="statsSection">
+        <div class="stats-header">
+          <div class="stats-meta" id="statsMeta"></div>
+          <button class="clear-btn" onclick="resetTool()">× clear</button>
+        </div>
+
+        <div class="section-label">Columns</div>
+        <div class="col-cards" id="colCards"></div>
+
+        <div class="section-label">Preview</div>
+        <div class="preview-wrap">
+          <table class="preview-table" id="previewTable"></table>
+          <div class="preview-more" id="previewMore"></div>
+        </div>
+      </div>
+
+    </div><!-- /panel-left -->
+
+    <!-- ═══════════════════════════════════════════ RIGHT PANEL ═══ -->
+    <div class="panel panel-right">
+
+      <div class="empty-state" id="emptyState">
+        <div>← upload or paste a CSV<br>to generate code</div>
+      </div>
+
+      <div class="output-section" id="outputSection">
+
+        <!-- Options -->
+        <div class="section-label">Options</div>
+        <div class="options-panel">
+
+          <!-- Shuffle -->
+          <div class="opt-row">
+            <span class="opt-label">Shuffle</span>
+            <label class="chk-label">
+              <input type="checkbox" id="shuffleToggle"> randomize order
+            </label>
+            <button class="icon-btn" id="newSeedBtn" title="New random seed">↻</button>
+            <span class="seed-val" id="seedDisplay"></span>
+          </div>
+
+          <!-- Row limit -->
+          <div class="opt-row">
+            <span class="opt-label">Rows</span>
+            <input type="number" class="num-input" id="rowLimitInput" min="1">
+            <span class="of-total" id="ofTotal"></span>
+          </div>
+
+          <!-- Per-column filters -->
+          <div class="filter-divider"></div>
+          <div class="filter-sublabel">Filter by column</div>
+          <div id="filterControls"></div>
+
+        </div>
+
+        <!-- Code output -->
+        <div class="warn-bar" id="warnBar"></div>
+        <div class="code-header">
+          <div class="code-meta"><span class="hl" id="activeCount"></span> rows embedded</div>
+          <button class="copy-btn" id="copyBtn" onclick="copyCode()">Copy</button>
+        </div>
+        <div class="code-block"><code id="codeOut"></code></div>
+
+        <!-- Sketch preview -->
+        <div class="preview-section" id="previewSection" style="display:none">
+          <div class="section-label">Preview</div>
+          <div class="preview-legend" id="previewLegend"></div>
+          <div id="previewContainer"></div>
+        </div>
+
+      </div><!-- /output-section -->
+
+    </div><!-- /panel-right -->
+
+  </div><!-- /cruncher -->
+
+  <script>
+    // ─────────────────────────────────────────────────────────── State ──
+    const state = {
+      filename: '',
+      headers: [],
+      rows: [],
+      columns: [],
+      shuffle: false,
+      seed: rndSeed(),
+      rowLimit: 10,
+      hiddenCols: new Set(), // columns excluded from output data
+      filters: {},           // per-column row filters
+    };
+
+    // ─────────────────────────────────────────────────────── CSV parser ──
+    function parseCSVLine(line) {
+      const out = [];
+      let field = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQ && line[i + 1] === '"') { field += '"'; i++; }
+          else inQ = !inQ;
+        } else if (ch === ',' && !inQ) { out.push(field.trim()); field = ''; }
+        else field += ch;
+      }
+      out.push(field.trim());
+      return out;
+    }
+
+    function parseCSV(text) {
+      const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim().split('\n');
+      if (lines.length < 2) return null;
+      const headers = parseCSVLine(lines[0]);
+      const rows = [];
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const vals = parseCSVLine(lines[i]);
+        const row = {};
+        headers.forEach((h, j) => row[h] = vals[j] !== undefined ? vals[j] : '');
+        rows.push(row);
+      }
+      return { headers, rows };
+    }
+
+    // ──────────────────────────────────────────── Column analysis ──
+    function analyzeColumns(headers, rows) {
+      return headers.map(col => {
+        const vals = rows.map(r => r[col]);
+        const nums = vals.map(v => parseFloat(v.trim())).filter(n => !isNaN(n));
+        const allNum = nums.length === vals.filter(v => v.trim() !== '').length && nums.length > 0;
+        if (allNum) {
+          return {
+            col, type: 'number',
+            min: Math.min(...nums),
+            max: Math.max(...nums),
+            mean: r2(nums.reduce((a, b) => a + b, 0) / nums.length),
+            count: nums.length,
+          };
+        } else {
+          const unique = [...new Set(vals.filter(v => v.trim() !== ''))];
+          return { col, type: 'text', unique, count: vals.filter(v => v.trim() !== '').length };
+        }
+      });
+    }
+
+    // ──────────────────────────────────────────── Seeded shuffle ──
+    function seededShuffle(arr, seed) {
+      const a = [...arr];
+      let s = (seed >>> 0) || 1;
+      for (let i = a.length - 1; i > 0; i--) {
+        s = Math.imul(s, 1664525) + 1013904223 | 0;
+        const j = (s >>> 0) % (i + 1);
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function rndSeed() { return Math.floor(Math.random() * 99999) + 1; }
+
+    // ──────────────────────────────────────── Get active rows ──
+    function getActiveRows() {
+      let rows = state.rows.filter(row =>
+        Object.entries(state.filters).every(([col, f]) =>
+          f.values.has((row[col] || '').trim())
+        )
+      );
+      if (state.shuffle) rows = seededShuffle(rows, state.seed);
+      return rows.slice(0, Math.max(1, state.rowLimit || 1));
+    }
+
+    // ──────────────────────────────────────── Code generation ──
+    function toCamel(str) {
+      return str
+        .replace(/[^a-zA-Z0-9\s_-]/g, '')
+        .replace(/[-_\s]+(.)/g, (_, c) => c.toUpperCase())
+        .replace(/^[^a-zA-Z]+/, '')
+        .replace(/^(.)/, c => c.toLowerCase()) || 'col';
+    }
+
+    function fmtVal(v) {
+      const n = parseFloat(v);
+      return (!isNaN(n) && String(v).trim() !== '') ? n : JSON.stringify(String(v));
+    }
+
+    function generateCode(activeRows) {
+      if (!activeRows.length) return '// No rows match the current filters.';
+
+      const { headers, columns, hiddenCols } = state;
+      const visHeaders = headers.filter(h => !hiddenCols.has(h));
+      const visCols    = columns.filter(c => !hiddenCols.has(c.col));
+
+      if (!visHeaders.length) return '// All columns are hidden — toggle at least one on.';
+
+      const colMap = Object.fromEntries(columns.map(c => [c.col, c]));
+
+      // Compute ranges from active rows for visible numeric columns
+      const activeRanges = {};
+      visCols.filter(c => c.type === 'number').forEach(c => {
+        const nums = activeRows.map(r => parseFloat(r[c.col])).filter(n => !isNaN(n));
+        if (nums.length) activeRanges[c.col] = { min: Math.min(...nums), max: Math.max(...nums) };
+      });
+
+      // Data array — only visible columns
+      const dataLines = activeRows.slice(0, 100).map(row => {
+        const pairs = visHeaders.map(h => `${toCamel(h)}: ${fmtVal(row[h])}`);
+        return `  { ${pairs.join(', ')} }`;
+      });
+
+      // Destructure
+      const vars = visHeaders.map(toCamel);
+      const destruct = vars.length <= 7
+        ? `const { ${vars.join(', ')} } = data[i];`
+        : `const d = data[i]; // d.${vars.slice(0, 3).join(', d.')} ...`;
+
+      // Column comments
+      const colLines = visHeaders.map(h => {
+        const c = colMap[h], vn = toCamel(h);
+        if (c && c.type === 'number') {
+          const ar = activeRanges[c.col];
+          return ar ? `    // ${vn}: ${ar.min}–${ar.max}` : `    // ${vn}: number`;
+        }
+        return `    // ${vn}: text`;
+      });
+
+      // map() hints for visible numeric columns
+      const mapHints = visCols
+        .filter(c => c.type === 'number' && activeRanges[c.col])
+        .map(c => {
+          const { min, max } = activeRanges[c.col];
+          const vn = toCamel(c.col);
+          return `    // map(${vn}, ${min}, ${max}, outputMin, outputMax)  ← replace outputMin/outputMax with pixel values`;
+        });
+
+      // Header comment
+      const parts = [`${activeRows.length} row${activeRows.length !== 1 ? 's' : ''}`];
+      if (state.shuffle) parts.push('shuffled');
+      if (activeRows.length < state.rows.length) parts.push(`filtered from ${state.rows.length}`);
+      if (hiddenCols.size) parts.push(`${visHeaders.length} of ${headers.length} cols`);
+      const header = `// ${parts.join(' · ')}`;
+
+      // Concrete draw stub — one x position + one map() example per numeric column
+      const numColsVisible = visCols.filter(c => c.type === 'number' && activeRanges[c.col]);
+      const stubLines = [];
+      stubLines.push(`    // Position: divide the canvas into equal columns, one per data row.`);
+      stubLines.push(`    // (i + 0.5) * colW centers the mark within its column.`);
+      stubLines.push(`    let colW = width / data.length;`);
+      stubLines.push(`    let x = (i + 0.5) * colW;`);
+      if (numColsVisible[0]) {
+        const { min, max } = activeRanges[numColsVisible[0].col];
+        const vn = toCamel(numColsVisible[0].col);
+        stubLines.push(`    // map() converts a data value to a visual range.`);
+        stubLines.push(`    // Change the last two numbers to control how big/small the output is.`);
+        stubLines.push(`    let size = map(${vn}, ${min}, ${max}, 5, 40);`);
+        stubLines.push(`    circle(x, height / 2, size);`);
+      } else {
+        stubLines.push(`    circle(x, height / 2, 20);`);
+      }
+
+      return [
+        header,
+        `const data = [`,
+        dataLines.join(',\n'),
+        `];`,
+        ``,
+        `function setup() {`,
+        `  createCanvas(600, 600);`,
+        `  noLoop(); // draw() runs once — remove this line if you want animation`,
+        `}`,
+        ``,
+        `function draw() {`,
+        `  background(245, 240, 232); // R, G, B — off-white RISO paper color`,
+        ``,
+        `  for (let i = 0; i < data.length; i++) {`,
+        `    // Unpack this row's values by name (shorthand for data[i].${vars[0] || 'value'} etc.)`,
+        `    ${destruct}`,
+        ``,
+        ...colLines,
+        ...(mapHints.length ? [``, `    // map(value, dataMin, dataMax, outputMin, outputMax) converts data to pixels.`, ...mapHints] : []),
+        ``,
+        `    // ── starter example — edit or replace this ──────────────────`,
+        ...stubLines,
+        `  }`,
+        `}`,
+      ].join('\n');
+    }
+
+    // ──────────────────────────────────────── Syntax highlight ──
+    function highlight(code) {
+      return code
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/("(?:[^"\\]|\\.)*")/g, '<span class="tok-str">$1</span>')
+        .replace(/(\/\/[^\n]*)/g, '<span class="tok-cmt">$1</span>')
+        .replace(/\b(const|let|var|function|for|return|if|else)\b/g, '<span class="tok-kw">$1</span>')
+        .replace(/\b(createCanvas|background|noLoop|map|setup|draw)\b/g, '<span class="tok-fn">$1</span>')
+        .replace(/(?<![a-zA-Z"#:-])(-?\b\d+\.?\d*\b)/g, '<span class="tok-num">$1</span>');
+    }
+
+    // ──────────────────────────────────────── Update code pane ──
+    let currentCode = '';
+    let previewP5 = null;
+
+    function update() {
+      const active = getActiveRows();
+      currentCode = generateCode(active);
+      document.getElementById('codeOut').innerHTML = highlight(currentCode);
+      document.getElementById('activeCount').textContent = active.length;
+
+      const warn = document.getElementById('warnBar');
+      if (active.length > 100) {
+        warn.textContent = `⚠ Only the first 100 of ${active.length} rows are embedded.`;
+        warn.classList.add('visible');
+      } else {
+        warn.classList.remove('visible');
+      }
+
+      if (previewP5) previewP5.redraw();
+    }
+
+    // ──────────────────────────────────────── Sketch preview ──
+    function initPreview() {
+      if (previewP5) previewP5.remove();
+      document.getElementById('previewSection').style.display = 'block';
+
+      previewP5 = new p5(function(p) {
+        p.setup = function() {
+          const w = document.getElementById('previewContainer').offsetWidth || 480;
+          p.createCanvas(w, 230);
+          p.pixelDensity(1);
+          p.noLoop();
+          p.textFont('monospace');
+        };
+
+        p.draw = function() {
+          p.background(245, 240, 232);
+          p.noStroke();
+
+          const rows = getActiveRows();
+
+          if (!rows.length) {
+            p.fill(200);
+            p.textAlign(p.CENTER, p.CENTER);
+            p.textSize(10);
+            p.text('no rows match the current filters', p.width / 2, p.height / 2);
+            return;
+          }
+
+          const visCols = state.columns.filter(c => !state.hiddenCols.has(c.col));
+          const numCols = visCols.filter(c => c.type === 'number');
+          const textCols = visCols.filter(c => c.type === 'text');
+
+          const PINK = p.color(255, 72, 176, 200);
+          const BLUE = p.color(0, 120, 191, 200);
+          const LABEL_H = 20;
+          const drawH = p.height - LABEL_H;
+          const colW = p.width / rows.length;
+
+          // Precompute value ranges from active rows
+          const ranges = {};
+          numCols.forEach(c => {
+            const nums = rows.map(r => parseFloat(r[c.col])).filter(n => !isNaN(n));
+            ranges[c.col] = nums.length > 1
+              ? { min: Math.min(...nums), max: Math.max(...nums) }
+              : { min: 0, max: nums[0] || 1 };
+          });
+
+          // Update legend
+          const hints = [];
+          if (numCols[0]) hints.push(numCols[0].col + ' → density');
+          if (numCols[1]) hints.push(numCols[1].col + ' → size');
+          if (numCols[2]) hints.push(numCols[2].col + ' → color');
+          if (!hints.length)  hints.push('no numeric columns — uniform marks');
+          document.getElementById('previewLegend').textContent = hints.join('   ·   ');
+
+          for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const x = (i + 0.5) * colW;
+
+            let spacing = 16;
+            let dotSize = Math.min(colW * 0.65, 14);
+            let col = BLUE;
+
+            if (numCols[0]) {
+              const r = ranges[numCols[0].col];
+              const v = parseFloat(row[numCols[0].col]);
+              if (!isNaN(v)) spacing = p.map(v, r.min, r.max, 42, 7);
+            }
+
+            if (numCols[1]) {
+              const r = ranges[numCols[1].col];
+              const v = parseFloat(row[numCols[1].col]);
+              if (!isNaN(v)) dotSize = p.map(v, r.min, r.max, 3, Math.min(colW * 0.9, 28));
+            }
+
+            if (numCols[2]) {
+              const r = ranges[numCols[2].col];
+              const v = parseFloat(row[numCols[2].col]);
+              const mid = (r.min + r.max) / 2;
+              col = (!isNaN(v) && v > mid) ? PINK : BLUE;
+            } else if (numCols.length === 0) {
+              col = i % 2 === 0 ? PINK : BLUE;
+            }
+
+            p.fill(col);
+            let y = spacing / 2;
+            while (y < drawH) {
+              p.circle(x, y, dotSize);
+              y += spacing;
+            }
+          }
+
+          // Bottom labels: first visible text column (truncated), or row index
+          p.textAlign(p.CENTER, p.BOTTOM);
+          p.textSize(7);
+          p.fill(180);
+          for (let i = 0; i < rows.length; i++) {
+            const x = (i + 0.5) * colW;
+            const lbl = textCols[0]
+              ? String(rows[i][textCols[0].col] || '').substring(0, 5)
+              : String(i + 1);
+            p.text(lbl, x, p.height - 2);
+          }
+        };
+
+        p.windowResized = function() {
+          const w = document.getElementById('previewContainer').offsetWidth;
+          if (w) p.resizeCanvas(w, 230);
+        };
+      }, document.getElementById('previewContainer'));
+    }
+
+    // ──────────────────────────────────────── Render left panel ──
+    function renderStats() {
+      const { filename, rows, headers, columns } = state;
+      document.getElementById('statsMeta').innerHTML =
+        `<strong>${esc(filename)}</strong> · ${rows.length} rows · ${headers.length} cols`;
+
+      document.getElementById('colCards').innerHTML = columns.map(c => {
+        if (c.type === 'number') {
+          return `<div class="col-card">
+            <div class="col-card-name" title="${esc(c.col)}">${esc(c.col)}</div>
+            <span class="col-type numeric">number</span>
+            <div class="stat-grid">
+              <span class="stat-lbl">min</span><span class="stat-val">${r2(c.min)}</span>
+              <span class="stat-lbl">max</span><span class="stat-val">${r2(c.max)}</span>
+              <span class="stat-lbl">avg</span><span class="stat-val">${r2(c.mean)}</span>
+            </div>
+          </div>`;
+        } else {
+          const shown = c.unique.slice(0, 3).map(esc).join(', ');
+          const more = c.unique.length > 3 ? ` +${c.unique.length - 3}` : '';
+          return `<div class="col-card">
+            <div class="col-card-name" title="${esc(c.col)}">${esc(c.col)}</div>
+            <span class="col-type text">text</span>
+            <div class="stat-grid">
+              <span class="stat-lbl">unique</span><span class="stat-val">${c.unique.length}</span>
+              <span class="stat-lbl">rows</span><span class="stat-val">${c.count}</span>
+            </div>
+            <div class="text-samples">${shown}${more}</div>
+          </div>`;
+        }
+      }).join('');
+
+      const tbl = document.getElementById('previewTable');
+      const preview = rows.slice(0, 5);
+      tbl.innerHTML =
+        `<thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` +
+        `<tbody>${preview.map(row =>
+          `<tr>${headers.map(h => `<td title="${esc(row[h] || '')}">${esc(row[h] || '')}</td>`).join('')}</tr>`
+        ).join('')}</tbody>`;
+      document.getElementById('previewMore').textContent =
+        rows.length > 5 ? `… ${rows.length - 5} more rows` : '';
+    }
+
+    // ──────────────────────────────────────── Render right panel controls ──
+    function renderControls() {
+      const { rows, columns } = state;
+
+      // Row limit
+      const li = document.getElementById('rowLimitInput');
+      li.max = rows.length;
+      li.value = Math.min(state.rowLimit, rows.length);
+      document.getElementById('ofTotal').textContent = `of ${rows.length}`;
+
+      // Seed display
+      document.getElementById('seedDisplay').textContent =
+        state.shuffle ? `seed ${state.seed}` : '';
+
+      // Rebuild — clone node to drop any stale listeners
+      const oldFc = document.getElementById('filterControls');
+      const fc = oldFc.cloneNode(false);
+      oldFc.parentNode.replaceChild(fc, oldFc);
+
+      fc.innerHTML = columns.map((c, idx) => {
+        const isOn = !state.hiddenCols.has(c.col);
+
+        // Unique values for this column, sorted sensibly
+        const allVals = [...new Set(state.rows.map(r => (r[c.col] || '').trim()).filter(Boolean))];
+        if (c.type === 'number') allVals.sort((a, b) => parseFloat(a) - parseFloat(b));
+        else allVals.sort();
+
+        const active = state.filters[c.col] ? state.filters[c.col].values : new Set(allVals);
+        const MAX = 30;
+        const pills = allVals.slice(0, MAX).map(v =>
+          `<button class="pill ${active.has(v) ? 'on' : ''}" data-idx="${idx}" data-val="${esc(v)}">${esc(v)}</button>`
+        );
+        const overflow = allVals.length > MAX
+          ? `<span class="stat-lbl">+${allVals.length - MAX} more</span>` : '';
+
+        return `<div class="filter-col-block">
+          <div class="filter-col-header">
+            <label class="col-toggle" title="${isOn ? 'Remove' : 'Include'} ${esc(c.col)} from data">
+              <input type="checkbox" class="col-toggle-input" data-idx="${idx}" ${isOn ? 'checked' : ''}>
+              <span class="col-toggle-track"></span>
+            </label>
+            <span class="filter-col-name ${isOn ? '' : 'col-name-off'}" title="${esc(c.col)}">${esc(c.col)}</span>
+          </div>
+          <div class="pill-group ${isOn ? '' : 'pills-off'}">${pills.join('')}${overflow}</div>
+        </div>`;
+      }).join('');
+
+      // Toggle: controls whether column appears in output data
+      fc.addEventListener('change', e => {
+        if (!e.target.classList.contains('col-toggle-input')) return;
+        const idx = parseInt(e.target.dataset.idx);
+        const c = state.columns[idx];
+        if (!c) return;
+        if (e.target.checked) {
+          state.hiddenCols.delete(c.col);
+        } else {
+          state.hiddenCols.add(c.col);
+        }
+        // Update visual state of this block without full re-render
+        const block = e.target.closest('.filter-col-block');
+        block.querySelector('.filter-col-name').classList.toggle('col-name-off', !e.target.checked);
+        block.querySelector('.pill-group').classList.toggle('pills-off', !e.target.checked);
+        block.querySelector('.col-toggle').title =
+          (e.target.checked ? 'Remove ' : 'Include ') + c.col + ' from data';
+        update();
+      });
+
+      // Pills: filter which rows are included
+      fc.addEventListener('click', e => {
+        const pill = e.target.closest('.pill');
+        if (!pill) return;
+        const idx = parseInt(pill.dataset.idx);
+        const c = state.columns[idx];
+        if (!c) return;
+        ensureFilter(c);
+        const val = pill.dataset.val;
+        if (state.filters[c.col].values.has(val)) {
+          state.filters[c.col].values.delete(val);
+          pill.classList.remove('on');
+        } else {
+          state.filters[c.col].values.add(val);
+          pill.classList.add('on');
+        }
+        update();
+      });
+    }
+
+    function ensureFilter(c) {
+      if (!state.filters[c.col]) {
+        const allVals = [...new Set(state.rows.map(r => (r[c.col] || '').trim()).filter(Boolean))];
+        state.filters[c.col] = { values: new Set(allVals) };
+      }
+    }
+
+    // ──────────────────────────────────────── Show / hide panels ──
+    function showResults() {
+      document.getElementById('statsSection').classList.add('visible');
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('outputSection').classList.add('visible');
+      renderStats();
+      renderControls();
+      update();
+      initPreview();
+    }
+
+    // ──────────────────────────────────────── Load data ──
+    function loadData(text, filename) {
+      const parsed = parseCSV(text);
+      if (!parsed || parsed.rows.length === 0) {
+        alert('Could not parse CSV — make sure the first row is a header.');
+        return;
+      }
+      Object.assign(state, {
+        filename,
+        headers: parsed.headers,
+        rows: parsed.rows,
+        columns: analyzeColumns(parsed.headers, parsed.rows),
+        rowLimit: Math.min(parsed.rows.length, 10),
+        hiddenCols: new Set(),
+        filters: {},
+        shuffle: false,
+        seed: rndSeed(),
+      });
+      document.getElementById('shuffleToggle').checked = false;
+      showResults();
+    }
+
+    function resetTool() {
+      Object.assign(state, { filename: '', headers: [], rows: [], columns: [], hiddenCols: new Set(), filters: {} });
+      document.getElementById('statsSection').classList.remove('visible');
+      document.getElementById('emptyState').style.display = '';
+      document.getElementById('outputSection').classList.remove('visible');
+      document.getElementById('fileInput').value = '';
+    }
+
+    // ──────────────────────────────────────── Controls wiring ──
+    document.getElementById('shuffleToggle').addEventListener('change', e => {
+      state.shuffle = e.target.checked;
+      document.getElementById('seedDisplay').textContent =
+        state.shuffle ? `seed ${state.seed}` : '';
+      update();
+    });
+
+    document.getElementById('newSeedBtn').addEventListener('click', () => {
+      state.seed = rndSeed();
+      document.getElementById('seedDisplay').textContent =
+        state.shuffle ? `seed ${state.seed}` : '';
+      if (state.shuffle) update();
+    });
+
+    document.getElementById('rowLimitInput').addEventListener('input', e => {
+      state.rowLimit = parseInt(e.target.value) || 1;
+      update();
+    });
+
+    // ──────────────────────────────────────── File input ──
+    document.getElementById('fileInput').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => loadData(ev.target.result, file.name);
+      reader.readAsText(file);
+    });
+
+    // ──────────────────────────────────────── Drag & drop ──
+    const dropArea = document.getElementById('dropArea');
+    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag-over'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag-over'));
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      dropArea.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => loadData(ev.target.result, file.name);
+      reader.readAsText(file);
+    });
+
+    // ──────────────────────────────────────── Paste section ──
+    const pasteToggle = document.getElementById('pasteToggle');
+    const pasteSection = document.getElementById('pasteSection');
+    pasteToggle.addEventListener('click', () => {
+      pasteSection.classList.toggle('open');
+      pasteToggle.textContent = pasteSection.classList.contains('open')
+        ? '▼ or paste CSV text' : '▶ or paste CSV text';
+    });
+
+    document.getElementById('parseBtn').addEventListener('click', () => {
+      const text = document.getElementById('pasteArea').value.trim();
+      if (text) loadData(text, 'pasted.csv');
+    });
+
+    document.getElementById('clearPasteBtn').addEventListener('click', () => {
+      document.getElementById('pasteArea').value = '';
+    });
+
+    // ──────────────────────────────────────── Sample data ──
+    const SAMPLE = `title,artist,year,bpm,energy,warmth
+Bitches Brew,Miles Davis,1970,116,87,72
+Trans-Europe Express,Kraftwerk,1977,116,61,40
+Planet Rock,Afrika Bambaataa,1982,128,95,55
+Blue Lines,Massive Attack,1991,92,68,58
+Selected Ambient Works,Aphex Twin,1992,145,45,30
+Since I Left You,The Avalanches,2001,120,80,62
+Madvillainy,Madvillain,2004,88,90,55
+Untrue,Burial,2007,138,55,38
+Arular,M.I.A.,2005,140,98,70
+Donuts,J Dilla,2006,93,82,60`;
+
+    document.getElementById('sampleBtn').addEventListener('click', () => {
+      loadData(SAMPLE, 'sample-albums.csv');
+    });
+
+    // ──────────────────────────────────────── Copy ──
+    function copyCode() {
+      navigator.clipboard.writeText(currentCode).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+      });
+    }
+
+    // ──────────────────────────────────────── Helpers ──
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function r2(n) { return Math.round(n * 100) / 100; }
+  </script>
+
+</body>
+</html>

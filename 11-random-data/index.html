@@ -23,6 +23,7 @@
   <p class="desc">Same dataset as demo 10 — but shuffled and sampled each time. Press <strong>space</strong> to regenerate. Each seed picks 5 random records and scatters them into a new composition.</p>
   <div class="data-download"><a href="data.csv" download>↓ data.csv</a></div>
   <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
   <div class="explanation">
 
     <h2>How it works</h2>
@@ -105,6 +106,9 @@ for (let i = 0; i < dotCount; i++) {
       <li>Use <code>random()</code> for position and <code>map()</code> for size/shape driven by data values</li>
       <li>Wrap everything in <code>randomSeed(seed)</code> so any composition can be reproduced</li>
     </ol>
+    <p>
+      The <a href="../15-data-cruncher/index.html">Data Cruncher</a> can help you prep a new CSV — toggle columns on and off, filter rows down to the subset you want, and copy the embedded data array directly into your sketch.
+    </p>
 
     <h3>Reference</h3>
     <p><a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WORKING-WITH-DATA.md">Working with Data in p5.js</a> — full reference for CSV, randomization, and JSON/APIs.</p>

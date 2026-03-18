@@ -23,6 +23,7 @@
   <p class="desc">10 records from a CSV file — each column is one row of data. BPM controls dot density, energy controls dot size, warmth selects the ink. Press r to toggle labels.</p>
   <div class="data-download"><a href="data.csv" download>↓ data.csv</a></div>
   <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
   <div class="explanation">
 
     <h2>How it works</h2>
@@ -126,6 +127,9 @@ while (y < height - 55) {   // dots from top to bottom of the column
     </ol>
     <p>
       Google Sheets → File → Download → CSV. Excel → Save As → CSV. Any tool that handles data can export a CSV.
+    </p>
+    <p>
+      Not sure what columns your CSV has or what ranges to put in <code>map()</code>? Drop it into the <a href="../15-data-cruncher/index.html">Data Cruncher</a> — it shows min, max, and average for every column and generates a ready-to-paste sketch.
     </p>
 
     <h3>Reference</h3>

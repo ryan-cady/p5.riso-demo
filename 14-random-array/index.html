@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>14 — Randomize Array</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-pink); }</style>
+</head>
+<body class="demo-page">
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">14</span>
+      <h1>Randomize Array</h1>
+    </div>
+  </header>
+  <p class="desc">Same 10-element array as demo 13 — shuffled and sampled on each draw. Press <strong>space</strong> for a new composition. Each seed picks 5 items and arranges them into a different layout.</p>
+  <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>
+      Demo 13 showed a fixed array drawn in order — deterministic, always the same. This demo asks: what if you <em>shuffle</em> the array and draw only a subset? The same 10 items become a generative system. Change the seed and you get a completely different selection and arrangement.
+    </p>
+
+    <h3>shuffle() — reorder an array randomly</h3>
+    <pre><code>// shuffle() returns a new array with the same items in a random order.
+// The original data[] array is not changed.
+let shuffled = shuffle(data);
+
+// slice(0, 5) takes the first 5 items from the shuffled list —
+// a random subset with no repeats.
+let selected = shuffled.slice(0, 5);</code></pre>
+    <p>
+      Slicing the first N items after shuffling is a clean way to pick a random subset without repeating anything. Change <code>5</code> to any number up to <code>data.length</code>.
+    </p>
+
+    <h3>randomSeed() — reproducible results</h3>
+    <pre><code>let seed = 42;
+
+function draw() {
+  randomSeed(seed); // reset the sequence at the start of every draw
+  let selected = shuffle(data).slice(0, 5);
+  // ...
+}</code></pre>
+    <p>
+      Without <code>randomSeed()</code>, every call to <code>random()</code> and <code>shuffle()</code> pulls from an unpredictable sequence — good for live animation, bad for reproducible prints. <code>randomSeed(n)</code> resets the sequence to a known starting point, so the same seed always produces the same shuffle and the same composition.
+    </p>
+    <p>
+      Calling <code>randomSeed()</code> at the very top of <code>draw()</code> ensures the entire drawing is locked to one seed.
+    </p>
+
+    <h3>Picking a new seed</h3>
+    <pre><code>function keyReleased() {
+  if (key === " ") {
+    // This random() runs outside draw(), after randomSeed() has expired,
+    // so it draws from the system's unseeded RNG — truly unpredictable.
+    seed = floor(random(9999));
+    redraw();
+  }
+}</code></pre>
+    <p>
+      The key insight: <code>seed = floor(random(9999))</code> runs <em>after</em> <code>draw()</code> has finished, outside the seeded context — so it gives a genuinely new, unpredictable number each time. That new seed then locks the next composition.
+    </p>
+
+    <h3>random(array) — pick one item</h3>
+    <pre><code>let names = ["sub", "kick", "bass", "pad", "lead"];
+let pick = random(names); // one item chosen at random</code></pre>
+    <p>
+      Pass an array to <code>random()</code> and it returns one element at random. Useful for picking a random color, a random record from your data, or a random word from a list.
+    </p>
+
+    <h3>The difference from demo 13</h3>
+    <ul>
+      <li><strong>Demo 13</strong> — fixed array, drawn in order. Add/remove items and the layout updates, but the arrangement never changes.</li>
+      <li><strong>Demo 14</strong> — same array, shuffled and sampled. One dataset, many possible compositions. The data is the <em>material</em>; the seed is the <em>arrangement</em>.</li>
+    </ul>
+    <p>
+      This is also the same pattern used in <a href="../11-random-data/index.html">demo 11</a> — the only difference is that demo 11 loads its data from a CSV file instead of a hardcoded array.
+    </p>
+
+    <h3>Using your own data</h3>
+    <p>
+      Replace the <code>data</code> array with any array of objects. The pattern stays the same: shuffle, slice, seed. Use the <a href="../15-data-cruncher/index.html">Data Cruncher</a> to generate a ready-to-paste array from any CSV file.
+    </p>
+
+    <h3>Reference</h3>
+    <p><a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WORKING-WITH-DATA.md">Working with Data in p5.js</a> — full reference for arrays, CSV, and randomization.</p>
+
+  </div>
+</body>
+</html>
