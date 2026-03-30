@@ -75,6 +75,7 @@ let composition = [];
 let textComposition = [];
 let blurbComposition = [];
 let blurbBox = {};
+let creditsBox = {};
 let creditsComposition = [];
 
 function preload() {
@@ -244,6 +245,24 @@ function randomize(seed) {
     layer: creditsLayer,
   }));
 
+  // Measure max text width for the credits box
+  textSize(creditsFontSize);
+  let maxCreditsW = 0;
+  for (let line of creditsLines) {
+    if (!line) continue;
+    textFont(boldLines.has(line) ? "rig-shaded-bold-face" : "rig-shaded-medium-face");
+    let w = textWidth(line);
+    if (w > maxCreditsW) maxCreditsW = w;
+  }
+  const CREDITS_PAD = 20;
+  creditsBox = {
+    x: rightFlapX - CREDITS_PAD,
+    y: creditsStartY - CREDITS_PAD,
+    w: maxCreditsW + CREDITS_PAD * 2,
+    h: creditsTotalH + CREDITS_PAD * 2,
+    layer: creditsLayer,
+  };
+
   loop();
 }
 
@@ -340,16 +359,18 @@ function draw() {
   }
   blurbBox.layer.noErase();
 
+  creditsBox.layer.noStroke();
+  creditsBox.layer.fill(255);
+  creditsBox.layer.rect(creditsBox.x, creditsBox.y, creditsBox.w, creditsBox.h);
+
+  creditsBox.layer.erase();
   for (let cr of creditsComposition) {
-    cr.layer.push();
-    cr.layer.textFont(cr.font);
-    cr.layer.textSize(cr.size);
-    cr.layer.textAlign(LEFT, CENTER);
-    cr.layer.noStroke();
-    cr.layer.fill(255);
-    cr.layer.text(cr.word, cr.x, cr.y);
-    cr.layer.pop();
+    creditsBox.layer.textFont(cr.font);
+    creditsBox.layer.textSize(cr.size);
+    creditsBox.layer.textAlign(LEFT, CENTER);
+    creditsBox.layer.text(cr.word, cr.x, cr.y);
   }
+  creditsBox.layer.noErase();
 
   drawRiso();
   noLoop();
