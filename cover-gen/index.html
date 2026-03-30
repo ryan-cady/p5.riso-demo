@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cover Gen</title>
+  <link rel="stylesheet" href="https://use.typekit.net/gmg0kmz.css">
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="../lib/p5.riso.js"></script>
+  <style>
+    /*
+      Typekit font reference
+      ----------------------
+      OCR-A Std:
+        font-family: "ocr-a-std", monospace;
+        font-weight: 400;
+
+      Rig Shaded — Bold:
+        font-family: "rig-shaded-bold-extrude", sans-serif;   font-weight: 700;
+        font-family: "rig-shaded-bold-face", sans-serif;      font-weight: 700;
+        font-family: "rig-shaded-bold-inline", sans-serif;    font-weight: 700;
+        font-family: "rig-shaded-bold-shading-coar", sans-serif; font-weight: 700;
+        font-family: "rig-shaded-bold-shading-fine", sans-serif; font-weight: 700;
+        font-family: "rig-shaded-bold-shadow", sans-serif;    font-weight: 700;
+
+      Rig Shaded — Medium:
+        font-family: "rig-shaded-medium-extrude", sans-serif;      font-weight: 500;
+        font-family: "rig-shaded-medium-face", sans-serif;         font-weight: 500;
+        font-family: "rig-shaded-medium-shaded-coa", sans-serif;   font-weight: 500;
+        font-family: "rig-shaded-medium-shaded-fin", sans-serif;   font-weight: 500;
+        font-family: "rig-shaded-medium-shadow", sans-serif;       font-weight: 500;
+
+      Rig Shaded — Light:
+        font-family: "rig-shaded-light-extrude", sans-serif;       font-weight: 300;
+        font-family: "rig-shaded-light-face", sans-serif;          font-weight: 300;
+        font-family: "rig-shaded-light-shading-coa", sans-serif;   font-weight: 300;
+        font-family: "rig-shaded-light-shading-fin", sans-serif;   font-weight: 300;
+        font-family: "rig-shaded-light-shadow", sans-serif;        font-weight: 300;
+
+      Rig Shaded — Zero:
+        font-family: "rig-shaded-zero-extrude", sans-serif;        font-weight: 100;
+        font-family: "rig-shaded-zero-shading-coar", sans-serif;   font-weight: 100;
+        font-family: "rig-shaded-zero-shading-fine", sans-serif;   font-weight: 100;
+        font-family: "rig-shaded-zero-shadow", sans-serif;         font-weight: 100;
+    */
+
+    body {
+      margin: 0;
+      background: #f5f0e8;
+      overflow: auto;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 24px auto;
+    }
+
+    .btn-row button {
+      padding: 10px 20px;
+      font-family: "ocr-a-std", monospace;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      background: #fff;
+      border: 1.5px solid #111;
+      cursor: pointer;
+    }
+
+    .btn-row button:hover {
+      background: #111;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="sketch.js"></script>
+  <div class="btn-row">
+    <button onclick="randomize()">&#8635; New Composition</button>
+    <button onclick="exportRiso()">&#8595; Export Layers</button>
+  </div>
+</body>
+
+</html>

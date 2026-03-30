@@ -78,11 +78,11 @@ function draw() {
 
     // --- EXAMPLE 1: Basic Color Mixing ---
     // Demonstrates how colors blend optically
-    // basicColorMixing();
+    basicColorMixing();
 
     // --- EXAMPLE 2: Halftone Gradients ---
     // Creates smooth gradients using ink density
-    halftoneGradients();
+    // halftoneGradients();
 
     // --- EXAMPLE 3: Text Layering ---
     // Shows registration and overlap with typography
