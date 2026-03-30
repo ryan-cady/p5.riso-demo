@@ -355,7 +355,13 @@ function draw() {
   noLoop();
 }
 
+function exportAll() {
+  let seed = window.location.hash.slice(1);
+  Riso.channels.forEach((c) => c.export("cover-" + seed + "-" + c.channelName + ".png"));
+  saveCanvas("cover-" + seed + "-composite", "png");
+}
+
 function keyReleased() {
-  if (key === "e") exportRiso();
+  if (key === "e") exportAll();
   if (key === "r") randomize();
 }
