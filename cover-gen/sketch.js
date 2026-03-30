@@ -17,6 +17,12 @@ const IMAGE_PATHS = [
   "images/Elise_Generative Cover.png",
   "images/Project2_GenerativeComp_NidhiSrikanth.grayscale.ink-1-brightred.png",
   "images/Smith_Destiny_Gen-Cover.png",
+  "images/ZanderConnally.png",
+  "images/Rascol_p2_cover_G&G.png",
+  "images/Ordiway_Generative_Cover.png",
+  "images/Breton_Generative_Cover.png",
+  "images/avifacecover.png",
+  "images/tobe.png",
 ];
 
 const HALFTONE_SHAPES = ["circle", "square", "line", "ellipse", "cross"];
@@ -39,7 +45,26 @@ const PAPER_COLORS = [
 const WORDS = ["glitch &", "grain", "vol 1"];
 const TEXT_COLS = 12;
 
-const BLURB = "Glitch & Grain Press is a publication presenting work created in Glitch & Grain, a course at the College for Creative Studies in Detroit exploring the intersection of generative code and analog printmaking. Each student built a data-driven visual system in p5.js — translating a self-chosen dataset into form, density, and mark through the p5.riso library — and contributed a series of generative compositions printed with the RISOgraph. This work collects the result of their completed systems, combined as a collabortive edition of zines.";
+const CONTRIBUTORS = [
+  "Eben Breton", "Zander Connally", "Dakota Hanson-Meier", "Davin Ordiway",
+  "Mar Oviedo", "Zofia Pejas", "Tobe Porter", "Thomas Rascol",
+  "Elise Sansbury", "Destiny Smith", "Nidhi Srikanth", "Veronica Trevino",
+];
+
+const BLURB ="Glitch & Grain Press is a publication presenting work created in Glitch & Grain, a course at the College for Creative Studies in Detroit exploring the intersection of generative code and analog printmaking. Each student built a data-driven visual system in p5.js — translating a self-chosen dataset into form, density, and mark through the p5.riso library — and contributed a series of generative compositions printed with the RISOgraph. This work collects the result of their completed systems, combined as a collabortive edition of zines.";
+
+// Seeded RNG (mulberry32) — guarantees same output for same seed across browsers
+let _rng;
+function seedRng(seed) {
+  let s = seed >>> 0;
+  _rng = () => { s += 0x6D2B79F5; let t = Math.imul(s ^ s >>> 15, 1 | s); t ^= t + Math.imul(t ^ t >>> 7, 61 | t); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+}
+function rnd(a, b) {
+  if (Array.isArray(a)) return a[floor(_rng() * a.length)];
+  if (b == null) return _rng() * a;
+  return a + _rng() * (b - a);
+}
+function rndInt(a, b) { return floor(rnd(a, b)); }
 
 let wordSize = 14;
 let paperColor = [245, 240, 232];
@@ -50,6 +75,7 @@ let composition = [];
 let textComposition = [];
 let blurbComposition = [];
 let blurbBox = {};
+let creditsComposition = [];
 
 function preload() {
   for (let path of IMAGE_PATHS) {
@@ -60,44 +86,50 @@ function preload() {
 function setup() {
   createCanvas(2550, 1275);
   pixelDensity(1);
-  randomize();
+  // Use seed from URL hash if present, otherwise pick a new one
+  let hashSeed = parseInt(window.location.hash.slice(1));
+  randomize(isNaN(hashSeed) ? null : hashSeed);
 }
 
-function randomize() {
-  paperColor = random(PAPER_COLORS);
+function randomize(seed) {
+  if (seed == null) seed = floor(Math.random() * 1_000_000);
+  window.location.hash = seed;
+  seedRng(seed);
+
+  paperColor = rnd(PAPER_COLORS);
 
   // Reset channels and pick 2 distinct random riso colors
   Riso.channels = [];
   let pool = [...RISO_COLOR_NAMES];
-  let i1 = floor(random(pool.length));
+  let i1 = rndInt(pool.length);
   let name1 = pool.splice(i1, 1)[0];
-  let name2 = random(pool);
+  let name2 = rnd(pool);
   layer1 = new Riso(name1);
   layer2 = new Riso(name2);
 
   // Build random layout and effect params for each image
   composition = imgs.map((img) => {
-    let scale = random(0.05, 0.30); // fraction of canvas width
+    let scale = rnd(0.10, 0.25); // fraction of canvas width
     let displayW = floor(width * scale);
     let displayH = floor(displayW * img.height / img.width);
     return {
       img,
       displayW,
       displayH,
-      x: random(-displayW * 0.25, width - displayW * 0.75),
-      y: random(-displayH * 0.25, height - displayH * 0.75),
-      rotation: random([0, HALF_PI, PI, -HALF_PI]),
-      halftoneShape: random(HALFTONE_SHAPES),
-      halftoneFreq: floor(random(3, 12)),
-      halftoneAngle: random(TWO_PI),
-      halftoneIntensity: random(80, 180),
-      layer: random() > 0.5 ? layer1 : layer2,
+      x: rnd(0, width - displayW),
+      y: rnd(0, height - displayH),
+      rotation: rnd([0, HALF_PI, PI, -HALF_PI]),
+      halftoneShape: rnd(HALFTONE_SHAPES),
+      halftoneFreq: rndInt(3, 12),
+      halftoneAngle: rnd(TWO_PI),
+      halftoneIntensity: rnd(80, 180),
+      layer: _rng() > 0.5 ? layer1 : layer2,
     };
   });
 
   // Pick a uniform size for this composition, then fit each word within
   // a 6-column grid on the right half without going off the canvas edge
-  wordSize = floor(random(64, 150));
+  wordSize = rndInt(64, 150);
 
   // Text is constrained to the first 60% of the right half
   const LINE_GAP = 2;
@@ -116,9 +148,9 @@ function randomize() {
   // --- Main block (all words except "vol 1") ---
   let blockH = mainWords.reduce((sum) => sum + wordSize, LINE_GAP * (mainWords.length - 1));
   let totalH = blockH;
-  let blockY = random(100, height - totalH - 100);
+  let blockY = rnd(100, height - totalH - 100);
   textSize(wordSize);
-  const TEXT_MIN_X = width / 2 + 60; // 40px clearance past the right spine line (width/2 + 20)
+  const TEXT_MIN_X = width / 2 + 75; // 40px clearance past the right spine line (width/2 + 35)
   let blockX = TEXT_MIN_X;
   textComposition = [];
   let curY = blockY;
@@ -139,9 +171,12 @@ function randomize() {
   textComposition.push({ word: "vol 1", x: volX, y: volY, size: volSize, font: "rig-shaded-bold-extrude", layer: layer1 });
   textComposition.push({ word: "vol 1", x: volX, y: volY, size: volSize, font: "rig-shaded-bold-face",    layer: layer2 });
 
-  // --- Back cover blurb (left half, same column grid logic) ---
+  // --- Back cover blurb — centered between left spine line and left trim line ---
   const BLURB_MARGIN = 60;
-  const blurbZone = (width / 2 - BLURB_MARGIN * 2) / 2;
+  const leftSpine = width / 2 - 35;
+  const leftTrim = width / 2 - 35 - 825;
+  const blurbZoneCenter = (leftSpine + leftTrim) / 2;
+  const blurbZone = (leftSpine - leftTrim) - BLURB_MARGIN * 2;
   const blurbFontSize = 16;
   const blurbLineH = blurbFontSize + 4;
 
@@ -166,11 +201,11 @@ function randomize() {
   const BLURB_PAD = 40;
   let blurbBlockH = blurbLines.length * blurbLineH;
   let blurbStartY = (height - blurbBlockH) / 2;
-  let blurbX = (width / 2 - blurbZone) / 2;
-  let blurbLayer = random() > 0.5 ? layer1 : layer2;
+  let blurbX = blurbZoneCenter;
+  let blurbLayer = _rng() > 0.5 ? layer1 : layer2;
 
   blurbBox = {
-    x: blurbX - BLURB_PAD,
+    x: blurbX - blurbZone / 2 - BLURB_PAD,
     y: blurbStartY - BLURB_PAD,
     w: blurbZone + BLURB_PAD * 2,
     h: blurbBlockH + BLURB_PAD * 2,
@@ -179,11 +214,34 @@ function randomize() {
 
   blurbComposition = blurbLines.map((text, i) => ({
     word: text,
-    x: blurbX + blurbZone / 2,
+    x: blurbX,
     y: blurbStartY + i * blurbLineH + blurbFontSize / 2,
     size: blurbFontSize,
     font: "rig-shaded-medium-face",
     layer: blurbLayer,
+  }));
+
+  // --- Right flap credits ---
+  const creditsFontSize = 16;
+  const creditsLineH = creditsFontSize + 6;
+  const rightFlapX = width / 2 + 35 + 825 + 80;
+  const boldLines = new Set(["Featuring work by", "Instructor", "2026", "College for Creative Studies", "Detroit MI"]);
+  const creditsLines = [
+    "Featuring work by", ...[...CONTRIBUTORS].sort(() => _rng() - 0.5),
+    "", "Instructor", "Ryan Cady",
+    "", "College for Creative Studies", "Detroit MI", "", "2026",
+  ];
+  const creditsTotalH = creditsLines.length * creditsLineH;
+  const creditsStartY = height - 100 - creditsTotalH;
+  const creditsLayer = _rng() > 0.5 ? layer1 : layer2;
+
+  creditsComposition = creditsLines.map((text, i) => ({
+    word: text,
+    x: rightFlapX,
+    y: creditsStartY + i * creditsLineH + creditsFontSize / 2,
+    size: creditsFontSize,
+    font: boldLines.has(text) ? "rig-shaded-bold-face" : "rig-shaded-medium-face",
+    layer: creditsLayer,
   }));
 
   loop();
@@ -197,20 +255,29 @@ function draw() {
   let lum1 = 0.299 * layer1.channelColor[0] + 0.587 * layer1.channelColor[1] + 0.114 * layer1.channelColor[2];
   let lum2 = 0.299 * layer2.channelColor[0] + 0.587 * layer2.channelColor[1] + 0.114 * layer2.channelColor[2];
   let lightLayer = lum1 > lum2 ? layer1 : layer2;
-  lightLayer.stroke(255);
+  lightLayer.stroke(200);
   lightLayer.strokeWeight(1);
   lightLayer.noFill();
   const DASH = 12, GAP = 8;
+  const SPINE_OFFSET = 35;
+  const PAGE_W = 825; // 5.5in at 150 DPI
   for (let y = 0; y < height; y += DASH + GAP) {
     let segH = min(DASH, height - y);
-    lightLayer.line(width / 2 - 20, y, width / 2 - 20, y + segH);
-    lightLayer.line(width / 2 + 20, y, width / 2 + 20, y + segH);
+    // Spine lines
+    lightLayer.line(width / 2 - SPINE_OFFSET, y, width / 2 - SPINE_OFFSET, y + segH);
+    lightLayer.line(width / 2 + SPINE_OFFSET, y, width / 2 + SPINE_OFFSET, y + segH);
+    // Outer trim lines — 5.5" from each spine line
+    lightLayer.line(width / 2 - SPINE_OFFSET - PAGE_W, y, width / 2 - SPINE_OFFSET - PAGE_W, y + segH);
+    lightLayer.line(width / 2 + SPINE_OFFSET + PAGE_W, y, width / 2 + SPINE_OFFSET + PAGE_W, y + segH);
+    // Bleed lines — 6mm (35px) outside each trim line
+    lightLayer.line(width / 2 - SPINE_OFFSET - PAGE_W - 35, y, width / 2 - SPINE_OFFSET - PAGE_W - 35, y + segH);
+    lightLayer.line(width / 2 + SPINE_OFFSET + PAGE_W + 35, y, width / 2 + SPINE_OFFSET + PAGE_W + 35, y + segH);
   }
 
   // Spine text — rotated 90°, centered between the two dashed lines
   let darkLyr = lum1 <= lum2 ? layer1 : layer2;
   darkLyr.push();
-  darkLyr.translate(width / 2 - 2, height / 2);
+  darkLyr.translate(width / 2, height / 2);
   darkLyr.rotate(HALF_PI);
   darkLyr.textFont("rig-shaded-bold-face");
   darkLyr.textSize(22);
@@ -272,6 +339,17 @@ function draw() {
     blurbBox.layer.text(b.word, b.x, b.y);
   }
   blurbBox.layer.noErase();
+
+  for (let cr of creditsComposition) {
+    cr.layer.push();
+    cr.layer.textFont(cr.font);
+    cr.layer.textSize(cr.size);
+    cr.layer.textAlign(LEFT, CENTER);
+    cr.layer.noStroke();
+    cr.layer.fill(255);
+    cr.layer.text(cr.word, cr.x, cr.y);
+    cr.layer.pop();
+  }
 
   drawRiso();
   noLoop();
