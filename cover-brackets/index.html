@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cover Bracket</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111;
+      color: #eee;
+      font-family: monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 24px;
+      gap: 24px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    #progress {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-top: 6px;
+    }
+
+    #matchup {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      width: 90%;
+    }
+
+    .candidate {
+      flex: 1;
+      cursor: pointer;
+      position: relative;
+      border: 2px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .candidate:hover {
+      border-color: #fff;
+    }
+
+    .candidate:hover .overlay {
+      opacity: 1;
+    }
+
+    .candidate img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .vs {
+      font-size: 20px;
+      letter-spacing: 0.15em;
+      opacity: 0.3;
+      flex-shrink: 0;
+    }
+
+    /* ── Winner screen ── */
+
+    #winner-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+      width: 90%;
+    }
+
+    #winner-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    #winner-top h2 {
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    #winner-top img {
+      width: 100%;
+      height: auto;
+      border: 2px solid #fff;
+    }
+
+    #winner-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+
+    /* ── Bracket results ── */
+
+    #bracket-results {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .bracket-round {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .round-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.35;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .round-matches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .match-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .match-thumb {
+      flex: 1;
+      position: relative;
+    }
+
+    .match-thumb img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .match-thumb.loser img {
+      opacity: 0.25;
+    }
+
+    .match-thumb .thumb-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 6px;
+      background: rgba(0,0,0,0.6);
+      opacity: 0.7;
+    }
+
+    .match-vs {
+      font-size: 11px;
+      opacity: 0.25;
+      flex-shrink: 0;
+    }
+
+    button {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #eee;
+      font-family: monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    button:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.08);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Cover Bracket</h1>
+  <div id="progress"></div>
+</header>
+
+<div id="matchup">
+  <div class="candidate" id="candidate-a" onclick="vote('a')">
+    <img id="img-a" src="" alt="Cover A">
+    <div class="overlay">Select</div>
+  </div>
+  <div class="vs">vs</div>
+  <div class="candidate" id="candidate-b" onclick="vote('b')">
+    <img id="img-b" src="" alt="Cover B">
+    <div class="overlay">Select</div>
+  </div>
+</div>
+
+<div id="winner-screen">
+  <div id="winner-top">
+    <h2>Winner</h2>
+    <img id="winner-img" src="" alt="Winner">
+    <div id="winner-label"></div>
+  </div>
+
+  <div id="bracket-results"></div>
+
+  <button onclick="restart()">↺ Run Again</button>
+</div>
+
+<script>
+  // Add image paths here as you add more covers
+  const IMAGES = [
+    "images/cover-515264-composite.png",
+    "images/cover-707146-composite.png",
+    "images/cover-813342-composite.png",
+    "images/cover-942871-composite.png",
+    "images/cover-981804-composite.png",
+  ];
+
+  let rounds = [];
+  let currentRound = 0;
+  let currentMatch = 0;
+  let winners = [];
+
+  function shuffle(arr) {
+    let a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function buildMatchups(images) {
+    let pairs = [];
+    for (let i = 0; i < images.length; i += 2) {
+      pairs.push([images[i], images[i + 1] || null]);
+    }
+    return pairs;
+  }
+
+  function skipByes() {
+    let round = rounds[currentRound];
+    while (currentMatch < round.length && round[currentMatch][1] === null) {
+      winners[currentRound].push(round[currentMatch][0]);
+      currentMatch++;
+    }
+  }
+
+  function init() {
+    rounds = [buildMatchups(shuffle(IMAGES))];
+    currentRound = 0;
+    currentMatch = 0;
+    winners = [[]];
+    skipByes();
+
+    document.getElementById("matchup").style.display = "flex";
+    document.getElementById("winner-screen").style.display = "none";
+    render();
+  }
+
+  function render() {
+    let round = rounds[currentRound];
+    let match = round[currentMatch];
+    let totalMatchups = round.filter(m => m[1] !== null).length;
+    let completedMatchups = winners[currentRound].length - round.slice(0, currentMatch).filter(m => m[1] === null).length;
+
+    document.getElementById("img-a").src = match[0];
+    document.getElementById("img-b").src = match[1];
+
+    let roundLabel = currentRound === 0 ? "Round 1"
+      : currentRound === rounds.length - 1 && totalMatchups === 1 ? "Final"
+      : "Round " + (currentRound + 1);
+
+    document.getElementById("progress").textContent =
+      roundLabel + " \u00b7 Match " + (completedMatchups + 1) + " of " + totalMatchups;
+  }
+
+  function vote(side) {
+    let round = rounds[currentRound];
+    let match = round[currentMatch];
+    let winner = side === "a" ? match[0] : match[1];
+
+    winners[currentRound].push(winner);
+    currentMatch++;
+    skipByes();
+
+    if (currentMatch >= round.length) {
+      let nextContestants = winners[currentRound];
+      if (nextContestants.length === 1) {
+        showWinner(nextContestants[0]);
+        return;
+      }
+      rounds.push(buildMatchups(nextContestants));
+      currentRound++;
+      currentMatch = 0;
+      winners.push([]);
+      skipByes();
+    }
+
+    render();
+  }
+
+  function thumbLabel(path) {
+    let m = path.match(/cover-(\d+)-composite/);
+    return m ? "#" + m[1] : path.split("/").pop();
+  }
+
+  function buildBracketHTML() {
+    let html = "";
+
+    // Render from Final back to Round 1
+    for (let r = rounds.length - 1; r >= 0; r--) {
+      let round = rounds[r];
+      let roundWinners = winners[r];
+
+      let totalReal = round.filter(m => m[1] !== null).length;
+      let roundName = r === rounds.length - 1 && totalReal === 1
+        ? "Final"
+        : r === rounds.length - 2 && rounds.length > 2
+          ? "Semifinal"
+          : "Round " + (r + 1);
+
+      html += `<div class="bracket-round">`;
+      html += `<div class="round-label">${roundName}</div>`;
+      html += `<div class="round-matches">`;
+
+      let winnerIdx = 0;
+      for (let i = 0; i < round.length; i++) {
+        let [a, b] = round[i];
+        let w = roundWinners[winnerIdx++];
+        if (b === null) continue; // skip byes
+
+        let loser = a === w ? b : a;
+        html += `
+          <div class="match-card">
+            <div class="match-thumb winner">
+              <img src="${w}" alt="winner">
+              <div class="thumb-label">${thumbLabel(w)}</div>
+            </div>
+            <div class="match-vs">vs</div>
+            <div class="match-thumb loser">
+              <img src="${loser}" alt="loser">
+              <div class="thumb-label">${thumbLabel(loser)}</div>
+            </div>
+          </div>`;
+      }
+
+      html += `</div></div>`;
+    }
+
+    return html;
+  }
+
+  function showWinner(img) {
+    document.getElementById("matchup").style.display = "none";
+    let ws = document.getElementById("winner-screen");
+    ws.style.display = "flex";
+    document.getElementById("winner-img").src = img;
+    let seed = img.match(/cover-(\d+)-composite/);
+    document.getElementById("winner-label").textContent = seed ? "#" + seed[1] : img;
+    document.getElementById("progress").textContent = "Complete";
+    document.getElementById("bracket-results").innerHTML = buildBracketHTML();
+  }
+
+  function restart() {
+    init();
+  }
+
+  init();
+</script>
+</body>
+</html>
