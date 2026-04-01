@@ -10,15 +10,20 @@
       background: #111;
       color: #eee;
       font-family: monospace;
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 32px 24px;
-      gap: 24px;
+      padding: 0 24px;
+      gap: 0;
     }
 
     header {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
     }
 
@@ -35,6 +40,13 @@
       text-transform: uppercase;
       opacity: 0.4;
       margin-top: 6px;
+    }
+
+    #bracket-preview {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #matchup {
@@ -235,6 +247,8 @@
   </div>
 </div>
 
+<div id="bracket-preview"></div>
+
 <div id="winner-screen">
   <div id="winner-top">
     <h2>Winner</h2>
@@ -250,17 +264,26 @@
 <script>
   // Add image paths here as you add more covers
   const IMAGES = [
+    "images/cover-130159-composite.png",
+    "images/cover-156843-composite.png",
+    "images/cover-196477-composite.png",
+    "images/cover-300758-composite.png",
+    "images/cover-441040-composite.png",
     "images/cover-515264-composite.png",
+    "images/cover-628594-composite.png",
     "images/cover-707146-composite.png",
     "images/cover-813342-composite.png",
-    "images/cover-942871-composite.png",
+    "images/cover-823309-composite.png",
+    "images/cover-867966-composite.png",
     "images/cover-981804-composite.png",
+    "images/cover-990900-composite.png",
   ];
 
   let rounds = [];
   let currentRound = 0;
   let currentMatch = 0;
   let winners = [];
+  let bracketStructure = []; // number of slots per round, pre-computed
 
   function shuffle(arr) {
     let a = [...arr];
@@ -287,7 +310,17 @@
     }
   }
 
+  function precomputeStructure() {
+    bracketStructure = [];
+    let n = IMAGES.length;
+    while (n > 1) {
+      bracketStructure.push(Math.ceil(n / 2));
+      n = Math.ceil(n / 2);
+    }
+  }
+
   function init() {
+    precomputeStructure();
     rounds = [buildMatchups(shuffle(IMAGES))];
     currentRound = 0;
     currentMatch = 0;
@@ -314,7 +347,88 @@
 
     document.getElementById("progress").textContent =
       roundLabel + " \u00b7 Match " + (completedMatchups + 1) + " of " + totalMatchups;
+
+    renderBracketPreview();
   }
+
+  // ── Bracket preview SVG ──────────────────────────────────────────────────
+
+  function matchupState(r, i) {
+    if (r < currentRound) return "done";
+    if (r > currentRound) return "future";
+    if (i < currentMatch) return "done";
+    if (i === currentMatch) return "current";
+    return "future";
+  }
+
+  function isSlotBye(r, i) {
+    return rounds[r] && rounds[r][i] && rounds[r][i][1] === null;
+  }
+
+  function renderBracketPreview() {
+    const totalRounds = bracketStructure.length;
+    if (totalRounds === 0) return;
+
+    const maxSlots = bracketStructure[0];
+    const unitH = 36;
+    const roundW = 80;
+    const dotR = 5;
+    const labelH = 18;
+    const svgH = maxSlots * unitH + labelH;
+    const svgW = totalRounds * roundW;
+
+    let lines = "";
+    let dots = "";
+    let labels = "";
+
+    for (let r = 0; r < totalRounds; r++) {
+      const slots = bracketStructure[r];
+      const span = Math.pow(2, r);
+      const cx = r * roundW + roundW / 2;
+
+      let rName = r === totalRounds - 1 ? "Final"
+        : r === totalRounds - 2 && totalRounds > 2 ? "Semi"
+        : "R" + (r + 1);
+      labels += `<text x="${cx}" y="${svgH}" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="9" font-family="monospace" letter-spacing="1">${rName}</text>`;
+
+      for (let i = 0; i < slots; i++) {
+        const cy = (i * span + span / 2) * unitH;
+        const state = matchupState(r, i);
+        const bye = isSlotBye(r, i);
+
+        if (r < totalRounds - 1) {
+          const parentSpan = Math.pow(2, r + 1);
+          const parentI = Math.floor(i / 2);
+          const parentCy = (parentI * parentSpan + parentSpan / 2) * unitH;
+          const nextCx = (r + 1) * roundW + roundW / 2;
+          const midX = (cx + nextCx) / 2;
+          const opacity = state === "done" ? 0.35 : 0.1;
+          lines += `<path d="M${cx},${cy} H${midX} V${parentCy} H${nextCx}" fill="none" stroke="rgba(255,255,255,${opacity})" stroke-width="1"/>`;
+        }
+
+        if (state === "current") {
+          dots += `<circle cx="${cx}" cy="${cy}" r="${dotR + 5}" fill="rgba(255,255,255,0.08)"/>`;
+          dots += `<circle cx="${cx}" cy="${cy}" r="${dotR + 2}" fill="rgba(255,255,255,0.15)"/>`;
+          dots += `<circle cx="${cx}" cy="${cy}" r="${dotR}" fill="#fff"/>`;
+        } else if (state === "done") {
+          if (bye) {
+            dots += `<circle cx="${cx}" cy="${cy}" r="${dotR - 1}" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="2,2"/>`;
+          } else {
+            dots += `<circle cx="${cx}" cy="${cy}" r="${dotR}" fill="rgba(255,255,255,0.4)"/>`;
+          }
+        } else {
+          dots += `<circle cx="${cx}" cy="${cy}" r="${dotR}" fill="rgba(255,255,255,0.1)"/>`;
+        }
+      }
+    }
+
+    const svg = `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+      ${lines}${dots}${labels}
+    </svg>`;
+    document.getElementById("bracket-preview").innerHTML = svg;
+  }
+
+  // ── Voting ───────────────────────────────────────────────────────────────
 
   function vote(side) {
     let round = rounds[currentRound];
@@ -341,6 +455,8 @@
     render();
   }
 
+  // ── Results ──────────────────────────────────────────────────────────────
+
   function thumbLabel(path) {
     let m = path.match(/cover-(\d+)-composite/);
     return m ? "#" + m[1] : path.split("/").pop();
@@ -349,7 +465,6 @@
   function buildBracketHTML() {
     let html = "";
 
-    // Render from Final back to Round 1
     for (let r = rounds.length - 1; r >= 0; r--) {
       let round = rounds[r];
       let roundWinners = winners[r];
@@ -369,7 +484,7 @@
       for (let i = 0; i < round.length; i++) {
         let [a, b] = round[i];
         let w = roundWinners[winnerIdx++];
-        if (b === null) continue; // skip byes
+        if (b === null) continue;
 
         let loser = a === w ? b : a;
         html += `
@@ -394,6 +509,7 @@
 
   function showWinner(img) {
     document.getElementById("matchup").style.display = "none";
+    document.getElementById("bracket-preview").style.display = "none";
     let ws = document.getElementById("winner-screen");
     ws.style.display = "flex";
     document.getElementById("winner-img").src = img;
@@ -404,6 +520,7 @@
   }
 
   function restart() {
+    document.getElementById("bracket-preview").style.display = "flex";
     init();
   }
 
