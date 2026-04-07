@@ -273,25 +273,6 @@ function draw() {
   // Two vertical spine lines on the lightest of the two colors
   let lum1 = 0.299 * layer1.channelColor[0] + 0.587 * layer1.channelColor[1] + 0.114 * layer1.channelColor[2];
   let lum2 = 0.299 * layer2.channelColor[0] + 0.587 * layer2.channelColor[1] + 0.114 * layer2.channelColor[2];
-  let lightLayer = lum1 > lum2 ? layer1 : layer2;
-  lightLayer.stroke(200);
-  lightLayer.strokeWeight(1);
-  lightLayer.noFill();
-  const DASH = 12, GAP = 8;
-  const SPINE_OFFSET = 35;
-  const PAGE_W = 825; // 5.5in at 150 DPI
-  for (let y = 0; y < height; y += DASH + GAP) {
-    let segH = min(DASH, height - y);
-    // Spine lines
-    lightLayer.line(width / 2 - SPINE_OFFSET, y, width / 2 - SPINE_OFFSET, y + segH);
-    lightLayer.line(width / 2 + SPINE_OFFSET, y, width / 2 + SPINE_OFFSET, y + segH);
-    // Outer trim lines — 5.5" from each spine line
-    lightLayer.line(width / 2 - SPINE_OFFSET - PAGE_W, y, width / 2 - SPINE_OFFSET - PAGE_W, y + segH);
-    lightLayer.line(width / 2 + SPINE_OFFSET + PAGE_W, y, width / 2 + SPINE_OFFSET + PAGE_W, y + segH);
-    // Bleed lines — 6mm (35px) outside each trim line
-    lightLayer.line(width / 2 - SPINE_OFFSET - PAGE_W - 35, y, width / 2 - SPINE_OFFSET - PAGE_W - 35, y + segH);
-    lightLayer.line(width / 2 + SPINE_OFFSET + PAGE_W + 35, y, width / 2 + SPINE_OFFSET + PAGE_W + 35, y + segH);
-  }
 
   // Spine text — rotated 90°, centered between the two dashed lines
   let darkLyr = lum1 <= lum2 ? layer1 : layer2;
