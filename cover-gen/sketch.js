@@ -51,7 +51,7 @@ const CONTRIBUTORS = [
   "Elise Sansbury", "Destiny Smith", "Nidhi Srikanth", "Veronica Trevino",
 ];
 
-const BLURB ="Glitch & Grain Press is a publication presenting work created in Glitch & Grain, a course at the College for Creative Studies in Detroit exploring the intersection of generative code and analog printmaking. Each student built a data-driven visual system in p5.js — translating a self-chosen dataset into form, density, and mark through the p5.riso library — and contributed a series of generative compositions printed with the RISOgraph. This work collects the result of their completed systems, combined as a collabortive edition of zines.";
+const BLURB ="Glitch & Grain Press is a publication presenting work created in Glitch & Grain, a course at the College for Creative Studies in Detroit exploring the intersection of generative code and analog printmaking. Each student built a data-driven visual system in p5.js — translating a self-chosen dataset into form, density, and mark through the p5.riso library — and contributed a series of generative compositions printed with the RISOgraph. This work collects their completed systems, combined as a collaborative edition of zines.";
 
 // Seeded RNG (mulberry32) — guarantees same output for same seed across browsers
 let _rng;
@@ -359,7 +359,36 @@ function draw() {
 
 function exportAll() {
   let seed = window.location.hash.slice(1);
-  Riso.channels.forEach((c) => c.export("cover-" + seed + "-" + c.channelName + ".png"));
+
+  // Export each Riso channel as a full-canvas-sized PNG using native canvas API.
+  // This ensures the exported image is exactly width×height (including transparent
+  // regions) regardless of p5 pixel density on the Riso graphics buffer.
+  Riso.channels.forEach((c) => {
+    let exportCanvas = document.createElement("canvas");
+    exportCanvas.width = width;
+    exportCanvas.height = height;
+    let ctx = exportCanvas.getContext("2d");
+
+    // Draw the Riso layer scaled to exact canvas dimensions
+    ctx.drawImage(c.elt, 0, 0, width, height);
+
+    // Zero out RGB channels, keeping only alpha (riso separation = black + alpha)
+    let imgData = ctx.getImageData(0, 0, width, height);
+    for (let i = 0; i < imgData.data.length; i += 4) {
+      imgData.data[i]     = 0;
+      imgData.data[i + 1] = 0;
+      imgData.data[i + 2] = 0;
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    exportCanvas.toBlob((blob) => {
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "cover-" + seed + "-" + c.channelName + ".png";
+      link.click();
+    });
+  });
+
   saveCanvas("cover-" + seed + "-composite", "png");
 }
 
