@@ -202,7 +202,7 @@ function randomize(seed) {
   const BLURB_PAD = 40;
   let blurbBlockH = blurbLines.length * blurbLineH;
   let blurbStartY = (height - blurbBlockH) / 2;
-  let blurbX = blurbZoneCenter;
+  let blurbX = blurbZoneCenter - 40;
   let blurbLayer = _rng() > 0.5 ? layer1 : layer2;
 
   blurbBox = {
