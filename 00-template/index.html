@@ -24,8 +24,36 @@
         <strong>p5riso-template.zip</strong>
         Includes <code>sketch.js</code>, <code>p5.riso.js</code>, and a basic HTML wrapper to get started.
       </div>
-      <a href="p5riso-template.zip" download class="download-btn">Download .zip</a>
+      <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+        <a href="template/index.html" class="download-btn">Open Template</a>
+        <a href="p5riso-template.zip" download class="download-btn">Download .zip</a>
+      </div>
     </div>
+  </div>
+
+  <div class="explanation">
+    <h2>How Riso layers work</h2>
+    <p>Each <code>Riso()</code> creates a separate ink channel. Draw on the channel just like a normal p5 graphics buffer, then call <code>drawRiso()</code> at the end to composite them onto the canvas.</p>
+
+    <h3>Setting up colors</h3>
+    <p>Pass any color name (all caps) to <code>new Riso()</code>:</p>
+    <pre><code>let pink   = new Riso("FLUORESCENTPINK");
+let blue   = new Riso("BLUE");
+let yellow = new Riso("YELLOW");</code></pre>
+    <p>Available names include: <code>YELLOW</code>, <code>BLUE</code>, <code>BURGUNDY</code>, <code>SUNFLOWER</code>, <code>ORANGE</code>, <code>GREEN</code>, <code>LIGHTLIME</code>, <code>MINT</code>, <code>MIST</code>, <code>COPPER</code>, <code>TEAL</code>, <code>FLUORESCENTPINK</code>, <code>BRIGHTRED</code>, <code>BLACK</code>, <code>AQUA</code>.</p>
+
+    <h3>Drawing on a layer</h3>
+    <p>Use the layer as a graphics context. <code>fill(255)</code> means full ink density:</p>
+    <pre><code>pink.fill(255);           // full ink
+pink.fill(128);           // ~50% ink (halftone in print)
+pink.noFill();
+pink.stroke(255);
+pink.circle(x, y, d);
+pink.rect(x, y, w, h);
+pink.image(img, x, y, w, h);</code></pre>
+
+    <h3>Keyboard shortcuts</h3>
+    <p><strong>Space</strong> — redraw with a new seed &nbsp;|&nbsp; <strong>E</strong> — export each layer as a PNG</p>
   </div>
 </body>
 </html>
