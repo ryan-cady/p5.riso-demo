@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.riso/lib/p5.riso.js"></script>
+  <script src="examples.js"></script>
+  <style>body { margin: 0; overflow: hidden; }</style>
+</head>
+<body>
+<script>
+const EXAMPLES = [
+  basicColorMixing,
+  halftoneGradients,
+  textLayering,
+  geometricPatterns,
+  lineWorkHatching,
+  textureNoise,
+  radialPatterns,
+  offsetMisregistration,
+  overlappingShapes,
+  dotsStippling,
+];
+
+const fn = (parseInt(new URLSearchParams(location.search).get('fn')) || 1) - 1;
+
+let blue, red, yellow, black;
+
+function setup() {
+  createCanvas(800, 600);
+  pixelDensity(1);
+  blue   = new Riso('blue');
+  red    = new Riso('red');
+  yellow = new Riso('yellow');
+  black  = new Riso('black');
+  noLoop();
+}
+
+function draw() {
+  background(255);
+  clearRiso();
+  EXAMPLES[fn]();
+  drawRiso();
+}
+</script>
+</body>
+</html>

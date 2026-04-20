@@ -4,12 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>00 — Intro to p5.riso</title>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.riso/lib/p5.riso.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/global.css">
+  <style>
+    .gallery-row {
+      display: grid;
+      grid-template-columns: repeat(5, 200px);
+      gap: 16px;
+      padding: 1.5rem 2rem 2rem;
+      width: fit-content;
+      margin: 0 auto;
+    }
+    .gallery-item {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .gallery-frame {
+      width: 200px;
+      height: 150px;
+      overflow: hidden;
+      border: 1px solid #d8d0c4;
+      border-radius: 4px;
+    }
+    .gallery-frame iframe {
+      width: 800px;
+      height: 600px;
+      transform: scale(0.25);
+      transform-origin: top left;
+      border: none;
+      display: block;
+      pointer-events: none;
+    }
+    .gallery-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
 </head>
 <body class="demo-page">
   <header>
@@ -20,22 +57,65 @@
     </div>
   </header>
   <p class="desc">Color channels, drawing to layers, compositing</p>
-  <script src="sketch.js"></script>
-  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
-  <div class="explanation">
-    
-      <h2>How it works</h2>
-      <p>This sketch introduces the basic p5.riso workflow — creating color layers, drawing shapes to them, and compositing the result.</p>
 
-      <h3>The Riso workflow</h3>
-      <p>Every p5.riso sketch follows the same three steps inside <code>draw()</code>:</p>
-      <ol>
-        <li><code>clearRiso()</code> — wipe all layers clean</li>
-        <li>Draw to your Riso layers</li>
-        <li><code>drawRiso()</code> — blend all layers together and display the result</li>
-      </ol>
-      <p>If you forget <code>clearRiso()</code>, layers stack on themselves and go solid. If you forget <code>drawRiso()</code>, nothing shows up.</p>
-     
+  <div class="explanation">
+    <h2>How it works</h2>
+    <p>This sketch introduces the basic p5.riso workflow — creating color layers, drawing shapes to them, and compositing the result.</p>
+
+    <h3>The Riso workflow</h3>
+    <p>Every p5.riso sketch follows the same three steps inside <code>draw()</code>:</p>
+    <ol>
+      <li><code>clearRiso()</code> — wipe all layers clean</li>
+      <li>Draw to your Riso layers</li>
+      <li><code>drawRiso()</code> — blend all layers together and display the result</li>
+    </ol>
+    <p>If you forget <code>clearRiso()</code>, layers stack on themselves and go solid. If you forget <code>drawRiso()</code>, nothing shows up.</p>
   </div>
+
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
+
+  <div class="gallery-row">
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=1" loading="lazy"></iframe></div>
+      <span class="gallery-label">Color Mixing</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=2" loading="lazy"></iframe></div>
+      <span class="gallery-label">Halftone Gradients</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=3" loading="lazy"></iframe></div>
+      <span class="gallery-label">Text Layering</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=4" loading="lazy"></iframe></div>
+      <span class="gallery-label">Geometric Patterns</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=5" loading="lazy"></iframe></div>
+      <span class="gallery-label">Line Work</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=6" loading="lazy"></iframe></div>
+      <span class="gallery-label">Texture &amp; Noise</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=7" loading="lazy"></iframe></div>
+      <span class="gallery-label">Radial Patterns</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=8" loading="lazy"></iframe></div>
+      <span class="gallery-label">Misregistration</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=9" loading="lazy"></iframe></div>
+      <span class="gallery-label">Overlapping Shapes</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-frame"><iframe src="runner.html?fn=10" loading="lazy"></iframe></div>
+      <span class="gallery-label">Dots &amp; Stippling</span>
+    </div>
+  </div>
+
 </body>
 </html>
