@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — Setting Up p5.js</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>Setting Up p5.js</h1>
+    </div>
+  </header>
+
+  <p class="desc">Two ways to work: the browser-based p5.js editor (nothing to install) or a local setup with VS Code and Live Server. Both work with p5.riso.</p>
+
+  <div class="explanation">
+
+    <h2>Option A — p5.js Web Editor</h2>
+    <p>
+      The fastest way to start. No installation required — everything runs in the browser at <a href="https://editor.p5js.org" target="_blank">editor.p5js.org</a>.
+    </p>
+
+    <h3>1. Create an account</h3>
+    <p>
+      Go to <a href="https://editor.p5js.org" target="_blank">editor.p5js.org</a> and sign up for a free account. This lets you save and share your sketches.
+    </p>
+
+    <h3>2. The default sketch</h3>
+    <p>
+      Every new sketch starts with a <code>sketch.js</code> that has <code>setup()</code> and <code>draw()</code> already in place. Click the play button (▶) to run it.
+    </p>
+    <pre><code>function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220);
+}</code></pre>
+
+    <h3>3. Adding p5.riso</h3>
+    <p>
+      The web editor doesn't load p5.riso automatically. To add it, open the file sidebar (click the <strong>&gt;</strong> arrow on the left), then click the dropdown arrow next to your sketch name and choose <strong>Add file</strong>. Name it <code>p5.riso.js</code>.
+    </p>
+    <p>
+      Paste the full contents of the <a href="https://raw.githubusercontent.com/antiboredom/p5.riso/master/lib/p5.riso.js" target="_blank">p5.riso library</a> into that file.
+    </p>
+    <p>
+      Then open <code>index.html</code> and add the script tag inside <code>&lt;head&gt;</code>, <strong>after</strong> the p5.js script tag:
+    </p>
+    <pre><code>&lt;script src="p5.riso.js"&gt;&lt;/script&gt;</code></pre>
+
+    <h3>4. Saving and sharing</h3>
+    <p>
+      Use <strong>File &gt; Save</strong> (or <kbd>Ctrl</kbd>+<kbd>S</kbd> / <kbd>Cmd</kbd>+<kbd>S</kbd>) to save your sketch. To share it, click <strong>File &gt; Share</strong> — you'll get a link that anyone can open to view or remix your sketch.
+    </p>
+
+    <h3>Uploading images</h3>
+    <p>
+      If your sketch uses <code>loadImage()</code>, open the file sidebar, click the dropdown, and choose <strong>Upload file</strong>. Once uploaded, reference it by filename only — no path needed:
+    </p>
+    <pre><code>function preload() {
+  img = loadImage("my-photo.jpg"); // just the filename
+}</code></pre>
+
+
+    <h2>Option B — VS Code + Live Server</h2>
+    <p>
+      Better for larger projects, working with local files, or using your own images. Requires a one-time install.
+    </p>
+
+    <h3>1. Install VS Code</h3>
+    <p>
+      Download <a href="https://code.visualstudio.com" target="_blank">Visual Studio Code</a> and install it. It's free and works on Mac, Windows, and Linux.
+    </p>
+
+    <h3>2. Install the Live Server extension</h3>
+    <p>
+      p5.js sketches must run on a local server — opening <code>index.html</code> directly as a file won't work because browsers block certain features (like <code>loadImage()</code>) on <code>file://</code> URLs.
+    </p>
+    <p>
+      In VS Code, open the Extensions panel (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>) and search for <strong>Live Server</strong> by Ritwick Dey. Install it.
+    </p>
+
+    <h3>3. Create your project folder</h3>
+    <p>
+      Make a new folder anywhere on your computer. Inside it, create two files:
+    </p>
+    <pre><code>my-sketch/
+├── index.html
+└── sketch.js</code></pre>
+
+    <h3>4. Set up index.html</h3>
+    <p>
+      This file loads p5.js and p5.riso from a CDN — no local library files needed. Paste this into <code>index.html</code>:
+    </p>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.riso/lib/p5.riso.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script src="sketch.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <h3>5. Write your sketch</h3>
+    <p>
+      Open <code>sketch.js</code> and start writing. Here's the minimal p5.riso boilerplate:
+    </p>
+    <pre><code>let pink, blue;
+
+function setup() {
+  createCanvas(600, 800);
+  pixelDensity(1);
+  noLoop();
+
+  pink = new Riso("fluorescentpink");
+  blue = new Riso("blue");
+}
+
+function draw() {
+  clearRiso();
+
+  pink.fill(200);
+  pink.circle(300, 400, 200);
+
+  blue.fill(180);
+  blue.rect(100, 300, 400, 200);
+
+  drawRiso();
+}</code></pre>
+
+    <h3>6. Launch Live Server</h3>
+    <p>
+      Right-click <code>index.html</code> in the VS Code file explorer and choose <strong>Open with Live Server</strong>. Your sketch opens in the browser at <code>localhost:5500</code>. Every time you save a file, the browser reloads automatically.
+    </p>
+
+    <h3>Working with images locally</h3>
+    <p>
+      Put your image files in the same folder as your sketch (or a subfolder like <code>images/</code>), then reference them by relative path:
+    </p>
+    <pre><code>img = loadImage("my-photo.jpg");      // same folder
+img = loadImage("images/photo.jpg");  // inside an images/ subfolder</code></pre>
+
+
+    <h2>Other Text Editors</h2>
+    <p>
+      Any text editor works as long as you pair it with a local server. Some options:
+    </p>
+    <ul>
+      <li><strong>Sublime Text</strong> — use the <a href="https://packagecontrol.io/packages/SublimeServer" target="_blank">SublimeServer</a> package</li>
+      <li><strong>WebStorm / other JetBrains IDEs</strong> — have a built-in local server; right-click <code>index.html</code> and choose <strong>Open in &gt; Browser</strong></li>
+      <li><strong>Terminal / command line</strong> — run <code>python3 -m http.server</code> from your sketch folder, then open <code>localhost:8000</code> in your browser</li>
+    </ul>
+
+
+    <h2>Tips</h2>
+    <ul>
+      <li>Always use <code>pixelDensity(1)</code> in <code>setup()</code> when working with p5.riso — it prevents display scaling from affecting exports</li>
+      <li>Load images in <code>preload()</code>, not <code>setup()</code> — p5 waits for <code>preload()</code> to finish before running anything else</li>
+      <li>Open the browser console (<kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>J</kbd> on Mac, <kbd>F12</kbd> on Windows) to see error messages when something isn't working</li>
+      <li>Use <code>noLoop()</code> when your sketch only needs to draw once — it's faster and makes <code>exportRiso()</code> more predictable</li>
+    </ul>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://editor.p5js.org" target="_blank">p5.js Web Editor</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/get-started/" target="_blank">p5.js Get Started guide</a> &nbsp;·&nbsp;
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso docs</a>
+    </p>
+
+  </div>
+</body>
+</html>
