@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — Exporting for Print</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-orange); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>Exporting for Print</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to export your p5.riso sketch as print-ready files — canvas sizing, resolution, layer export, and what to hand off to the printer.</p>
+
+  <div class="explanation">
+
+    <h2>Canvas Size & Resolution</h2>
+    <p>
+      RISO prints at <strong>150 DPI</strong> by default (some machines go higher). To calculate your canvas size, multiply your print dimensions in inches by the DPI:
+    </p>
+    <pre><code>// Half-letter: 5.5" × 8.5" at 150 DPI
+createCanvas(825, 1275);
+
+// Letter: 8.5" × 11" at 150 DPI
+createCanvas(1275, 1650);
+
+// A5: 5.8" × 8.3" at 150 DPI
+createCanvas(870, 1245);
+
+// A4: 8.3" × 11.7" at 150 DPI
+createCanvas(1245, 1755);</code></pre>
+    <p>
+      Always set <code>pixelDensity(1)</code> in <code>setup()</code>. Without it, Retina/HiDPI screens will double the canvas resolution and break your export dimensions.
+    </p>
+    <pre><code>function setup() {
+  createCanvas(825, 1275); // half-letter at 150 DPI
+  pixelDensity(1);         // required — never skip this
+  noLoop();
+}</code></pre>
+
+    <h2>exportRiso()</h2>
+    <p>
+      Call <code>exportRiso()</code> to download your print files. It saves one PNG per ink layer plus a composite preview. Most sketches trigger this with a key press:
+    </p>
+    <pre><code>function keyReleased() {
+  if (key === "e") exportRiso();
+}</code></pre>
+    <p>
+      The files download automatically to your browser's downloads folder. You'll get:
+    </p>
+    <ul>
+      <li>One grayscale PNG per Riso layer — e.g. <code>fluorescentpink_0.png</code>, <code>blue_1.png</code></li>
+      <li>A composite PNG showing all layers together — <code>composite.png</code></li>
+    </ul>
+    <p>
+      The layer PNGs are the print files. The composite is for reference only.
+    </p>
+
+    <h2>Use noLoop() Before Exporting</h2>
+    <p>
+      If your sketch animates or redraws continuously, the exported frame might not be the one you want. Call <code>noLoop()</code> in <code>setup()</code> to draw once and stop — then press your export key when the composition looks right.
+    </p>
+    <p>
+      For sketches with a space-to-randomize pattern, combine both:
+    </p>
+    <pre><code>function setup() {
+  createCanvas(825, 1275);
+  pixelDensity(1);
+  noLoop();        // draw once and stop
+}
+
+function keyReleased() {
+  if (key === " ") redraw();      // new composition
+  if (key === "e") exportRiso();  // export current composition
+}</code></pre>
+
+    <h2>File Naming</h2>
+    <p>
+      The exported layer files are named after your <code>new Riso()</code> color name and their index: <code>colorname_0.png</code>, <code>colorname_1.png</code>, etc. Use clear, descriptive color names so the printer operator knows which file goes with which drum.
+    </p>
+    <pre><code>let pink = new Riso("fluorescentpink"); // → fluorescentpink_0.png
+let blue = new Riso("blue");            // → blue_1.png</code></pre>
+
+    <h2>What to Send to the Printer</h2>
+    <p>
+      Hand off the individual layer PNGs — one file per ink color. Include:
+    </p>
+    <ul>
+      <li>The layer PNG for each ink (e.g. <code>fluorescentpink_0.png</code> and <code>blue_1.png</code>)</li>
+      <li>The ink color name for each file so the operator can load the right drum</li>
+      <li>The composite PNG as a reference for how the final print should look</li>
+      <li>Paper stock, if you have a preference</li>
+    </ul>
+    <p>
+      The layer PNGs are <strong>grayscale</strong> — black areas will print in ink, white areas won't. Don't convert them to color before sending.
+    </p>
+
+    <h2>Bleed</h2>
+    <p>
+      If your design runs to the edge of the paper, add a <strong>bleed</strong> — extra artwork that extends beyond the trim line — so there's no white edge if the cut is slightly off. A standard bleed is 0.125" (about 19px at 150 DPI) on each side.
+    </p>
+    <pre><code>// Half-letter with 0.125" bleed on all sides:
+// 5.5" + 0.25" = 5.75"  →  5.75 × 150 = 862px wide
+// 8.5" + 0.25" = 8.75"  →  8.75 × 150 = 1312px tall
+createCanvas(862, 1312);
+pixelDensity(1);</code></pre>
+
+    <h2>Checking Your Export</h2>
+    <p>
+      Before sending to print, open each layer PNG and verify:
+    </p>
+    <ul>
+      <li>The file is grayscale — no color tint</li>
+      <li>The canvas dimensions match your intended print size at 150 DPI</li>
+      <li>Artwork fills the canvas correctly — no unexpected white borders or clipping</li>
+      <li>Dithered or halftoned areas look as expected at 100% zoom</li>
+    </ul>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso docs</a> &nbsp;·&nbsp;
+      <a href="../00-riso-color/index.html">How RISO Color Works</a> &nbsp;·&nbsp;
+      <a href="../00-template/index.html">Starter Template</a>
+    </p>
+
+  </div>
+</body>
+</html>

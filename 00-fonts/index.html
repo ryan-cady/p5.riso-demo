@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — Working with Fonts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>Working with Fonts</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to load and use custom fonts in p5.js — from Google Fonts and local font files — and how to draw type on Riso layers.</p>
+
+  <div class="explanation">
+
+    <h2>Two Ways to Load Fonts</h2>
+    <p>
+      p5.js gives you two approaches depending on where your font is coming from: CSS (for web fonts like Google Fonts) or <code>loadFont()</code> (for local font files).
+    </p>
+
+    <h2>Option A — Google Fonts via CSS</h2>
+    <p>
+      The simplest approach for Google Fonts. Add the font's <code>&lt;link&gt;</code> tag to your <code>index.html</code> head, then reference the font by name in your sketch — no <code>loadFont()</code> needed.
+    </p>
+    <p>
+      In <code>index.html</code>:
+    </p>
+    <pre><code>&lt;!-- paste the Google Fonts link tag in &lt;head&gt; --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"&gt;</code></pre>
+    <p>
+      Then in <code>sketch.js</code>, just use the font name as a string:
+    </p>
+    <pre><code>function draw() {
+  textFont("Space Mono");
+  textSize(48);
+  fill(0);
+  text("Hello", 100, 200);
+}</code></pre>
+    <p>
+      Go to <a href="https://fonts.google.com" target="_blank">fonts.google.com</a>, select a font, click <strong>Get font</strong>, then <strong>Get embed code</strong> — copy the <code>&lt;link&gt;</code> tag into your HTML.
+    </p>
+
+    <h2>Option B — Local Font Files with loadFont()</h2>
+    <p>
+      For fonts you've downloaded (.ttf or .otf files), use <code>loadFont()</code> in <code>preload()</code>. p5.js needs to fetch and parse the file before drawing anything, so it <em>must</em> be in <code>preload()</code>.
+    </p>
+    <pre><code>let myFont;
+
+function preload() {
+  myFont = loadFont("fonts/MyFont-Regular.ttf");
+}
+
+function setup() {
+  createCanvas(825, 1275);
+  pixelDensity(1);
+  noLoop();
+}
+
+function draw() {
+  clearRiso();
+
+  textFont(myFont);
+  textSize(64);
+
+  let pink = new Riso("fluorescentpink");
+  pink.fill(255);
+  pink.textFont(myFont);
+  pink.textSize(64);
+  pink.text("RISO", 100, 300);
+
+  drawRiso();
+}</code></pre>
+    <p>
+      Put your font file in the same folder as your sketch (or a <code>fonts/</code> subfolder) and reference it by relative path.
+    </p>
+
+    <h2>Text on Riso Layers</h2>
+    <p>
+      To draw text on a Riso ink layer, call the text functions on the layer object instead of globally:
+    </p>
+    <pre><code>let blue = new Riso("blue");
+
+blue.fill(255);            // ink density — 255 = full coverage
+blue.textFont("Space Mono");
+blue.textSize(72);
+blue.textAlign(CENTER, CENTER);
+blue.text("GLITCH", width / 2, height / 2);</code></pre>
+    <p>
+      Text drawn to a Riso layer renders in that ink color. The layer ignores the global fill — always set <code>layer.fill()</code> separately.
+    </p>
+
+    <h2>Text Properties</h2>
+    <pre><code>textFont("Space Mono");       // font family
+textSize(48);                 // size in pixels
+textStyle(BOLD);              // NORMAL, BOLD, ITALIC, BOLDITALIC
+textLeading(60);              // line height (for multi-line text)
+
+textAlign(LEFT);              // horizontal: LEFT, CENTER, RIGHT
+textAlign(LEFT, TOP);         // + vertical: TOP, CENTER, BASELINE, BOTTOM
+
+// Measure a string before drawing it:
+let w = textWidth("Hello");
+let h = textAscent() + textDescent(); // approximate line height</code></pre>
+
+    <h2>Multi-Line Text</h2>
+    <p>
+      Pass <code>\n</code> inside a string for a line break, or use the optional width parameter on <code>text()</code> to wrap automatically:
+    </p>
+    <pre><code>// Manual line breaks:
+text("Line one\nLine two\nLine three", x, y);
+
+// Auto-wrap inside a box — text wraps at the given width:
+text("A longer piece of text that will wrap automatically.", x, y, 400);</code></pre>
+
+    <h2>Tips for Print Typography</h2>
+    <ul>
+      <li><strong>Use larger type than you think</strong> — dithering and halftone dot patterns can make fine type hard to read at small sizes</li>
+      <li><strong>Avoid two-color text</strong> — misregistration will make fine letterforms blurry; put text on a single layer</li>
+      <li><strong>High-contrast works best</strong> — bold, wide type in a single ink color reads cleanly; light weights and thin strokes are risky</li>
+      <li><strong>Test with noFill() / noStroke()</strong> — toggling these helps isolate whether your text settings are taking effect</li>
+    </ul>
+
+    <h2>Finding Fonts</h2>
+    <ul>
+      <li><a href="https://fonts.google.com" target="_blank">Google Fonts</a> — free, large library, easy to embed via CSS</li>
+      <li><a href="https://velvetyne.fr" target="_blank">Velvetyne</a> — independent French foundry, free open-source typefaces</li>
+      <li><a href="https://open-foundry.com" target="_blank">Open Foundry</a> — curated open-source typefaces</li>
+      <li><a href="https://www.dafont.com" target="_blank">DaFont</a> — large library, check individual font licenses before use</li>
+    </ul>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/p5/text/" target="_blank">p5.js text()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/loadFont/" target="_blank">p5.js loadFont()</a> &nbsp;·&nbsp;
+      <a href="https://fonts.google.com" target="_blank">Google Fonts</a>
+    </p>
+
+  </div>
+</body>
+</html>

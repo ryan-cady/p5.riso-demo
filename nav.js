@@ -6,9 +6,10 @@
     {
       label: 'Reference',
       demos: [
-        { path: '00-glossary',  num: '00', title: 'Glossary' },
-        { path: '00-bookmarks', num: '00', title: 'Class Bookmarks' },
-        { path: '00-template',  num: '00', title: 'Template' },
+        { path: '00-glossary',   num: '00', title: 'Glossary' },
+        { path: '00-bookmarks',  num: '00', title: 'Class Bookmarks' },
+        { path: '00-template',   num: '00', title: 'Template' },
+        { path: '00-debugging',  num: '00', title: 'Debugging' },
       ]
     },
     {
@@ -17,6 +18,13 @@
         { path: '00-p5js',  num: '00', title: 'p5.js Overview' },
         { path: '00-setup', num: '00', title: 'Setting Up p5.js' },
         { path: '00-intro', num: '00', title: 'Intro to p5.riso' },
+      ]
+    },
+    {
+      label: 'Printing',
+      demos: [
+        { path: '00-riso-color', num: '00', title: 'How RISO Color Works' },
+        { path: '00-export',     num: '00', title: 'Exporting for Print' },
       ]
     },
     {
@@ -43,6 +51,7 @@
         { path: '08-functions',    num: '08', title: 'Functions' },
         { path: '13-arrays',       num: '13', title: 'Arrays' },
         { path: '14-random-array', num: '14', title: 'Randomize Array' },
+        { path: '00-fonts',        num: '00', title: 'Working with Fonts' },
       ]
     },
     {

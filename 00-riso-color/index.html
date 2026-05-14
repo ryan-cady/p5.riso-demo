@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — How RISO Color Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    :root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-pink); }
+
+    .ink-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+      margin: 0.5rem 0 1rem;
+    }
+
+    .ink-swatch {
+      background: var(--riso-paper);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ink-swatch-color {
+      height: 56px;
+    }
+
+    .ink-swatch-info {
+      padding: 0.5rem 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+    }
+
+    .ink-swatch-label {
+      font-weight: 700;
+      color: var(--riso-black);
+      margin-bottom: 0.15rem;
+    }
+
+    .ink-swatch-note {
+      color: #999;
+      line-height: 1.4;
+    }
+
+    .layer-diagram {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.75rem 0 1rem;
+      flex-wrap: wrap;
+    }
+
+    .layer-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .layer-box-color {
+      width: 64px;
+      height: 64px;
+      border-radius: 3px;
+    }
+
+    .layer-box-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #888;
+      text-align: center;
+    }
+
+    .layer-plus {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      color: #ccc;
+      padding-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>How RISO Color Works</h1>
+    </div>
+  </header>
+
+  <p class="desc">Risograph prints one ink color at a time, building up an image layer by layer. Understanding how inks interact — and how to design for it — is the key to making intentional prints.</p>
+
+  <div class="explanation">
+
+    <h2>What a Risograph Does</h2>
+    <p>
+      A Risograph is a stencil duplicator — similar in principle to a screen print or mimeograph. It burns your artwork into a drum wrapped with a master stencil, then rolls ink through it onto paper. Each ink color is a separate pass through the machine.
+    </p>
+    <p>
+      This means a two-color print requires two separate runs through the printer: one for each ink drum. The paper is fed through twice, and the two layers land on top of each other.
+    </p>
+
+    <h2>Ink is Semi-Transparent</h2>
+    <p>
+      RISO inks are not opaque — they're closer to a thin wash than a solid block of color. The paper shows through, and wherever two inks overlap, they mix optically and physically to create a third color.
+    </p>
+
+    <div class="ink-demo">
+      <div class="ink-swatch">
+        <div class="ink-swatch-color" style="background: #FF48B0;"></div>
+        <div class="ink-swatch-info">
+          <div class="ink-swatch-label">Fluor. Pink</div>
+          <div class="ink-swatch-note">Layer 1 alone</div>
+        </div>
+      </div>
+      <div class="ink-swatch">
+        <div class="ink-swatch-color" style="background: #FFE800;"></div>
+        <div class="ink-swatch-info">
+          <div class="ink-swatch-label">Yellow</div>
+          <div class="ink-swatch-note">Layer 2 alone</div>
+        </div>
+      </div>
+      <div class="ink-swatch">
+        <div class="ink-swatch-color" style="background: #FF9D00;"></div>
+        <div class="ink-swatch-info">
+          <div class="ink-swatch-label">Overprint</div>
+          <div class="ink-swatch-note">Both layers overlap — produces orange</div>
+        </div>
+      </div>
+      <div class="ink-swatch">
+        <div class="ink-swatch-color" style="background: #f5f0e8;"></div>
+        <div class="ink-swatch-info">
+          <div class="ink-swatch-label">Paper</div>
+          <div class="ink-swatch-note">Unprinted areas show through</div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      The overprint color depends on both inks and isn't always predictable from the screen preview. Printing a test swatch of your chosen combination before a full run is always worth it.
+    </p>
+
+    <h2>Color Separation</h2>
+    <p>
+      When you design for RISO, you're creating a separate artwork for each ink color — called a <strong>color separation</strong>. Each separation is a grayscale image: black areas will print, white areas won't.
+    </p>
+    <p>
+      In p5.riso, each <code>new Riso()</code> call creates one layer. Anything you draw to that layer becomes the separation for that ink:
+    </p>
+    <pre><code>let pink = new Riso("fluorescentpink"); // layer 1 — pink ink
+let blue = new Riso("blue");            // layer 2 — blue ink
+
+// Draw to pink layer:
+pink.fill(255);          // full density
+pink.circle(200, 300, 150);
+
+// Draw to blue layer:
+blue.fill(180);          // ~70% density — lighter print
+blue.rect(100, 200, 300, 200);</code></pre>
+
+    <p>
+      The fill value on a Riso layer is <strong>ink density, not color</strong> — 255 is full coverage, 0 is none. The actual color comes from the ink drum.
+    </p>
+
+    <h2>Designing for Two Colors</h2>
+    <p>
+      The most interesting RISO prints use the overlap intentionally. Think of your composition in three zones:
+    </p>
+    <ul>
+      <li><strong>Color 1 only</strong> — areas only the first ink covers</li>
+      <li><strong>Color 2 only</strong> — areas only the second ink covers</li>
+      <li><strong>Overprint</strong> — areas where both inks overlap, creating a third color</li>
+      <li><strong>Paper</strong> — unprinted areas, which contribute the paper color to the composition</li>
+    </ul>
+    <p>
+      Choosing ink colors that produce an interesting overprint gives you effectively three colors from two passes. Blue + yellow = green. Pink + yellow = orange. Pink + blue = purple.
+    </p>
+
+    <h2>The Screen Preview is an Approximation</h2>
+    <p>
+      <code>drawRiso()</code> composites your layers on screen using a <strong>multiply blend mode</strong> — a reasonable simulation, but not identical to real ink on paper. Real ink is affected by paper absorbency, ink viscosity, drum pressure, and registration, none of which a screen can replicate.
+    </p>
+    <p>
+      Fluorescent inks are especially hard to preview accurately — they look much more vivid and saturated on paper than on screen.
+    </p>
+
+    <h2>Registration</h2>
+    <p>
+      Because the paper feeds through the printer twice, the two layers will never align with pixel-perfect precision. A small amount of <strong>misregistration</strong> — a 1–3mm shift — is normal and expected. It's part of the RISO aesthetic.
+    </p>
+    <p>
+      Design with this in mind:
+    </p>
+    <ul>
+      <li>Avoid designs where perfect alignment is critical — fine text in two colors, for example, will be blurry</li>
+      <li>Embrace the offset — a slight shift in layers can add energy and a handmade quality</li>
+      <li>Large shapes and dithered images tolerate misregistration better than thin lines or tight type</li>
+    </ul>
+
+    <h2>Halftone and Dither</h2>
+    <p>
+      RISO prints in a single density — each dot of ink is either fully on or fully off. To create the illusion of lighter tones or photographic images, p5.riso converts images into dot patterns before printing:
+    </p>
+    <ul>
+      <li><strong>Dithering</strong> — scatters dots to approximate continuous tone. Atkinson dither gives a high-contrast, graphic look; Floyd-Steinberg gives finer gradients.</li>
+      <li><strong>Halftone</strong> — arranges dots in a regular grid pattern, like traditional offset printing. Frequency controls dot size; angle controls the grid direction.</li>
+    </ul>
+    <p>
+      See demos <a href="../04-basic-dither/index.html">04</a>, <a href="../05-dither-comparison/index.html">05</a>, and <a href="../06-two-color-dither/index.html">06</a> for live examples.
+    </p>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso docs</a> &nbsp;·&nbsp;
+      <a href="https://stencil.wiki/" target="_blank">Stencil Wiki — RISO printing</a> &nbsp;·&nbsp;
+      <a href="../00-export/index.html">Exporting for Print →</a>
+    </p>
+
+  </div>
+</body>
+</html>

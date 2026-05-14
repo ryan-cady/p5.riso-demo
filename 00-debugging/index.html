@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — Debugging</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>Debugging</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to find and fix problems in your sketch — opening the console, reading error messages, and common p5.js and p5.riso mistakes.</p>
+
+  <div class="explanation">
+
+    <h2>The Browser Console</h2>
+    <p>
+      The console is your most important debugging tool. It shows error messages, warnings, and anything you print with <code>console.log()</code>. Open it with:
+    </p>
+    <ul>
+      <li><strong>Mac:</strong> <kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>J</kbd></li>
+      <li><strong>Windows / Linux:</strong> <kbd>F12</kbd>, then click the Console tab</li>
+      <li><strong>Any browser:</strong> right-click anywhere on the page → <strong>Inspect</strong> → Console tab</li>
+    </ul>
+    <p>
+      When your sketch isn't working, open the console first. The error message will usually tell you exactly what's wrong and which line to look at.
+    </p>
+
+    <h2>console.log()</h2>
+    <p>
+      Print any value to the console to see what's actually inside a variable. Indispensable for checking data, loop counts, and positions:
+    </p>
+    <pre><code>let x = random(width);
+console.log(x); // prints the actual number to the console
+
+// Log multiple values at once:
+console.log("x:", x, "y:", y);
+
+// Inside a loop — see every value:
+for (let i = 0; i &lt; data.length; i++) {
+  console.log(i, data[i]);
+}</code></pre>
+    <p>
+      Remove or comment out <code>console.log()</code> calls when you're done debugging — logging inside <code>draw()</code> runs 60 times per second and can slow your sketch.
+    </p>
+
+    <h2>Common p5.js Errors</h2>
+
+    <h3>"X is not defined"</h3>
+    <p>
+      A variable or function is being used before it's declared, or declared in the wrong scope. Variables declared inside <code>setup()</code> aren't visible in <code>draw()</code> — declare them at the top of the file instead.
+    </p>
+    <pre><code>// ✗ wrong — img is local to preload(), invisible in draw()
+function preload() {
+  let img = loadImage("photo.jpg");
+}
+
+// ✓ correct — declared at the top, accessible everywhere
+let img;
+function preload() {
+  img = loadImage("photo.jpg");
+}</code></pre>
+
+    <h3>Blank canvas / nothing appears</h3>
+    <p>
+      Several causes:
+    </p>
+    <ul>
+      <li><strong>background() covers your shapes</strong> — move <code>background()</code> to the top of <code>draw()</code>, before drawing anything</li>
+      <li><strong>fill and stroke are both off</strong> — check that you have <code>fill()</code> or <code>stroke()</code> set</li>
+      <li><strong>Shapes are drawn off-canvas</strong> — log your x/y values and check they're within <code>width</code> and <code>height</code></li>
+      <li><strong>draw() never ran</strong> — if you called <code>noLoop()</code> before drawing anything, call <code>redraw()</code> to trigger one frame</li>
+    </ul>
+
+    <h3>Image doesn't load</h3>
+    <p>
+      Almost always a path problem or a missing <code>preload()</code>. Check:
+    </p>
+    <pre><code>// ✗ wrong — images must be loaded in preload(), not setup()
+function setup() {
+  img = loadImage("photo.jpg"); // won't be ready in time
+}
+
+// ✓ correct
+function preload() {
+  img = loadImage("photo.jpg");
+}
+
+// ✗ wrong path — file is in an images/ folder but path is wrong
+img = loadImage("photo.jpg");
+
+// ✓ correct path
+img = loadImage("images/photo.jpg");</code></pre>
+    <p>
+      If you're using Live Server locally, the path is relative to your HTML file. In the p5 web editor, just use the filename with no path.
+    </p>
+
+    <h3>"Cannot read properties of undefined"</h3>
+    <p>
+      You're trying to access a property on something that doesn't exist yet — usually because a variable hasn't been assigned, or an array index is out of bounds.
+    </p>
+    <pre><code>// ✗ if data[5] doesn't exist, data[5].name will crash
+let name = data[5].name;
+
+// ✓ check the length first
+console.log(data.length); // make sure index 5 exists
+console.log(data[5]);     // check what's actually there</code></pre>
+
+    <h3>Sketch runs but exports are blank or wrong size</h3>
+    <p>
+      Missing <code>pixelDensity(1)</code>. On Retina displays, p5 doubles the canvas resolution — your sketch looks fine on screen but exports at the wrong size. Always include:
+    </p>
+    <pre><code>function setup() {
+  createCanvas(825, 1275);
+  pixelDensity(1); // ← required for correct exports
+}</code></pre>
+
+    <h2>Common p5.riso Errors</h2>
+
+    <h3>Canvas is blank / Riso layers don't appear</h3>
+    <p>
+      Check that you're calling both <code>clearRiso()</code> and <code>drawRiso()</code> in the right order:
+    </p>
+    <pre><code>function draw() {
+  clearRiso();  // ← wipe layers at the start
+
+  pink.fill(255);
+  pink.circle(300, 400, 200);
+
+  drawRiso();   // ← composite layers to the canvas at the end
+}</code></pre>
+    <p>
+      If you forget <code>drawRiso()</code>, nothing appears on the canvas. If you forget <code>clearRiso()</code> in a looping sketch, layers accumulate and the image gets darker every frame.
+    </p>
+
+    <h3>Riso layer shows wrong color</h3>
+    <p>
+      The color name passed to <code>new Riso()</code> must exactly match a name in the <code>RISOCOLORS</code> array — all lowercase, no spaces. Check the <a href="../index.html">homepage color chart</a> for the exact string.
+    </p>
+    <pre><code>// ✗ wrong — "Fluorescent Pink" is not a valid name
+let pink = new Riso("Fluorescent Pink");
+
+// ✓ correct
+let pink = new Riso("fluorescentpink");</code></pre>
+
+    <h3>Riso fill has no effect</h3>
+    <p>
+      Riso layer fill takes a value from 0–255 controlling <strong>ink density</strong>, not a color. Setting it to 0 means no ink:
+    </p>
+    <pre><code>pink.fill(0);   // no ink — nothing prints (probably not what you want)
+pink.fill(255); // full density
+pink.fill(128); // half density — lighter print</code></pre>
+
+    <h3>exportRiso() exports an empty frame</h3>
+    <p>
+      If you're calling <code>exportRiso()</code> before the sketch has drawn, or in a looping sketch between frames, the export will be blank. Use <code>noLoop()</code> and make sure you export only after <code>drawRiso()</code> has run:
+    </p>
+    <pre><code>function keyReleased() {
+  if (key === "e") {
+    // safe — only runs after the current draw() completes
+    exportRiso();
+  }
+}</code></pre>
+
+    <h2>Isolating Problems</h2>
+    <p>
+      When something is wrong and you can't tell why, comment out code until the sketch works, then add it back piece by piece:
+    </p>
+    <pre><code>function draw() {
+  clearRiso();
+
+  pink.fill(255);
+  pink.circle(300, 400, 150); // does this work alone?
+
+  // blue.fill(180);           // comment this out temporarily
+  // blue.rect(100, 200, 400, 300);
+
+  drawRiso();
+}</code></pre>
+    <p>
+      Start with the simplest version that should work, verify it does, then re-enable complexity one block at a time.
+    </p>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/" target="_blank">p5.js Reference</a> &nbsp;·&nbsp;
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso Docs</a> &nbsp;·&nbsp;
+      <a href="../00-glossary/index.html">Glossary</a>
+    </p>
+
+  </div>
+</body>
+</html>
