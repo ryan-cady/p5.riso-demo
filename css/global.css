@@ -532,6 +532,15 @@ body.has-sidebar {
 .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
 .sidebar-nav::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
+.nav-category-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #3a3a3a;
+  padding: 0.7rem 1rem 0.25rem;
+}
+
 .nav-item {
   display: flex;
   align-items: baseline;
