@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random &amp; Noise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-pink); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Random &amp; Noise</h1>
+    </div>
+  </header>
+
+  <p class="desc">Two ways to introduce variation in p5.js — random() for unpredictable scattered values, and noise() for smooth, organic variation.</p>
+
+  <div class="explanation">
+
+    <h2>random()</h2>
+    <p>
+      <code>random()</code> returns a different number every time it's called. With no arguments it returns a value between 0 and 1. Pass a max, or a min and max:
+    </p>
+    <pre><code>random()         // 0 to 1
+random(100)      // 0 to 100
+random(50, 200)  // 50 to 200</code></pre>
+    <pre><code>for (let i = 0; i &lt; 40; i++) {
+  let x = random(width);
+  let y = random(height);
+  let d = random(20, 80);
+  pink.fill(255);
+  pink.circle(x, y, d);
+}</code></pre>
+
+    <h2>Picking from an Array</h2>
+    <p>
+      Pass an array to <code>random()</code> to pick a random element from it:
+    </p>
+    <pre><code>let inkNames = ["fluorescentpink", "blue", "yellow", "teal"];
+let chosen = random(inkNames); // picks one at random
+
+let sizes = [20, 40, 60, 80, 100];
+let d = random(sizes);</code></pre>
+
+    <h2>randomSeed()</h2>
+    <p>
+      By default, <code>random()</code> gives different results every run. <code>randomSeed(n)</code> locks the sequence — the same seed always produces the same values:
+    </p>
+    <pre><code>function setup() {
+  createCanvas(825, 1275);
+  pixelDensity(1);
+  noLoop();
+  randomSeed(42); // same layout every run
+}</code></pre>
+    <p>
+      For a space-to-regenerate pattern, use a variable seed so each press generates a new layout that can still be reproduced:
+    </p>
+    <pre><code>let seed = 1;
+
+function draw() {
+  randomSeed(seed);
+  clearRiso();
+  for (let i = 0; i &lt; 50; i++) {
+    pink.fill(255);
+    pink.circle(random(width), random(height), random(20, 80));
+  }
+  drawRiso();
+}
+
+function keyReleased() {
+  if (key === " ") {
+    seed = floor(random(10000));
+    redraw();
+  }
+  if (key === "e") exportRiso();
+}</code></pre>
+    <p>
+      Seeding is important for RISO work — it lets you export exactly the composition you previewed.
+    </p>
+
+    <h2>noise()</h2>
+    <p>
+      <code>noise()</code> also returns values between 0 and 1, but adjacent inputs produce similar outputs — the values flow smoothly rather than jumping around. This makes it ideal for organic, natural-looking variation.
+    </p>
+    <p>
+      Pass a steadily-changing value to get smooth drift:
+    </p>
+    <pre><code>let t = 0;
+
+function draw() {
+  clearRiso();
+
+  let x = noise(t) * width;
+  let y = noise(t + 100) * height; // offset avoids correlated x/y
+
+  pink.fill(255);
+  pink.circle(x, y, 60);
+  drawRiso();
+
+  t += 0.005; // small step = slow drift; larger step = faster
+}</code></pre>
+
+    <h2>2D Noise Fields</h2>
+    <p>
+      Pass both x and y coordinates (scaled down) to get a smoothly varying value at every point on the canvas:
+    </p>
+    <pre><code>function draw() {
+  clearRiso();
+  for (let x = 0; x &lt; width; x += 40) {
+    for (let y = 0; y &lt; height; y += 40) {
+      let n = noise(x * 0.005, y * 0.005); // 0–1, smoothly varying
+      let d = n * 60;
+      pink.fill(255);
+      pink.circle(x, y, d);
+    }
+  }
+  drawRiso();
+}</code></pre>
+    <p>
+      The scale factor (0.005) controls how zoomed in you are on the noise field. Smaller = broader, smoother variation. Larger = tighter, more rapid variation.
+    </p>
+
+    <h2>noiseSeed()</h2>
+    <p>
+      Like <code>randomSeed()</code>, <code>noiseSeed(n)</code> locks the noise field to a fixed pattern:
+    </p>
+    <pre><code>noiseSeed(99); // same noise field every run</code></pre>
+
+    <h2>random() vs noise()</h2>
+    <ul>
+      <li><strong>random()</strong> — each call is independent with no relationship to the last. Good for scattered positions, random sizes, picking from a list.</li>
+      <li><strong>noise()</strong> — nearby inputs give nearby outputs. Good for organic shapes, flowing motion, and anything where adjacent values should feel connected.</li>
+    </ul>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/p5/random/" target="_blank">p5.js random()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/noise/" target="_blank">p5.js noise()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/randomSeed/" target="_blank">p5.js randomSeed()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/noiseSeed/" target="_blank">p5.js noiseSeed()</a>
+    </p>
+
+  </div>
+</body>
+</html>

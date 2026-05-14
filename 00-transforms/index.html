@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transforms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Transforms</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to move, rotate, and scale the coordinate system in p5.js — and why push() and pop() are essential for keeping transforms under control.</p>
+
+  <div class="explanation">
+
+    <h2>translate()</h2>
+    <p>
+      <code>translate(x, y)</code> moves the origin of the coordinate system. Everything drawn after it is offset by that amount:
+    </p>
+    <pre><code>translate(200, 300);
+circle(0, 0, 100); // draws at (200, 300) on the canvas</code></pre>
+    <p>
+      This is useful for drawing shapes relative to a center point, or for placing a group of shapes together without recalculating every coordinate:
+    </p>
+    <pre><code>// Draw a cluster centered at (400, 600):
+translate(400, 600);
+circle(0, 0, 80);
+circle(-60, 40, 40);
+circle(60, -30, 55);</code></pre>
+
+    <h2>rotate()</h2>
+    <p>
+      <code>rotate(angle)</code> rotates the coordinate system around the current origin. Angles are in radians by default — use <code>angleMode(DEGREES)</code> to switch:
+    </p>
+    <pre><code>rotate(PI / 4);      // 45° in radians (default)
+
+angleMode(DEGREES);
+rotate(45);          // same thing in degrees</code></pre>
+    <p>
+      Rotation always happens around the <em>current origin</em>. To rotate a shape around its own center, translate to that point first, then rotate:
+    </p>
+    <pre><code>// Rotate a rectangle around its own center:
+translate(400, 300); // move origin to the shape's center
+rotate(PI / 6);      // rotate 30°
+rect(-100, -50, 200, 100); // draw centered on origin</code></pre>
+
+    <h2>scale()</h2>
+    <p>
+      <code>scale(s)</code> scales everything drawn after it. Values above 1 enlarge; below 1 shrink:
+    </p>
+    <pre><code>scale(2);      // double size
+scale(0.5);    // half size
+scale(2, 1);   // stretch horizontally only</code></pre>
+
+    <h2>push() and pop()</h2>
+    <p>
+      Transforms accumulate — each <code>translate()</code> or <code>rotate()</code> adds to what came before it. Without <code>push()</code> and <code>pop()</code>, transforms pile up and affect everything drawn afterward.
+    </p>
+    <p>
+      <code>push()</code> saves the current transform state. <code>pop()</code> restores it. Wrap any isolated transform in a push/pop pair:
+    </p>
+    <pre><code>// Without push/pop — the translate affects everything after it:
+translate(200, 300);
+circle(0, 0, 80);   // at (200, 300) ✓
+circle(0, 0, 40);   // also at (200, 300) — still translated!
+
+// With push/pop — the translate is contained:
+push();
+  translate(200, 300);
+  circle(0, 0, 80); // at (200, 300) ✓
+pop();
+circle(0, 0, 40);   // back at (0, 0) ✓</code></pre>
+    <p>
+      The indentation inside push/pop is a convention — it visually marks what's affected. Pairs can be nested inside each other.
+    </p>
+
+    <h2>Combining Transforms</h2>
+    <p>
+      Transforms apply in order. Translate first, then rotate, to spin shapes around a point on the canvas:
+    </p>
+    <pre><code>// 8 rectangles arranged in a circle:
+for (let i = 0; i &lt; 8; i++) {
+  push();
+    translate(width / 2, height / 2); // move to canvas center
+    rotate(i * TWO_PI / 8);           // rotate to position
+    translate(200, 0);                // move out from center
+    pink.fill(255);
+    pink.rect(-30, -30, 60, 60);
+  pop();
+}</code></pre>
+
+    <h2>Transforms on Riso Layers</h2>
+    <p>
+      Transforms work with Riso layers exactly as they do globally — apply them before drawing to a layer:
+    </p>
+    <pre><code>push();
+  translate(width / 2, height / 2);
+  rotate(PI / 4);
+  pink.fill(255);
+  pink.rect(-100, -100, 200, 200); // rotated 45° around canvas center
+pop();</code></pre>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/p5/translate/" target="_blank">p5.js translate()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/rotate/" target="_blank">p5.js rotate()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/push/" target="_blank">p5.js push() / pop()</a>
+    </p>
+
+  </div>
+</body>
+</html>

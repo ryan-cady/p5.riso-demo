@@ -15,9 +15,11 @@
     {
       label: 'Basics',
       demos: [
-        { path: '00-p5js',  title: 'p5.js Overview' },
-        { path: '00-setup', title: 'Setting Up p5.js' },
-        { path: '00-intro', title: 'Intro to p5.riso' },
+        { path: '00-p5js',       title: 'p5.js Overview' },
+        { path: '00-setup',      title: 'Setting Up p5.js' },
+        { path: '00-variables',  title: 'Variables & Conditionals' },
+        { path: '00-intro',      title: 'Intro to p5.riso' },
+        { path: '00-interaction', title: 'Mouse & Keyboard' },
       ]
     },
     {
@@ -49,8 +51,10 @@
       label: 'Code',
       demos: [
         { path: '08-functions',    title: 'Functions' },
+        { path: '00-transforms',   title: 'Transforms' },
         { path: '13-arrays',       title: 'Arrays' },
         { path: '14-random-array', title: 'Randomize Array' },
+        { path: '00-random',       title: 'Random & Noise' },
         { path: '00-fonts',        title: 'Working with Fonts' },
       ]
     },

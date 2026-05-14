@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mouse &amp; Keyboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-pink); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Mouse &amp; Keyboard</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to respond to mouse position, clicks, and key presses in p5.js — and the standard patterns for triggering redraws and exports.</p>
+
+  <div class="explanation">
+
+    <h2>Mouse Position</h2>
+    <p>
+      <code>mouseX</code> and <code>mouseY</code> always hold the current mouse coordinates, updated every frame:
+    </p>
+    <pre><code>function draw() {
+  clearRiso();
+  pink.fill(255);
+  pink.circle(mouseX, mouseY, 60); // circle follows the cursor
+  drawRiso();
+}</code></pre>
+    <p>
+      <code>pmouseX</code> and <code>pmouseY</code> hold the <em>previous</em> frame's position — useful for drawing lines that follow mouse movement:
+    </p>
+    <pre><code>function draw() {
+  if (mouseIsPressed) {
+    pink.strokeWeight(4);
+    pink.stroke(200);
+    pink.line(pmouseX, pmouseY, mouseX, mouseY);
+  }
+  drawRiso();
+}</code></pre>
+
+    <h2>Mouse Events</h2>
+    <p>
+      These functions run once when the corresponding event happens:
+    </p>
+    <pre><code>function mousePressed() {
+  // runs once when the mouse button is pressed down
+  redraw();
+}
+
+function mouseReleased() {
+  // runs once when the mouse button is released
+}
+
+function mouseMoved() {
+  // runs every time the mouse moves (without a button held)
+}</code></pre>
+
+    <h2>mouseIsPressed</h2>
+    <p>
+      The boolean <code>mouseIsPressed</code> is <code>true</code> as long as a mouse button is held. Useful inside <code>draw()</code> for continuous interaction:
+    </p>
+    <pre><code>function draw() {
+  clearRiso();
+  if (mouseIsPressed) {
+    pink.fill(255);
+    pink.circle(mouseX, mouseY, 80);
+  }
+  drawRiso();
+}</code></pre>
+
+    <h2>Key Events</h2>
+    <p>
+      <code>keyPressed()</code> and <code>keyReleased()</code> fire once per key event. The <code>key</code> variable holds the character that was pressed:
+    </p>
+    <pre><code>function keyPressed() {
+  // runs once when any key is pressed down
+  console.log(key); // prints which key was pressed
+}
+
+function keyReleased() {
+  // runs once when the key is released
+}</code></pre>
+    <p>
+      Use <code>keyReleased()</code> over <code>keyPressed()</code> for one-shot actions like exporting — it won't fire repeatedly if the key is held down.
+    </p>
+
+    <h2>The Standard Sketch Pattern</h2>
+    <p>
+      Most p5.riso sketches use the same pattern: draw once on load, space bar to regenerate, <kbd>E</kbd> to export:
+    </p>
+    <pre><code>function setup() {
+  createCanvas(825, 1275);
+  pixelDensity(1);
+  noLoop(); // draw once and stop
+}
+
+function draw() {
+  clearRiso();
+
+  pink.fill(255);
+  pink.circle(random(width), random(height), 100);
+
+  drawRiso();
+}
+
+function keyReleased() {
+  if (key === " ") redraw();      // new composition
+  if (key === "e") exportRiso();  // export current frame
+}</code></pre>
+
+    <h2>Special Keys</h2>
+    <p>
+      The <code>key</code> variable holds a string for regular characters. For special keys, check <code>keyCode</code>:
+    </p>
+    <pre><code>function keyPressed() {
+  if (keyCode === ENTER)       { /* Enter key */  }
+  if (keyCode === BACKSPACE)   { /* Backspace */  }
+  if (keyCode === LEFT_ARROW)  { x -= 10; }
+  if (keyCode === RIGHT_ARROW) { x += 10; }
+  if (keyCode === UP_ARROW)    { y -= 10; }
+  if (keyCode === DOWN_ARROW)  { y += 10; }
+}</code></pre>
+    <p>
+      p5 provides constants for common keys: <code>ENTER</code>, <code>BACKSPACE</code>, <code>DELETE</code>, <code>UP_ARROW</code>, <code>DOWN_ARROW</code>, <code>LEFT_ARROW</code>, <code>RIGHT_ARROW</code>, <code>SHIFT</code>, <code>CONTROL</code>, <code>ALT</code>, <code>ESCAPE</code>.
+    </p>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/p5/mouseX/" target="_blank">p5.js mouseX</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/keyPressed/" target="_blank">p5.js keyPressed()</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/p5/keyCode/" target="_blank">p5.js keyCode</a>
+    </p>
+
+  </div>
+</body>
+</html>

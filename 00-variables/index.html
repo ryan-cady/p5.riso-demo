@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variables &amp; Conditionals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-orange); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Variables &amp; Conditionals</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to store values in variables and make decisions with if/else — two of the most fundamental building blocks in JavaScript.</p>
+
+  <div class="explanation">
+
+    <h2>Variables</h2>
+    <p>
+      A variable stores a value so you can use it later. In JavaScript, declare variables with <code>let</code> or <code>const</code>:
+    </p>
+    <pre><code>let x = 100;       // can be changed later
+const size = 50;   // fixed — never changes</code></pre>
+    <p>
+      Use <code>const</code> when the value won't change. Use <code>let</code> when it will.
+    </p>
+    <pre><code>let x = 100;
+x = x + 10; // fine — x is now 110
+
+const size = 50;
+size = 60;  // ✗ error — const can't be reassigned</code></pre>
+
+    <h2>Scope</h2>
+    <p>
+      A variable declared inside a function only exists inside that function. To use a variable across multiple functions (<code>setup()</code>, <code>draw()</code>, etc.), declare it at the top of the file:
+    </p>
+    <pre><code>let img;           // declared at top — visible everywhere
+
+function preload() {
+  img = loadImage("photo.jpg");
+}
+
+function draw() {
+  image(img, 0, 0); // works — img is in scope
+}</code></pre>
+    <pre><code>function setup() {
+  let count = 0;   // only exists inside setup()
+}
+
+function draw() {
+  count++;         // ✗ error — count is not defined here
+}</code></pre>
+
+    <h2>if / else</h2>
+    <p>
+      An <code>if</code> statement runs a block of code only when a condition is true:
+    </p>
+    <pre><code>if (x &gt; width) {
+  x = 0; // reset when x goes off the right edge
+}</code></pre>
+    <p>
+      Add <code>else</code> for what to do when the condition is false, and <code>else if</code> to check additional conditions:
+    </p>
+    <pre><code>if (x &gt; width) {
+  x = 0;
+} else if (x &lt; 0) {
+  x = width;
+} else {
+  x = x + 2;
+}</code></pre>
+
+    <h2>Comparison Operators</h2>
+    <pre><code>x === y   // equal (use === not ==)
+x !== y   // not equal
+x &gt; y    // greater than
+x &lt; y    // less than
+x &gt;= y   // greater than or equal
+x &lt;= y   // less than or equal</code></pre>
+    <p>
+      Always use <code>===</code> (triple equals) for comparisons in JavaScript — it checks both value and type. <code>==</code> can produce unexpected results.
+    </p>
+
+    <h2>Logical Operators</h2>
+    <p>
+      Combine conditions with <code>&amp;&amp;</code> (and), <code>||</code> (or), and <code>!</code> (not):
+    </p>
+    <pre><code>if (x &gt; 0 &amp;&amp; x &lt; width) {
+  // x is on screen
+}
+
+if (key === " " || key === "r") {
+  redraw(); // redraw on space OR "r"
+}
+
+if (!isExporting) {
+  draw(); // only draw if not currently exporting
+}</code></pre>
+
+    <h2>Boolean Variables</h2>
+    <p>
+      A boolean holds either <code>true</code> or <code>false</code>. Useful as flags to track state:
+    </p>
+    <pre><code>let showGrid = false;
+
+function keyReleased() {
+  if (key === "g") {
+    showGrid = !showGrid; // toggle on/off
+    redraw();
+  }
+}
+
+function draw() {
+  clearRiso();
+  if (showGrid) {
+    drawGrid();
+  }
+  drawRiso();
+}</code></pre>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#declarations" target="_blank">MDN — Variables</a> &nbsp;·&nbsp;
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling" target="_blank">MDN — Conditionals</a>
+    </p>
+
+  </div>
+</body>
+</html>
