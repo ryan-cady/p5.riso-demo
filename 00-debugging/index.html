@@ -55,6 +55,14 @@ for (let i = 0; i &lt; data.length; i++) {
     <p>
       Remove or comment out <code>console.log()</code> calls when you're done debugging — logging inside <code>draw()</code> runs 60 times per second and can slow your sketch.
     </p>
+    <p>
+      p5.js also provides <code>print()</code> as a shorthand that does exactly the same thing:
+    </p>
+    <pre><code>print(x);         // same as console.log(x)
+print("x:", x);   // same as console.log("x:", x)</code></pre>
+    <p>
+      Both work identically — use whichever feels more natural. <code>print()</code> is a bit shorter; <code>console.log()</code> is more standard JavaScript.
+    </p>
 
     <h2>Common p5.js Errors</h2>
 
