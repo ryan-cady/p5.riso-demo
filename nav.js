@@ -8,15 +8,15 @@
       demos: [
         { path: '00-glossary',  num: '00', title: 'Glossary' },
         { path: '00-bookmarks', num: '00', title: 'Class Bookmarks' },
-        { path: '00-setup',     num: '00', title: 'Setting Up p5.js' },
+        { path: '00-template',  num: '00', title: 'Template' },
       ]
     },
     {
       label: 'Basics',
       demos: [
-        { path: '00-p5js',     num: '00', title: 'p5.js Overview' },
-        { path: '00-template', num: '00', title: 'Template' },
-        { path: '00-intro',    num: '00', title: 'Intro to p5.riso' },
+        { path: '00-p5js',  num: '00', title: 'p5.js Overview' },
+        { path: '00-setup', num: '00', title: 'Setting Up p5.js' },
+        { path: '00-intro', num: '00', title: 'Intro to p5.riso' },
       ]
     },
     {
