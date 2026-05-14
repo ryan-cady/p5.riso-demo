@@ -107,11 +107,6 @@
         `<div class="sidebar-sub">p5.riso demos</div>` +
       `</div>` +
       `<div class="sidebar-nav">${navItems}</div>` +
-      `<div class="sidebar-resources">` +
-        `<div class="sidebar-res-label">Resources</div>` +
-        `<a href="https://antiboredom.github.io/p5.riso/" target="_blank" class="sidebar-resource">p5.riso Docs</a>` +
-        `<a href="https://p5js.org/reference/" target="_blank" class="sidebar-resource">p5.js Reference</a>` +
-      `</div>` +
     `</nav>`;
 
   document.body.insertAdjacentHTML('afterbegin', html);
