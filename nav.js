@@ -69,7 +69,6 @@
       const href = root + d.path + '/index.html';
       const isActive = currentPath.includes('/' + d.path + '/');
       return `<a href="${href}" class="nav-item${isActive ? ' active' : ''}">` +
-        `<span class="nav-num">${d.num}</span>` +
         `<span class="nav-title">${d.title}</span>` +
         `</a>`;
     }).join('');
