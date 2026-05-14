@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — p5.js Overview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>p5.js Overview</h1>
+    </div>
+  </header>
+
+  <p class="desc">A quick-reference introduction to p5.js — the creative coding library these demos are built on. Covers the sketch lifecycle, shapes, color, typography, math, interaction, and animation.</p>
+
+  <div class="explanation">
+
+    <h2>What is p5.js?</h2>
+    <p>
+      p5.js is a JavaScript library for creative coding. It gives you a set of simple functions for drawing shapes, working with color, loading images, handling mouse and keyboard input, and animating things on screen — all running directly in the browser.
+    </p>
+    <p>
+      Every p5.js sketch has the same basic structure: a <code>setup()</code> function that runs once when the sketch starts, and a <code>draw()</code> function that runs on a loop — up to 60 times per second by default.
+    </p>
+
+
+    <h2>Sketch Structure</h2>
+
+    <h3>setup()</h3>
+    <p>
+      Runs once at the very start. Use it to create the canvas, set initial values, and configure anything that only needs to happen once.
+    </p>
+    <pre><code>function setup() {
+  createCanvas(600, 400); // width, height in pixels
+  background(240);        // fill the canvas with a light gray
+}</code></pre>
+
+    <h3>draw()</h3>
+    <p>
+      Runs in a loop after <code>setup()</code> finishes — once per frame. Anything you draw here redraws every frame, which is how animation works. Use <code>noLoop()</code> to stop the loop if you only need to draw once.
+    </p>
+    <pre><code>function draw() {
+  background(240);          // clear the canvas each frame
+  circle(mouseX, mouseY, 40); // draw a circle that follows the mouse
+}</code></pre>
+
+    <h3>preload()</h3>
+    <p>
+      Runs before <code>setup()</code>, and p5 waits for it to finish before moving on. Use it to load images, fonts, or data files. Never load files inside <code>setup()</code> or <code>draw()</code>.
+    </p>
+    <pre><code>let img;
+
+function preload() {
+  img = loadImage("photo.jpg"); // fully loaded before setup() runs
+}
+
+function setup() {
+  createCanvas(600, 400);
+  image(img, 0, 0);
+}</code></pre>
+
+
+    <h2>The Canvas & Coordinates</h2>
+    <p>
+      The canvas coordinate system starts at the <strong>top-left corner</strong>, which is <code>(0, 0)</code>. X increases to the right, Y increases downward. This is the opposite of math class, but standard for screen graphics.
+    </p>
+    <pre><code>// A canvas that is 600px wide and 400px tall:
+// top-left  → (0, 0)
+// top-right → (600, 0)
+// center    → (300, 200)
+// bottom-right → (600, 400)
+
+createCanvas(600, 400);
+
+// built-in variables for canvas size:
+// width  → 600
+// height → 400</code></pre>
+    <p>
+      Always call <code>pixelDensity(1)</code> in <code>setup()</code> when using p5.riso — it prevents high-DPI screens from scaling the canvas in ways that affect exports.
+    </p>
+
+
+    <h2>Shapes</h2>
+    <pre><code>circle(x, y, diameter);          // circle centered at (x, y)
+ellipse(x, y, width, height);    // ellipse centered at (x, y)
+
+rect(x, y, width, height);       // rectangle from top-left corner
+rect(x, y, width, height, r);    // with rounded corners (radius r)
+
+line(x1, y1, x2, y2);           // line between two points
+point(x, y);                     // single pixel
+
+triangle(x1, y1, x2, y2, x3, y3); // three corners
+
+// rectMode changes how rect() is positioned:
+rectMode(CENTER); // x,y is the center instead of top-left corner
+rectMode(CORNER); // default — x,y is top-left</code></pre>
+
+
+    <h2>Color</h2>
+    <p>
+      Color values are 0–255. A single number is grayscale; three numbers are red, green, blue.
+    </p>
+    <pre><code>background(255);           // white
+background(0);             // black
+background(128);           // mid gray
+background(255, 0, 0);     // red
+background(0, 120, 191);   // riso blue
+
+fill(255, 72, 176);        // set fill color (pink)
+fill(200, 80);             // grayscale with opacity (0–255)
+noFill();                  // transparent fill
+
+stroke(0);                 // black outline
+stroke(255, 0, 0);         // red outline
+noStroke();                // no outline
+strokeWeight(3);           // outline thickness in pixels</code></pre>
+    <p>
+      Color settings stay active until you change them — set <code>fill()</code> and <code>stroke()</code> before each shape you want to look different.
+    </p>
+
+
+    <h2>Typography</h2>
+    <pre><code>textSize(24);              // font size in pixels
+textFont("monospace");     // font family (or a loaded font)
+textAlign(CENTER, CENTER); // horizontal, vertical alignment
+                           // LEFT / CENTER / RIGHT
+                           // TOP / CENTER / BASELINE / BOTTOM
+
+fill(0);
+text("Hello world", x, y); // draw text at (x, y)
+
+// measure text width before drawing:
+let w = textWidth("Hello world");</code></pre>
+
+
+    <h2>Variables & Math</h2>
+    <pre><code>let x = 100;        // declare a variable (can be reassigned)
+const SIZE = 40;    // constant (cannot be reassigned)
+
+// Arithmetic
+x = x + 10;        // or: x += 10
+x = x * 2;
+
+// Useful p5 math functions:
+random(low, high);          // random float between low and high
+random(myArray);            // random item from an array
+floor(3.7);                 // → 3  (round down)
+ceil(3.2);                  // → 4  (round up)
+round(3.5);                 // → 4  (round to nearest)
+abs(-5);                    // → 5  (absolute value)
+
+// map() rescales a value from one range to another:
+// e.g. convert a 0–100 data value to a 10–80px size
+let size = map(value, 0, 100, 10, 80);
+
+// constrain() clamps a value to stay within a range:
+let x = constrain(mouseX, 0, width);
+
+// Trigonometry (angles in radians):
+sin(angle);   cos(angle);   // −1 to 1
+TWO_PI;       // full circle (≈ 6.28)
+PI;           // half circle (≈ 3.14)
+radians(90);  // convert degrees → radians → 1.57</code></pre>
+
+
+    <h2>Interaction</h2>
+
+    <h3>Mouse</h3>
+    <pre><code>mouseX   // current mouse X position
+mouseY   // current mouse Y position
+
+function mousePressed() {
+  // runs once when mouse button is clicked
+}
+
+function mouseDragged() {
+  // runs every frame while dragging
+}</code></pre>
+
+    <h3>Keyboard</h3>
+    <pre><code>key      // the last key pressed, as a string: "a", " ", "Enter"
+keyCode  // numeric code for special keys: ENTER, BACKSPACE, UP_ARROW…
+
+function keyPressed() {
+  if (key === " ") {
+    // spacebar was pressed
+  }
+}
+
+function keyReleased() {
+  // runs when a key is released
+}</code></pre>
+
+
+    <h2>Animation & Looping</h2>
+    <pre><code>frameRate(30);   // set target frames per second (default: 60)
+frameCount;      // how many frames have drawn so far
+
+noLoop();        // stop draw() from looping — draw once and pause
+loop();          // restart the loop after noLoop()
+redraw();        // run draw() exactly once while looped off</code></pre>
+    <p>
+      For Riso sketches that only draw once (most of them), <code>noLoop()</code> in <code>setup()</code> keeps things simple and makes <code>exportRiso()</code> predictable.
+    </p>
+
+
+    <h2>Transforms</h2>
+    <p>
+      Transforms move, rotate, or scale the entire coordinate system. Wrap them in <code>push()</code> / <code>pop()</code> so they don't affect anything drawn afterwards.
+    </p>
+    <pre><code>push();                  // save current transform state
+  translate(300, 200);   // move origin to (300, 200)
+  rotate(PI / 4);        // rotate 45 degrees
+  rect(-50, -50, 100, 100); // draws centered at the new origin
+pop();                   // restore previous transform state
+// everything below is back to normal</code></pre>
+    <p>
+      Angles for <code>rotate()</code> are in <strong>radians</strong>. Use <code>radians(45)</code> to convert from degrees, or use the built-in constants: <code>QUARTER_PI</code>, <code>HALF_PI</code>, <code>PI</code>, <code>TWO_PI</code>.
+    </p>
+
+
+    <h2>Noise</h2>
+    <p>
+      <code>noise()</code> returns smooth, organic-looking random values — unlike <code>random()</code>, nearby inputs give nearby outputs. Useful for flowing shapes and textures.
+    </p>
+    <pre><code>// noise() returns a value between 0 and 1
+let n = noise(x * 0.01, y * 0.01); // 2D noise at position (x, y)
+
+// Animate over time by passing frameCount as a third argument:
+let n = noise(x * 0.01, y * 0.01, frameCount * 0.005);</code></pre>
+
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/" target="_blank">p5.js full reference</a> &nbsp;·&nbsp;
+      <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6Zy51Q-x9tMWIv9cueOFTFA" target="_blank">The Coding Train — p5.js tutorials</a> &nbsp;·&nbsp;
+      <a href="../00-setup/index.html">Setting Up p5.js</a>
+    </p>
+
+  </div>
+</body>
+</html>

@@ -14,6 +14,7 @@
     {
       label: 'Basics',
       demos: [
+        { path: '00-p5js',     num: '00', title: 'p5.js Overview' },
         { path: '00-template', num: '00', title: 'Template' },
         { path: '00-intro',    num: '00', title: 'Intro to p5.riso' },
       ]
