@@ -13,6 +13,7 @@
   <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -27,7 +28,7 @@
 
     <h2>How it works</h2>
     <p>
-      An array is an ordered list of values. In p5.js you declare one with square brackets — the same syntax JavaScript uses everywhere. Each slot is a value you can read back later by its index.
+      An <a class="gref" href="../00-glossary/index.html#array">array</a> is an ordered list of values. In p5.js you declare one with square brackets — the same syntax JavaScript uses everywhere. Each slot is a value you can read back later by its index.
     </p>
 
     <h3>A plain number array</h3>
@@ -37,7 +38,7 @@
 // sizes[2] → 25  (third element, index 2)
 // sizes.length → 5  (how many elements)</code></pre>
     <p>
-      Indexes start at <strong>0</strong>, so the last element is always at <code>arr.length - 1</code>. <code>.length</code> tells you how many elements are in the array — you never need to hard-code that number.
+      Indexes start at <strong>0</strong>, so the last element is always at <code>arr.length - 1</code>. <a class="gref" href="../00-glossary/index.html#array-length"><code>.length</code></a> tells you how many elements are in the array — you never need to hard-code that number.
     </p>
 
     <h3>Looping over an array</h3>
@@ -47,7 +48,7 @@
   circle(x, 300, s);
 }</code></pre>
     <p>
-      This is the core loop pattern for data-driven sketches. <code>i</code> is both the array index and the position counter. As <code>i</code> goes from 0 to <code>sizes.length - 1</code>, <code>sizes[i]</code> steps through every element in order.
+      This is the core <a class="gref" href="../00-glossary/index.html#for-loop">loop</a> pattern for data-driven sketches. <code>i</code> is both the <a class="gref" href="../00-glossary/index.html#array-index">array index</a> and the position counter. As <code>i</code> goes from 0 to <code>sizes.length - 1</code>, <code>sizes[i]</code> steps through every element in order.
     </p>
 
     <h3>Arrays of objects</h3>
@@ -58,7 +59,7 @@
   // ...
 ];</code></pre>
     <p>
-      Each element can itself be an object with multiple named properties. This lets one array carry several values per item — a label, a number, a boolean — and you read them by name instead of position.
+      Each element can itself be an <a class="gref" href="../00-glossary/index.html#object">object</a> with multiple named properties. This lets one array carry several values per item — a label, a number, a boolean — and you read them by <a class="gref" href="../00-glossary/index.html#object-property">name</a> instead of position.
     </p>
 
     <h3>Reading properties inside the loop</h3>
@@ -74,12 +75,12 @@
   // ... draw column of dots
 }</code></pre>
     <p>
-      The loop body stays the same no matter how many elements are in <code>data</code>. Add or remove entries from the array at the top of the sketch and the drawing updates automatically — you never touch the loop.
+      The loop body stays the same no matter how many elements are in <code>data</code>. Add or remove entries and the drawing updates automatically — you never touch the loop. <a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a> converts the data range to canvas coordinates. The <a class="gref" href="../00-glossary/index.html#ternary">ternary</a> picks a layer based on the <code>warm</code> flag.
     </p>
 
     <h3>What comes next</h3>
     <p>
-      <a href="../14-random-array/index.html">Demo 14</a> takes this exact same array and applies <code>shuffle()</code> and <code>randomSeed()</code> to it — turning a fixed dataset into a generative system where every seed produces a different composition. After that, <code>loadTable()</code> in <a href="../10-csv-data/index.html">demo 10</a> reads a CSV file and gives you back something that works exactly like this array of objects — the drawing loop doesn't change at all.
+      <a href="../14-random-array/index.html">Demo 14</a> takes this exact same array and applies <a class="gref" href="../00-glossary/index.html#shuffle"><code>shuffle()</code></a> and <a class="gref" href="../00-glossary/index.html#randomSeed"><code>randomSeed()</code></a> to it — turning a fixed dataset into a generative system where every seed produces a different composition. After that, <a class="gref" href="../00-glossary/index.html#loadTable"><code>loadTable()</code></a> in <a href="../10-csv-data/index.html">demo 10</a> reads a CSV file and gives you back something that works exactly like this array of objects — the drawing loop doesn't change at all.
     </p>
 
     <h3>When to use each approach</h3>

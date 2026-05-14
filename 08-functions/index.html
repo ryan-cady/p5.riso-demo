@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -31,7 +32,7 @@
   fill(255, 72, 176, 180);
   circle(width / 2, height / 2, 200);
 }</code></pre>
-      <p>A function is a <strong>named block of code</strong>. You define it once with <code>function</code>, then run it whenever you want by calling its name: <code>drawCircleStamp()</code>. In Mode 1, we call it three times — but since it always does the exact same thing, it draws in the same spot every time. The output never changes.</p>
+      <p>A <a class="gref" href="../00-glossary/index.html#function">function</a> is a <strong>named block of code</strong>. You define it once with <code>function</code>, then run it whenever you want by calling its name: <code>drawCircleStamp()</code>. In Mode 1, we call it three times — but since it always does the exact same thing, it draws in the same spot every time. The output never changes.</p>
       <p>This is useful for organizing your code, but it gets more powerful when you add parameters.</p>
 
       <h3>Mode 2: Function with parameters</h3>
@@ -56,13 +57,13 @@ drawRing(300, 350, 140, color(0, 120, 191));   // big blue ring</code></pre>
   let i = floor(random(colors.length));
   return colors[i];
 }</code></pre>
-      <p><code>return</code> <strong>sends a value back</strong> to wherever the function was called. Think of it like a machine with an output slot — you put something in, it does some work, and hands you a result:</p>
+      <p><a class="gref" href="../00-glossary/index.html#return"><code>return</code></a> <strong>sends a value back</strong> to wherever the function was called. Think of it like a machine with an output slot — you put something in, it does some work, and hands you a result:</p>
       <pre><code>let col = pickColor();  // col now holds a random color
 drawRing(x, y, size, col);</code></pre>
-      <p>The return value gets stored in <code>col</code>, which we then pass to <code>drawRing()</code>. Mode 3 combines both concepts — <code>pickColor()</code> returns a color, and <code>drawRing()</code> uses it as a parameter. Press <strong>r</strong> to regenerate with new random values.</p>
+      <p>The return value gets stored in <code>col</code>, which we then pass to <code>drawRing()</code>. Mode 3 combines both concepts — <code>pickColor()</code> returns a color, and <code>drawRing()</code> uses it as a parameter. Press <strong>r</strong> to regenerate with new <a class="gref" href="../00-glossary/index.html#random"><code>random</code></a> values.</p>
 
       <h3>Why functions matter</h3>
-      <p>You've already been using functions this whole time — <code>setup()</code>, <code>draw()</code>, <code>preload()</code>, and <code>keyReleased()</code> are all functions that P5 calls for you. <code>random()</code>, <code>map()</code>, and <code>floor()</code> are functions that return values. Now you can write your own.</p>
+      <p>You've already been using functions this whole time — <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a>, <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a>, <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a>, and <code>keyReleased()</code> are all functions that P5 calls for you. <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a>, <a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a>, and <a class="gref" href="../00-glossary/index.html#math-floor"><code>floor()</code></a> are functions that return values. Now you can write your own.</p>
       <p>Functions keep your code organized, avoid repetition, and make it easier to experiment — change the function once and every call to it updates automatically.</p>
 
   </div>

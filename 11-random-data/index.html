@@ -13,6 +13,7 @@
   <style>:root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-orange); }</style>
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -35,14 +36,14 @@
     <pre><code>let x = random(80, width - 80);   // a random x position
 let y = random(80, height - 80);  // a random y position</code></pre>
     <p>
-      <code>random(low, high)</code> returns a float anywhere between <code>low</code> and <code>high</code>. Each call is independent — calling it twice gives two different numbers. This is how we scatter cluster centers unpredictably across the canvas.
+      <a class="gref" href="../00-glossary/index.html#random"><code>random(low, high)</code></a> returns a float anywhere between <code>low</code> and <code>high</code>. Each call is independent — calling it twice gives two different numbers. This is how we scatter cluster centers unpredictably across the canvas.
     </p>
 
     <h3>random(array) — pick one element</h3>
     <pre><code>let names = ["bulbasaur", "snorlax", "jolteon"];
 let pick = random(names);  // one of the three, chosen at random</code></pre>
     <p>
-      Pass an array to <code>random()</code> and it returns one element chosen at random — equivalent to <code>names[floor(random(names.length))]</code> but much shorter. Useful for picking a random color, a random record from a dataset, or a random word from a list.
+      Pass an <a class="gref" href="../00-glossary/index.html#array">array</a> to <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> and it returns one element chosen at random — equivalent to <code>names[floor(random(names.length))]</code> but much shorter. Useful for picking a random color, a random record from a dataset, or a random word from a list.
     </p>
 
     <h3>shuffle(array) — reorder randomly</h3>
@@ -57,7 +58,7 @@ let shuffled = shuffle(rows);
 // Take the first 5 of the shuffled list = a random subset
 let selected = shuffled.slice(0, 5);</code></pre>
     <p>
-      <code>shuffle()</code> returns a new array with the same items in a random order. Slicing the first N elements after shuffling is a clean way to pick a random subset without repetition — each element appears at most once. Here we pick 5 of the 10 records; which 5 depends entirely on the current seed.
+      <a class="gref" href="../00-glossary/index.html#shuffle"><code>shuffle()</code></a> returns a new array with the same items in a random order. <a class="gref" href="../00-glossary/index.html#array-slice">Slicing</a> the first N elements after shuffling is a clean way to pick a random subset without repetition — each element appears at most once. Here we pick 5 of the 10 records; which 5 depends entirely on the current seed.
     </p>
 
     <h3>randomSeed(n) — reproducible randomness</h3>
@@ -75,7 +76,7 @@ function keyReleased() {
   }
 }</code></pre>
     <p>
-      Without <code>randomSeed()</code>, every call to <code>random()</code> pulls from a different point in an unpredictable sequence — good for live animation, bad for reproducible prints. <code>randomSeed(n)</code> resets the sequence to a known starting point, so calling the same code with the same seed always produces the same result. Calling <code>randomSeed()</code> at the top of <code>draw()</code> ensures the whole composition is locked to one seed.
+      Without <a class="gref" href="../00-glossary/index.html#randomSeed"><code>randomSeed()</code></a>, every call to <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> pulls from a different point in an unpredictable sequence — good for live animation, bad for reproducible prints. <code>randomSeed(n)</code> resets the sequence to a known starting point, so calling the same code with the same seed always produces the same result. Calling <code>randomSeed()</code> at the top of <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> ensures the whole composition is locked to one seed.
     </p>
     <p>
       The key insight: the final <code>seed = floor(random(9999))</code> in the keypress handler runs <em>outside</em> the seeded context (after <code>draw()</code> has finished), so it draws from the system's unseeded RNG — truly random, giving a new unpredictable seed each time.
@@ -92,7 +93,7 @@ for (let i = 0; i < dotCount; i++) {
   layer.circle(x + cos(a) * d, y + sin(a) * d, dotSize);
 }</code></pre>
     <p>
-      The data still controls the visual properties — energy drives cluster size and dot diameter, BPM drives how many dots appear. But now position is free. The same record placed with seed 100 looks completely different from seed 200 because <code>x</code> and <code>y</code> are random. The data is the <em>shape</em>; the seed is the <em>composition</em>.
+      The data still controls the visual properties — energy drives cluster size and dot diameter, BPM drives how many dots appear. But now position is free. The same record placed with seed 100 looks completely different from seed 200 because <code>x</code> and <code>y</code> are random. The data is the <em>shape</em>; the seed is the <em>composition</em>. <a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a> converts the data ranges into canvas-scale values.
     </p>
 
     <h3>Using your own data</h3>
@@ -100,11 +101,11 @@ for (let i = 0; i < dotCount; i++) {
       Swap in any CSV or JSON array. The key pattern is:
     </p>
     <ol>
-      <li>Load your data (CSV or JSON) in <code>preload()</code></li>
-      <li>Convert rows/items into a plain JS array</li>
-      <li><code>shuffle()</code> the array and <code>slice()</code> a subset</li>
-      <li>Use <code>random()</code> for position and <code>map()</code> for size/shape driven by data values</li>
-      <li>Wrap everything in <code>randomSeed(seed)</code> so any composition can be reproduced</li>
+      <li>Load your data (CSV or JSON) in <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a></li>
+      <li>Convert rows/items into a plain JS <a class="gref" href="../00-glossary/index.html#array">array</a></li>
+      <li><a class="gref" href="../00-glossary/index.html#shuffle"><code>shuffle()</code></a> the array and <a class="gref" href="../00-glossary/index.html#array-slice"><code>slice()</code></a> a subset</li>
+      <li>Use <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> for position and <a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a> for size/shape driven by data values</li>
+      <li>Wrap everything in <a class="gref" href="../00-glossary/index.html#randomSeed"><code>randomSeed(seed)</code></a> so any composition can be reproduced</li>
     </ol>
     <p>
       The <a href="../16-data-cruncher/index.html">Data Cruncher</a> can help you prep a new CSV — toggle columns on and off, filter rows down to the subset you want, and copy the embedded data array directly into your sketch.

@@ -13,6 +13,7 @@
   <style>:root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-orange); }</style>
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -27,7 +28,7 @@
 
     <h2>How it works</h2>
     <p>
-      Earlier demos load one image. This demo puts multiple images into an array and loops through them — the same pattern you'd use for a zine, poster, or any layout with more than one photo. Each image is dithered and placed on a Riso layer at a random position and size.
+      Earlier demos load one image. This demo puts multiple images into an <a class="gref" href="../00-glossary/index.html#array">array</a> and loops through them — the same pattern you'd use for a zine, poster, or any layout with more than one photo. Each image is dithered and placed on a Riso layer at a random position and size.
     </p>
 
     <h3>Loading multiple images in preload()</h3>
@@ -48,7 +49,7 @@ function preload() {
   }
 }</code></pre>
     <p>
-      All images are loaded upfront in <code>preload()</code>. Add new paths to <code>imagePaths</code> and the loop handles them automatically. <code>SHOW_COUNT</code> controls how many appear on each draw — the rest are loaded but not used until the next shuffle.
+      All images are loaded upfront in <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a> using <a class="gref" href="../00-glossary/index.html#loadImage"><code>loadImage()</code></a>. Add new paths to <code>imagePaths</code> and the loop handles them automatically. <code>SHOW_COUNT</code> controls how many appear on each draw — the rest are loaded but not used until the next shuffle.
     </p>
 
     <h3>Picking a random subset</h3>
@@ -57,7 +58,7 @@ function preload() {
 // a random subset with no repeats.
 let selected = shuffle(images).slice(0, SHOW_COUNT);</code></pre>
     <p>
-      This is the same pattern from demo 14. Every press of space picks a new seed, which means a new shuffle — different images, different positions, different sizes.
+      <a class="gref" href="../00-glossary/index.html#shuffle"><code>shuffle()</code></a> reorders the array randomly, then <a class="gref" href="../00-glossary/index.html#array-slice"><code>slice()</code></a> takes the first N — a random subset without repeats. This is the same pattern from demo 14. Every press of space picks a new <a class="gref" href="../00-glossary/index.html#randomSeed">seed</a>, which means a new shuffle.
     </p>
 
     <h3>Resizing once in setup()</h3>
@@ -68,7 +69,7 @@ let selected = shuffle(images).slice(0, SHOW_COUNT);</code></pre>
   }
 }</code></pre>
     <p>
-      Resizing in <code>setup()</code> means it happens once, not on every frame. Passing <code>0</code> as the second argument preserves the aspect ratio — p5 calculates the height automatically.
+      <a class="gref" href="../00-glossary/index.html#img-resize">Resizing</a> in <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a> means it happens once, not on every frame. Passing <code>0</code> as the second argument preserves the aspect ratio — p5 calculates the height automatically.
     </p>
 
     <h3>Dithering and drawing each image</h3>
@@ -92,7 +93,7 @@ let selected = shuffle(images).slice(0, SHOW_COUNT);</code></pre>
   layer.image(dithered, x, y, w, h);
 }</code></pre>
     <p>
-      The loop body is the same for every image. <code>i % 2</code> alternates between 0 and 1 as <code>i</code> steps through the array — a simple way to split images across two ink layers. <code>layer.image(img, x, y, w, h)</code> works exactly like p5's <code>image()</code> but draws to the Riso layer instead of the main canvas.
+      The loop body is the same for every image. <code>i % 2</code> alternates between 0 and 1 as <code>i</code> steps through the array — a simple way to split images across two ink layers. <a class="gref" href="../00-glossary/index.html#ditherImage"><code>ditherImage()</code></a> converts each photo before <a class="gref" href="../00-glossary/index.html#layer-image"><code>layer.image()</code></a> draws it to the Riso channel.
     </p>
 
     <h3>Random layout with a seed</h3>
@@ -107,7 +108,7 @@ function keyReleased() {
   }
 }</code></pre>
     <p>
-      <code>randomSeed()</code> at the top of <code>draw()</code> locks every <code>random()</code> call in the loop to a reproducible sequence. Press space to pick a new seed — each one is a unique composition you can export and print.
+      <a class="gref" href="../00-glossary/index.html#randomSeed"><code>randomSeed()</code></a> at the top of <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> locks every <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> call in the loop to a reproducible sequence. Press space to pick a new seed — each one is a unique composition you can export and print.
     </p>
 
     <h3>Using your own images</h3>

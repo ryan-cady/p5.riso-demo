@@ -364,6 +364,27 @@ canvas {
   color: var(--riso-black);
 }
 
+/* Glossary cross-reference links — wrap <code> in <a class="gref"> */
+.explanation a.gref,
+.desc a.gref {
+  text-decoration: none;
+  border-bottom: none;
+  color: inherit;
+}
+
+.explanation a.gref code,
+.desc a.gref code {
+  color: var(--riso-blue);
+  border-bottom: 1px dashed color-mix(in srgb, var(--riso-blue) 50%, transparent);
+  transition: background 0.1s;
+}
+
+.explanation a.gref:hover code,
+.desc a.gref:hover code {
+  background: #e8f2f9;
+  border-bottom-style: solid;
+}
+
 /* Data download link — demos 10 and 11 */
 .data-download {
   max-width: 860px;
@@ -453,8 +474,136 @@ canvas {
 
 
 /* ──────────────────────────────────────────────
+   Sidebar navigation
+────────────────────────────────────────────── */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 210px;
+  background: var(--riso-black);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 50;
+  border-right: 1px solid #2a2a2a;
+}
+
+body.has-sidebar {
+  padding-left: 210px;
+}
+
+.sidebar-brand {
+  padding: 1.25rem 1rem 1rem;
+  border-bottom: 1px solid #2a2a2a;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: block;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.sidebar-logo-pink { color: var(--riso-pink); }
+.sidebar-logo-blue { color: var(--riso-blue); }
+
+.sidebar-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  color: #555;
+  margin-top: 0.3rem;
+  letter-spacing: 0.03em;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.4rem 0;
+}
+
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+.nav-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  text-decoration: none;
+  color: #888;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  transition: background 0.1s, color 0.1s;
+}
+
+.nav-item:hover {
+  background: #1e1e1e;
+  color: #ddd;
+}
+
+.nav-item.active {
+  background: #222;
+  color: #fff;
+}
+
+.nav-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  color: #444;
+  width: 1.6rem;
+  flex-shrink: 0;
+}
+
+.nav-item:hover .nav-num,
+.nav-item.active .nav-num { color: #777; }
+
+.sidebar-resources {
+  padding: 0.6rem 0 0.75rem;
+  border-top: 1px solid #2a2a2a;
+  flex-shrink: 0;
+}
+
+.sidebar-res-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #444;
+  padding: 0 1rem 0.4rem;
+}
+
+.sidebar-resource {
+  display: block;
+  padding: 0.28rem 1rem;
+  font-size: 0.74rem;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.1s;
+}
+
+.sidebar-resource:hover { color: var(--riso-blue); }
+
+/* Hide the back link when sidebar handles navigation */
+.has-sidebar .back { display: none; }
+
+
+/* ──────────────────────────────────────────────
    Responsive
 ────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  body.has-sidebar { padding-left: 0; }
+  .has-sidebar .back { display: inline; }
+}
 
 @media (max-width: 600px) {
   .home header { padding: 2rem 1.25rem 1.5rem; }

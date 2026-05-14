@@ -8,182 +8,542 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/global.css">
+  <style>
+    .home-content {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 3rem 2.5rem 5rem;
+    }
+
+    /* ── Hero ───────────────────────────────── */
+    .home-hero {
+      margin-bottom: 3rem;
+    }
+
+    .home-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+    }
+
+    .home-hero h1 .pink { color: var(--riso-pink); }
+    .home-hero h1 .blue { color: var(--riso-blue); }
+
+    .home-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: #999;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.25rem;
+    }
+
+    .home-intro {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #555;
+      max-width: 540px;
+    }
+
+    .home-intro a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid var(--riso-blue);
+    }
+
+    .home-intro a:hover {
+      color: var(--riso-pink);
+      border-color: var(--riso-pink);
+    }
+
+    /* ── Section wrapper ────────────────────── */
+    .home-section {
+      margin-bottom: 2.75rem;
+    }
+
+    .home-section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #aaa;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--riso-paper-dark);
+    }
+
+    /* ── Resource cards ─────────────────────── */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .resource-card {
+      background: var(--riso-paper);
+      padding: 1.25rem 1.25rem 1rem;
+      text-decoration: none;
+      color: var(--riso-black);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: background 0.12s;
+    }
+
+    .resource-card:hover { background: #fff; }
+
+    .resource-card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #bbb;
+    }
+
+    .resource-card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .resource-card-desc {
+      font-size: 0.78rem;
+      color: #777;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .resource-card-arrow {
+      font-size: 0.72rem;
+      color: #bbb;
+      margin-top: 0.25rem;
+      transition: color 0.12s;
+    }
+
+    .resource-card:hover .resource-card-arrow { color: var(--riso-blue); }
+    .resource-card:nth-child(1) .resource-card-title { color: var(--riso-blue); }
+    .resource-card:nth-child(2) .resource-card-title { color: var(--riso-orange); }
+    .resource-card:nth-child(3) .resource-card-title { color: var(--riso-blue); }
+
+    /* ── Get started links ──────────────────── */
+    .start-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .start-link {
+      background: var(--riso-paper);
+      padding: 0.9rem 1.25rem;
+      text-decoration: none;
+      color: var(--riso-black);
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      transition: background 0.12s, padding-left 0.12s;
+    }
+
+    .start-link:hover {
+      background: #fff;
+      padding-left: 1.75rem;
+    }
+
+    .start-link-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: #bbb;
+      flex-shrink: 0;
+      width: 1.5rem;
+    }
+
+    .start-link-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .start-link-desc {
+      font-size: 0.78rem;
+      color: #888;
+    }
+
+    /* ── Color swatches ─────────────────────── */
+    .color-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .color-group-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #bbb;
+      margin-bottom: 0.6rem;
+    }
+
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+    }
+
+    .color-swatch {
+      background: var(--riso-paper);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-color {
+      height: 72px;
+      flex-shrink: 0;
+    }
+
+    .swatch-info {
+      padding: 0.45rem 0.55rem 0.5rem;
+    }
+
+    .swatch-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--riso-black);
+      line-height: 1.3;
+      margin-bottom: 0.2rem;
+    }
+
+    .swatch-code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.56rem;
+      color: #aaa;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    .swatch-also {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.52rem;
+      color: #c0b8ac;
+      margin-top: 0.2rem;
+    }
+
+    .color-footnote {
+      font-size: 0.78rem;
+      color: #999;
+      line-height: 1.6;
+      margin-top: 0.75rem;
+    }
+
+    .color-footnote code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      background: var(--riso-paper-dark);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+
+    .home-note {
+      font-size: 0.8rem;
+      color: #999;
+      line-height: 1.6;
+    }
+
+    .home-note code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.74rem;
+      background: var(--riso-paper-dark);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .home-content { padding: 2rem 1.25rem 4rem; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .swatch-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+      .swatch-color { height: 56px; }
+    }
+  </style>
 </head>
 <body class="home">
+  <script src="nav.js"></script>
 
-  <header>
-    <h1><span class="pink">Glitch</span> &amp; <span class="blue">Grain</span></h1>
-    <div class="subtitle">p5.riso Demo Sketches</div>
-    <p class="intro">
-      Code demos for learning the <a href="https://antiboredom.github.io/p5.riso/">p5.riso</a> library — RISO color channels, image import, dithering, and halftone effects. Each folder is a standalone P5.js sketch.
-    </p>
-    <div class="header-links">
-      <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/README.md">README</a>
-      <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WALKTHROUGH.md">Walkthrough</a>
-      <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WORKING-WITH-DATA.md">Working with Data</a>
-      <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/CCS-RISO-COLORS.md">RISO Color Reference</a>
-      <a href="cover-gen/index.html">Cover Generator</a>
-      <a href="cover-brackets/index.html">Cover Bracket</a>
+  <div class="home-content">
+
+    <!-- ── Hero ─────────────────────────────── -->
+    <div class="home-hero">
+      <h1><span class="pink">Glitch</span> &amp; <span class="blue">Grain</span></h1>
+      <div class="home-subtitle">p5.riso Demo Sketches</div>
+      <p class="home-intro">
+        Code demos for learning <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso</a> —
+        a library for simulating Risograph printing in the browser. Each demo is a standalone p5.js sketch
+        covering color channels, image import, dithering, halftone, and data-driven layouts.
+      </p>
     </div>
-  </header>
 
-  <div class="demos">
-    <a href="00-template/index.html" class="demo-link">
-      <div class="demo-num">00</div>
-      <div class="demo-info">
-        <div class="demo-title">Template</div>
-        <div class="demo-desc">Blank boilerplate — half-letter at 150 DPI, export &amp; composite keys</div>
+    <!-- ── Resources ────────────────────────── -->
+    <div class="home-section">
+      <div class="home-section-title">Resources</div>
+      <div class="resource-grid">
+        <a href="https://p5js.org/reference/" target="_blank" class="resource-card">
+          <div class="resource-card-label">Docs</div>
+          <div class="resource-card-title">p5.js Reference</div>
+          <div class="resource-card-desc">Full API reference for every p5.js function — shapes, color, math, I/O, and more.</div>
+          <div class="resource-card-arrow">↗ p5js.org</div>
+        </a>
+        <a href="https://antiboredom.github.io/p5.riso/" target="_blank" class="resource-card">
+          <div class="resource-card-label">Library</div>
+          <div class="resource-card-title">p5.riso Docs</div>
+          <div class="resource-card-desc">Official docs for p5.riso — channels, dither modes, halftone, export, and all 81 RISO colors.</div>
+          <div class="resource-card-arrow">↗ Open</div>
+        </a>
+        <a href="00-glossary/index.html" class="resource-card">
+          <div class="resource-card-label">Reference</div>
+          <div class="resource-card-title">Glossary</div>
+          <div class="resource-card-desc">Searchable definitions for every JavaScript, p5.js, and p5.riso term used in the demos.</div>
+          <div class="resource-card-arrow">→ Open</div>
+        </a>
       </div>
-      <div class="demo-tag">Starter</div>
-    </a>
-    <a href="00-intro/index.html" class="demo-link">
-      <div class="demo-num">00</div>
-      <div class="demo-info">
-        <div class="demo-title">Intro to p5.riso</div>
-        <div class="demo-desc">Color channels, drawing to layers, compositing with drawRiso()</div>
+    </div>
+
+    <!-- ── Get started ───────────────────────── -->
+    <div class="home-section">
+      <div class="home-section-title">Get Started</div>
+      <div class="start-links">
+        <a href="00-template/index.html" class="start-link">
+          <span class="start-link-num">00</span>
+          <span class="start-link-title">Template</span>
+          <span class="start-link-desc">Blank boilerplate — start here for a new sketch</span>
+        </a>
+        <a href="00-intro/index.html" class="start-link">
+          <span class="start-link-num">00</span>
+          <span class="start-link-title">Intro to p5.riso</span>
+          <span class="start-link-desc">Color channels, layer drawing, and compositing</span>
+        </a>
+        <a href="04-basic-dither/index.html" class="start-link">
+          <span class="start-link-num">04</span>
+          <span class="start-link-title">Basic Dither</span>
+          <span class="start-link-desc">Load an image and apply Atkinson dither to a Riso layer</span>
+        </a>
       </div>
-      <div class="demo-tag">Basics</div>
-    </a>
-    <a href="01-color-array/index.html" class="demo-link">
-      <div class="demo-num">01</div>
-      <div class="demo-info">
-        <div class="demo-title">RISO Color Array</div>
-        <div class="demo-desc">Explore the RISOCOLORS array — 81 ink colors, random selection</div>
+    </div>
+
+    <!-- ── RISO Ink Colors ───────────────────── -->
+    <div class="home-section">
+      <div class="home-section-title">Available RISO Ink Colors</div>
+
+      <div class="color-group">
+        <div class="color-group-label">2-Color Prints — pick any two</div>
+        <div class="swatch-grid">
+
+          <!-- red → orange → yellow → green → teal → blue → purple → pink → neutral -->
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#F15060;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Bright Red</div>
+              <div class="swatch-code">"brightred"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#FF6C2F;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Orange</div>
+              <div class="swatch-code">"orange"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#BD6439;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Copper</div>
+              <div class="swatch-code">"copper"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#FFB511;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Sunflower</div>
+              <div class="swatch-code">"sunflower"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#FFE800;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Yellow</div>
+              <div class="swatch-code">"yellow"</div>
+              <div class="swatch-also">also 1-color</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#E3ED55;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Light Lime</div>
+              <div class="swatch-code">"lightlime"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#D5E4C0;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Mist</div>
+              <div class="swatch-code">"mist"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#00A95C;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Green</div>
+              <div class="swatch-code">"green"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#82D8D5;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Mint</div>
+              <div class="swatch-code">"mint"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#00838A;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Teal</div>
+              <div class="swatch-code">"teal"</div>
+              <div class="swatch-also">also 1-color</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#5EC8E5;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Aqua</div>
+              <div class="swatch-code">"aqua"</div>
+              <div class="swatch-also">also 1-color</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#0078BF;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Blue</div>
+              <div class="swatch-code">"blue"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#914E72;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Burgundy</div>
+              <div class="swatch-code">"burgundy"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#FF48B0;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Fluor. Pink</div>
+              <div class="swatch-code">"fluorescentpink"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#000000;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">HD Black</div>
+              <div class="swatch-code">"black"</div>
+            </div>
+          </div>
+
+        </div>
       </div>
-      <div class="demo-tag">Colors</div>
-    </a>
-    <a href="02-curated-palette/index.html" class="demo-link">
-      <div class="demo-num">02</div>
-      <div class="demo-info">
-        <div class="demo-title">Curated Palette</div>
-        <div class="demo-desc">Build a custom subset of RISO colors and draw swatches</div>
+
+      <div class="color-group">
+        <div class="color-group-label">1-Color Prints</div>
+        <div class="swatch-grid">
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#FF7477;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Fluor. Orange</div>
+              <div class="swatch-code">"fluorescentorange"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#FFE800;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Yellow</div>
+              <div class="swatch-code">"yellow"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#BBE000;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Fluor. Lime</div>
+              <div class="swatch-code">"fluorescentlime"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#00838A;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Teal</div>
+              <div class="swatch-code">"teal"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#5EC8E5;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Aqua</div>
+              <div class="swatch-code">"aqua"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#765BA7;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Purple</div>
+              <div class="swatch-code">"purple"</div>
+            </div>
+          </div>
+
+          <div class="color-swatch">
+            <div class="swatch-color" style="background:#000000;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Black</div>
+              <div class="swatch-code">"black"</div>
+            </div>
+          </div>
+
+        </div>
       </div>
-      <div class="demo-tag">Colors</div>
-    </a>
-    <a href="03-load-image/index.html" class="demo-link">
-      <div class="demo-num">03</div>
-      <div class="demo-info">
-        <div class="demo-title">Load Image</div>
-        <div class="demo-desc">Use preload() and loadImage() to bring images into P5</div>
-      </div>
-      <div class="demo-tag">Images</div>
-    </a>
-    <a href="04-basic-dither/index.html" class="demo-link">
-      <div class="demo-num">04</div>
-      <div class="demo-info">
-        <div class="demo-title">Basic Dither</div>
-        <div class="demo-desc">Apply Atkinson dither to an image on a Riso layer</div>
-      </div>
-      <div class="demo-tag">Dither</div>
-    </a>
-    <a href="05-dither-comparison/index.html" class="demo-link">
-      <div class="demo-num">05</div>
-      <div class="demo-info">
-        <div class="demo-title">Dither Comparison</div>
-        <div class="demo-desc">Compare all 4 dither algorithms — keys 1–4 to switch</div>
-      </div>
-      <div class="demo-tag">Dither</div>
-    </a>
-    <a href="06-two-color-dither/index.html" class="demo-link">
-      <div class="demo-num">06</div>
-      <div class="demo-info">
-        <div class="demo-title">Two-Color Print</div>
-        <div class="demo-desc">Dither + halftone on two Riso layers — press 1/2 to adjust threshold</div>
-      </div>
-      <div class="demo-tag">Halftone</div>
-    </a>
-    <a href="07-data-driven/index.html" class="demo-link">
-      <div class="demo-num">07</div>
-      <div class="demo-info">
-        <div class="demo-title">Data-Driven</div>
-        <div class="demo-desc">Data controls color selection, dither threshold, and halftone frequency</div>
-      </div>
-      <div class="demo-tag">Data</div>
-    </a>
-    <a href="08-functions/index.html" class="demo-link">
-      <div class="demo-num">08</div>
-      <div class="demo-info">
-        <div class="demo-title">Functions</div>
-        <div class="demo-desc">Three levels — defining, parameters, and return values</div>
-      </div>
-      <div class="demo-tag">Fundamentals</div>
-    </a>
-    <a href="09-api-data/index.html" class="demo-link">
-      <div class="demo-num">09</div>
-      <div class="demo-info">
-        <div class="demo-title">API Data</div>
-        <div class="demo-desc">loadJSON() fetches live Pokémon stats — each Pokémon prints a different pattern</div>
-      </div>
-      <div class="demo-tag">Data</div>
-    </a>
-    <a href="10-csv-data/index.html" class="demo-link">
-      <div class="demo-num">10</div>
-      <div class="demo-info">
-        <div class="demo-title">CSV Data</div>
-        <div class="demo-desc">loadTable() reads a spreadsheet — 10 records, each row becomes a column of dots</div>
-      </div>
-      <div class="demo-tag">Data</div>
-    </a>
-    <a href="11-random-data/index.html" class="demo-link">
-      <div class="demo-num">11</div>
-      <div class="demo-info">
-        <div class="demo-title">Random Data</div>
-        <div class="demo-desc">shuffle() + randomSeed() — sample a CSV dataset, press space for a new composition</div>
-      </div>
-      <div class="demo-tag">Data</div>
-    </a>
-    <a href="12-webcam/index.html" class="demo-link">
-      <div class="demo-num">12</div>
-      <div class="demo-info">
-        <div class="demo-title">Webcam Riso</div>
-        <div class="demo-desc">Live camera feed — dither + halftone on two Riso layers, freeze to export</div>
-      </div>
-      <div class="demo-tag">Live</div>
-    </a>
-    <a href="13-arrays/index.html" class="demo-link">
-      <div class="demo-num">13</div>
-      <div class="demo-info">
-        <div class="demo-title">Arrays</div>
-        <div class="demo-desc">Arrays of objects drive the sketch — the same loop pattern behind loadTable() and CSV data</div>
-      </div>
-      <div class="demo-tag">Data</div>
-    </a>
-    <a href="14-random-array/index.html" class="demo-link">
-      <div class="demo-num">14</div>
-      <div class="demo-info">
-        <div class="demo-title">Randomize Array</div>
-        <div class="demo-desc">shuffle() + randomSeed() on a hardcoded array — pick a subset, press space for a new composition</div>
-      </div>
-      <div class="demo-tag">Data</div>
-    </a>
-    <a href="15-image-array/index.html" class="demo-link">
-      <div class="demo-num">15</div>
-      <div class="demo-info">
-        <div class="demo-title">Image Array</div>
-        <div class="demo-desc">Load multiple images into an array, dither each one, scatter randomly with randomSeed()</div>
-      </div>
-      <div class="demo-tag">Images</div>
-    </a>
-    <a href="16-data-cruncher/index.html" class="demo-link">
-      <div class="demo-num">16</div>
-      <div class="demo-info">
-        <div class="demo-title">Data Cruncher</div>
-        <div class="demo-desc">Drop any CSV — toggle columns on/off, filter rows, and copy a ready-to-paste p5.js sketch</div>
-      </div>
-      <div class="demo-tag">Tool</div>
-    </a>
+
+      <p class="color-footnote">
+        Pass the exact string to <code>new Riso()</code> — e.g. <code>let blue = new Riso("blue")</code>.
+        Yellow, Teal, and Aqua are available for both 1-color and 2-color prints.
+        HD Black and Black share the same code name but are different physical drums.
+      </p>
+    </div>
+
+    <p class="home-note">
+      Demos 03–07 require an image — upload one to the sketch folder and update the <code>loadImage()</code> path.
+    </p>
+
   </div>
-
-  <div class="note">
-    Demos 03–07 require an image — upload one to your sketch and update the <code>loadImage()</code> path.<br>
-    See <a href="https://antiboredom.github.io/p5.riso/">p5.riso docs</a> for full reference.<br><br>
-    <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/README.md">README</a>
-    <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WALKTHROUGH.md">Walkthrough</a> &nbsp;·&nbsp;
-    <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/WORKING-WITH-DATA.md">Working with Data</a> &nbsp;·&nbsp;
-    <a href="https://github.com/ryan-cady/p5.riso-demo/blob/main/CCS-RISO-COLORS.md">RISO Color Reference</a> &nbsp;·&nbsp;
-    <a href="cover-gen/index.html">Cover Generator</a> &nbsp;·&nbsp;
-    <a href="cover-brackets/index.html">Cover Bracket</a>
-  </div>
-
 </body>
 </html>

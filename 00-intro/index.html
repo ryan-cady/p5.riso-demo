@@ -49,6 +49,7 @@
   </style>
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -57,20 +58,6 @@
     </div>
   </header>
   <p class="desc">Color channels, drawing to layers, compositing</p>
-
-  <div class="explanation">
-    <h2>How it works</h2>
-    <p>This sketch introduces the basic p5.riso workflow — creating color layers, drawing shapes to them, and compositing the result.</p>
-
-    <h3>The Riso workflow</h3>
-    <p>Every p5.riso sketch follows the same three steps inside <code>draw()</code>:</p>
-    <ol>
-      <li><code>clearRiso()</code> — wipe all layers clean</li>
-      <li>Draw to your Riso layers</li>
-      <li><code>drawRiso()</code> — blend all layers together and display the result</li>
-    </ol>
-    <p>If you forget <code>clearRiso()</code>, layers stack on themselves and go solid. If you forget <code>drawRiso()</code>, nothing shows up.</p>
-  </div>
 
   <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
 
@@ -115,6 +102,20 @@
       <div class="gallery-frame"><iframe src="runner.html?fn=10" loading="lazy"></iframe></div>
       <span class="gallery-label">Dots &amp; Stippling</span>
     </div>
+  </div>
+
+  <div class="explanation">
+    <h2>How it works</h2>
+    <p>This sketch introduces the basic p5.riso workflow — creating color layers, drawing shapes to them, and compositing the result.</p>
+
+    <h3>The Riso workflow</h3>
+    <p>Every p5.riso sketch follows the same three steps inside <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a>:</p>
+    <ol>
+      <li><a class="gref" href="../00-glossary/index.html#clearRiso"><code>clearRiso()</code></a> — wipe all layers clean</li>
+      <li>Draw to your Riso layers</li>
+      <li><a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a> — blend all layers together and display the result</li>
+    </ol>
+    <p>If you forget <a class="gref" href="../00-glossary/index.html#clearRiso"><code>clearRiso()</code></a>, layers stack on themselves and go solid. If you forget <a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a>, nothing shows up.</p>
   </div>
 
 </body>

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -59,7 +60,7 @@
   drawRiso();
 }</code></pre>
     <p>
-      <code>capture.get()</code> returns a static <code>p5.Image</code> copy of the video at that instant. Processing two full-frame images every tick is expensive, so we run at <code>frameRate(6)</code> — slow enough to stay smooth, fast enough to feel live.
+      <code>capture.get()</code> returns a static <code>p5.Image</code> copy of the video at that instant. <a class="gref" href="../00-glossary/index.html#clearRiso"><code>clearRiso()</code></a> wipes the layers each frame, then <a class="gref" href="../00-glossary/index.html#ditherImage"><code>ditherImage()</code></a> and <a class="gref" href="../00-glossary/index.html#halftoneImage"><code>halftoneImage()</code></a> process it before <a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a> composites everything. We run at <a class="gref" href="../00-glossary/index.html#frameRate"><code>frameRate(6)</code></a> — slow enough to stay smooth, fast enough to feel live.
     </p>
 
     <h3>Step 3: mirror the frame</h3>
@@ -97,7 +98,7 @@ if (key === "1") {
 // Press "e" to export
 if (frozen) exportRiso();</code></pre>
     <p>
-      <code>noLoop()</code> stops the animation loop. While frozen, adjusting <strong>1/2</strong> (threshold) or <strong>3/4</strong> (halftone frequency) calls <code>redraw()</code>, which runs <code>draw()</code> once using the stored <code>frozenFrame</code>. This lets you dial in the look before committing to an export. Press <strong>f</strong> again to resume the live feed.
+      <a class="gref" href="../00-glossary/index.html#noLoop"><code>noLoop()</code></a> stops the animation loop. While frozen, adjusting <strong>1/2</strong> (threshold) or <strong>3/4</strong> (halftone frequency) calls <a class="gref" href="../00-glossary/index.html#redraw"><code>redraw()</code></a>, which runs <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> once using the stored <code>frozenFrame</code>. <a class="gref" href="../00-glossary/index.html#constrain"><code>constrain()</code></a> keeps the threshold in a valid range. Press <strong>e</strong> to trigger <a class="gref" href="../00-glossary/index.html#exportRiso"><code>exportRiso()</code></a>. Press <strong>f</strong> again to resume the live feed.
     </p>
 
     <h3>Keys at a glance</h3>

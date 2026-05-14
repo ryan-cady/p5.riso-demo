@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -30,9 +31,9 @@
       <h3>Picking a random color</h3>
       <pre><code>let i = floor(random(RISOCOLORS.length));
 let c = RISOCOLORS[i];</code></pre>
-      <p><code>RISOCOLORS</code> is a global array with 81 Risograph ink colors. Each entry has a <code>.name</code> (like <code>"fluorescentpink"</code>) and a <code>.color</code> (RGB values).</p>
-      <p><code>i</code> is an <strong>index number</strong> — a random position in the array. <code>random()</code> returns a decimal like 42.739, but array positions must be whole numbers, so <code>floor()</code> rounds it down.</p>
-      <p><code>c</code> is the <strong>color object</strong> at that position. The sketch uses <code>c.color</code> for the fill and <code>c.name</code> for the label.</p>
+      <p><a class="gref" href="../00-glossary/index.html#RISOCOLORS"><code>RISOCOLORS</code></a> is a global <a class="gref" href="../00-glossary/index.html#array">array</a> with 81 Risograph ink colors. Each entry has a <a class="gref" href="../00-glossary/index.html#RISOCOLORS-props"><code>.name</code></a> (like <code>"fluorescentpink"</code>) and a <code>.color</code> (RGB values).</p>
+      <p><code>i</code> is an <strong>index number</strong> — a random position in the array. <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> returns a decimal like 42.739, but array positions must be whole numbers, so <a class="gref" href="../00-glossary/index.html#math-floor"><code>floor()</code></a> rounds it down.</p>
+      <p><code>c</code> is the <strong>color object</strong> at that position. The sketch uses <code>c.color</code> for the <a class="gref" href="../00-glossary/index.html#fill"><code>fill</code></a> and <code>c.name</code> for the label.</p>
 
       <h3>The pattern</h3>
       <p><code>floor(random(array.length))</code> is a general pattern for picking a random item from any array — you'll use it often.</p>

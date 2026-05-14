@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — Glossary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    .controls {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .search-wrap::before {
+      content: '⌕';
+      position: absolute;
+      left: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      padding: 0.5rem 0.75rem 0.5rem 2rem;
+      border: 1px solid #d8d0c4;
+      border-radius: 4px;
+      background: #fff;
+      color: var(--riso-black);
+      outline: none;
+    }
+
+    #search:focus { border-color: var(--riso-blue); }
+    #search::placeholder { color: #bbb; }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tabs button {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: transparent;
+      color: #999;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .filter-tabs button:hover { border-color: var(--riso-blue); color: var(--riso-blue); }
+    .filter-tabs button.active[data-filter="all"] { background: var(--riso-black); border-color: var(--riso-black); color: var(--riso-paper); }
+    .filter-tabs button.active[data-filter="js"] { background: var(--riso-orange); border-color: var(--riso-orange); color: #fff; }
+    .filter-tabs button.active[data-filter="p5"] { background: var(--riso-blue); border-color: var(--riso-blue); color: #fff; }
+    .filter-tabs button.active[data-filter="riso"] { background: var(--riso-pink); border-color: var(--riso-pink); color: #fff; }
+
+    .glossary {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .glossary-section { margin-bottom: 2.5rem; }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid;
+    }
+
+    .section-heading h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .section-heading .section-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: #aaa;
+      margin-left: auto;
+    }
+
+    [data-category="js"] .section-heading { border-color: var(--riso-orange); }
+    [data-category="js"] .section-heading h2 { color: var(--riso-orange); }
+    [data-category="p5"] .section-heading { border-color: var(--riso-blue); }
+    [data-category="p5"] .section-heading h2 { color: var(--riso-blue); }
+    [data-category="riso"] .section-heading { border-color: var(--riso-pink); }
+    [data-category="riso"] .section-heading h2 { color: var(--riso-pink); }
+
+    .subsection-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #bbb;
+      padding: 1rem 0 0.4rem;
+    }
+
+    .term {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 0.75rem 1.5rem;
+      align-items: baseline;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--riso-paper-dark);
+      scroll-margin-top: 1.5rem;
+    }
+
+    .term:last-child { border-bottom: none; }
+    .term[hidden], .subsection-label[hidden] { display: none; }
+
+    .term-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--riso-black);
+      line-height: 1.4;
+    }
+
+    [data-category="js"] .term-name { color: #c94b00; }
+    [data-category="p5"] .term-name { color: #005c91; }
+    [data-category="riso"] .term-name { color: #cc2d88; }
+
+    .term-name code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+    .term-desc {
+      font-size: 0.84rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .term-desc code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.73rem;
+      background: var(--riso-paper-dark);
+      padding: 0.1em 0.35em;
+      border-radius: 2px;
+      color: var(--riso-black);
+    }
+
+    .term-desc em { color: #888; font-style: italic; }
+
+    .no-results {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.82rem;
+      color: #bbb;
+      padding: 2rem 0;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .controls { padding: 0 1.25rem 1.25rem; }
+      .glossary { padding: 0 1.25rem 3rem; }
+      .term { grid-template-columns: 1fr; gap: 0.2rem; padding: 0.65rem 0; }
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <span class="demo-num">00</span>
+      <h1>Glossary</h1>
+    </div>
+  </header>
+  <p class="desc">Common coding terms for JavaScript, p5.js, and p5.riso used in these demos</p>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Search terms…" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="filter-tabs">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="js">JavaScript</button>
+      <button data-filter="p5">p5.js</button>
+      <button data-filter="riso">p5.riso</button>
+    </div>
+  </div>
+
+  <div class="glossary">
+    <p class="no-results" id="no-results">No terms match your search.</p>
+
+    <!-- ── JavaScript ────────────────────────────── -->
+    <section class="glossary-section" data-category="js">
+      <div class="section-heading">
+        <h2>JavaScript</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="subsection-label">Variables</div>
+
+      <div id="let" class="term" data-search="let variable declare block scope">
+        <div class="term-name"><code>let</code></div>
+        <div class="term-desc">Declares a variable that can be reassigned later. Most common way to store a value. <em>Block-scoped</em> — only exists inside the <code>{}</code> where it's declared.</div>
+      </div>
+      <div id="const" class="term" data-search="const constant declare cannot reassign">
+        <div class="term-name"><code>const</code></div>
+        <div class="term-desc">Declares a variable that <em>cannot</em> be reassigned. Use for values that won't change, like the canvas size or a fixed color name.</div>
+      </div>
+
+      <div class="subsection-label">Arrays</div>
+
+      <div id="array" class="term" data-search="array [] list ordered collection">
+        <div class="term-name"><code>[]</code> Array</div>
+        <div class="term-desc">An ordered list of values. Items are separated by commas: <code>let colors = ['pink', 'blue', 'yellow']</code>. Items are numbered starting at 0.</div>
+      </div>
+      <div id="array-index" class="term" data-search="array index bracket access item element">
+        <div class="term-name"><code>array[index]</code></div>
+        <div class="term-desc">Access an item by its position. <code>colors[0]</code> returns the first item. Index starts at <code>0</code>, so the last item is at <code>array.length - 1</code>.</div>
+      </div>
+      <div id="array-length" class="term" data-search="length property count size array">
+        <div class="term-name"><code>array.length</code></div>
+        <div class="term-desc">The number of items in an array. Often used in loops: <code>for (let i = 0; i &lt; array.length; i++)</code>.</div>
+      </div>
+      <div id="array-push" class="term" data-search="push add append array end">
+        <div class="term-name"><code>array.push(item)</code></div>
+        <div class="term-desc">Adds an item to the <em>end</em> of an array and returns the new length. Common when building up a list incrementally.</div>
+      </div>
+      <div id="array-map" class="term" data-search="map transform array function new javascript method">
+        <div class="term-name"><code>array.map(fn)</code></div>
+        <div class="term-desc">Creates a <em>new</em> array by running a function on every element. Example: <code>names.map(n => n.toUpperCase())</code> returns all names uppercased.</div>
+      </div>
+      <div id="array-filter" class="term" data-search="filter condition subset array new">
+        <div class="term-name"><code>array.filter(fn)</code></div>
+        <div class="term-desc">Creates a new array containing only the elements where the function returns <code>true</code>. Example: <code>nums.filter(n => n > 10)</code>.</div>
+      </div>
+      <div id="array-foreach" class="term" data-search="forEach each loop iterate callback">
+        <div class="term-name"><code>array.forEach(fn)</code></div>
+        <div class="term-desc">Runs a function once for every element, in order. Unlike <code>map</code>, it doesn't return anything — use it for side effects like drawing.</div>
+      </div>
+      <div id="array-slice" class="term" data-search="slice subset portion copy array">
+        <div class="term-name"><code>array.slice(start, end)</code></div>
+        <div class="term-desc">Returns a portion of the array as a new array without modifying the original. <code>arr.slice(0, 3)</code> returns the first 3 items. Used after <code>shuffle()</code> to pick a random subset.</div>
+      </div>
+      <div id="array-includes" class="term" data-search="includes contains check item boolean">
+        <div class="term-name"><code>array.includes(item)</code></div>
+        <div class="term-desc">Returns <code>true</code> if the item is found in the array, <code>false</code> otherwise.</div>
+      </div>
+      <div id="array-sort" class="term" data-search="sort order arrange array">
+        <div class="term-name"><code>array.sort()</code></div>
+        <div class="term-desc">Sorts the array <em>in place</em> (modifies the original). By default sorts alphabetically. Pass a comparator function for numeric sort: <code>arr.sort((a, b) => a - b)</code>.</div>
+      </div>
+      <div id="array-reduce" class="term" data-search="reduce accumulate single value fold">
+        <div class="term-name"><code>array.reduce(fn)</code></div>
+        <div class="term-desc">Reduces an array to a single value by accumulating. Useful for summing values: <code>nums.reduce((sum, n) => sum + n, 0)</code>.</div>
+      </div>
+
+      <div class="subsection-label">Objects</div>
+
+      <div id="object" class="term" data-search="object {} key value pair data structure">
+        <div class="term-name"><code>{}</code> Object</div>
+        <div class="term-desc">A collection of named values (properties). Example: <code>let dot = { x: 100, y: 200, size: 40 }</code>. Used to group related data together.</div>
+      </div>
+      <div id="object-property" class="term" data-search="property dot notation access object value">
+        <div class="term-name"><code>object.property</code></div>
+        <div class="term-desc">Access a value from an object by name. Example: <code>dot.size</code> returns <code>40</code>. Can also assign: <code>dot.size = 60</code>.</div>
+      </div>
+      <div id="object-keys" class="term" data-search="object keys array property names list">
+        <div class="term-name"><code>Object.keys(obj)</code></div>
+        <div class="term-desc">Returns an array of all the property names in an object. Useful for iterating over an object's keys.</div>
+      </div>
+
+      <div class="subsection-label">Control Flow</div>
+
+      <div id="if-else" class="term" data-search="if else conditional branch">
+        <div class="term-name"><code>if / else</code></div>
+        <div class="term-desc">Runs different code depending on whether a condition is true or false. <code>else if</code> chains multiple conditions.</div>
+      </div>
+      <div id="for-loop" class="term" data-search="for loop counter i index repeat">
+        <div class="term-name"><code>for</code> loop</div>
+        <div class="term-desc">Repeats code a set number of times using a counter variable. Most common pattern: <code>for (let i = 0; i &lt; total; i++) { }</code>.</div>
+      </div>
+      <div id="for-of" class="term" data-search="for of loop array iterate item modern">
+        <div class="term-name"><code>for...of</code></div>
+        <div class="term-desc">Loops through every item in an array (or other iterable) without needing an index counter. <code>for (let item of array) { }</code>.</div>
+      </div>
+      <div id="ternary" class="term" data-search="ternary ? : inline conditional shorthand">
+        <div class="term-name"><code>condition ? a : b</code></div>
+        <div class="term-desc">Ternary operator — a compact one-line <code>if/else</code>. Returns <code>a</code> if condition is true, <code>b</code> if false. Example: <code>x > 0 ? 'positive' : 'zero'</code>.</div>
+      </div>
+
+      <div class="subsection-label">Functions</div>
+
+      <div id="function" class="term" data-search="function define declare named">
+        <div class="term-name"><code>function name() { }</code></div>
+        <div class="term-desc">Defines a reusable block of code. Call it by name to run it. Functions can accept inputs (parameters) and send back a result (<code>return</code>).</div>
+      </div>
+      <div id="arrow-function" class="term" data-search="arrow function => fat arrow compact syntax">
+        <div class="term-name"><code>() =&gt; { }</code></div>
+        <div class="term-desc">Arrow function — a compact way to write a function. Common in array methods: <code>array.map(item => item * 2)</code>.</div>
+      </div>
+      <div id="return" class="term" data-search="return value exit function output">
+        <div class="term-name"><code>return</code></div>
+        <div class="term-desc">Exits a function and sends a value back to the caller. Example: <code>function double(n) { return n * 2; }</code>.</div>
+      </div>
+      <div id="callback" class="term" data-search="callback function argument pass higher order">
+        <div class="term-name">Callback</div>
+        <div class="term-desc">A function passed as an argument to another function, to be called later. Common in <code>forEach</code>, <code>map</code>, <code>filter</code>, and async operations like <code>loadJSON</code>.</div>
+      </div>
+
+      <div class="subsection-label">Math</div>
+
+      <div id="math-random" class="term" data-search="math random random number decimal 0 1">
+        <div class="term-name"><code>Math.random()</code></div>
+        <div class="term-desc">Returns a random decimal between 0 (inclusive) and 1 (exclusive). Multiply to get a larger range: <code>Math.random() * 360</code>. In p5, use <code>random()</code> instead — it's the same idea with a simpler API.</div>
+      </div>
+      <div id="math-floor" class="term" data-search="math floor round down integer truncate">
+        <div class="term-name"><code>Math.floor(n)</code></div>
+        <div class="term-desc">Rounds a number <em>down</em> to the nearest integer. In p5, <code>floor(n)</code> does the same thing without the <code>Math.</code> prefix. Combine with <code>random()</code> to get a random integer: <code>floor(random(10))</code>.</div>
+      </div>
+      <div id="math-ceil" class="term" data-search="math ceil round up integer">
+        <div class="term-name"><code>Math.ceil(n)</code></div>
+        <div class="term-desc">Rounds a number <em>up</em> to the nearest integer. In p5, use <code>ceil(n)</code>. Opposite of <code>Math.floor()</code>.</div>
+      </div>
+      <div id="math-round" class="term" data-search="math round nearest integer">
+        <div class="term-name"><code>Math.round(n)</code></div>
+        <div class="term-desc">Rounds to the <em>nearest</em> integer — up if the decimal is 0.5 or above, down otherwise. In p5, use <code>round(n)</code>.</div>
+      </div>
+      <div id="math-min-max" class="term" data-search="math min max smallest largest number">
+        <div class="term-name"><code>Math.min() / Math.max()</code></div>
+        <div class="term-desc">Return the smallest or largest of a set of numbers. <code>Math.max(5, 3, 9)</code> returns <code>9</code>. Useful for clamping values. In p5, use <code>constrain()</code> to clamp within a range.</div>
+      </div>
+      <div id="parseint" class="term" data-search="parseint parse string integer number convert">
+        <div class="term-name"><code>parseInt(string)</code></div>
+        <div class="term-desc">Converts a string like <code>"42"</code> to the integer <code>42</code>. Returns <code>NaN</code> if the string doesn't start with a valid number.</div>
+      </div>
+
+      <div class="subsection-label">Strings</div>
+
+      <div id="string-split" class="term" data-search="split string array separator delimiter">
+        <div class="term-name"><code>string.split(sep)</code></div>
+        <div class="term-desc">Splits a string into an array using a separator. <code>'a,b,c'.split(',')</code> returns <code>['a', 'b', 'c']</code>.</div>
+      </div>
+      <div id="string-case" class="term" data-search="touppercase tolowercase case string">
+        <div class="term-name"><code>.toUpperCase() / .toLowerCase()</code></div>
+        <div class="term-desc">Return a new string converted to all uppercase or all lowercase characters.</div>
+      </div>
+
+      <div class="subsection-label">Other</div>
+
+      <div id="set" class="term" data-search="set unique collection no duplicates">
+        <div class="term-name"><code>Set</code></div>
+        <div class="term-desc">A collection of unique values — duplicates are automatically removed. Create with <code>new Set([...array])</code>. Check membership with <code>set.has(item)</code>.</div>
+      </div>
+      <div id="console-log" class="term" data-search="console log debug print output browser">
+        <div class="term-name"><code>console.log()</code></div>
+        <div class="term-desc">Prints a value to the browser's developer console (F12 or Cmd+Opt+I). Essential for debugging — check what a variable actually contains.</div>
+      </div>
+    </section>
+
+    <!-- ── p5.js ───────────────────────────────── -->
+    <section class="glossary-section" data-category="p5">
+      <div class="section-heading">
+        <h2>p5.js</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="subsection-label">Lifecycle</div>
+
+      <div id="setup" class="term" data-search="setup function once start initialization canvas">
+        <div class="term-name"><code>setup()</code></div>
+        <div class="term-desc">Runs <em>once</em> when the sketch starts. Put <code>createCanvas()</code> here along with any one-time initialization code.</div>
+      </div>
+      <div id="draw" class="term" data-search="draw function loop animation repeat continuous">
+        <div class="term-name"><code>draw()</code></div>
+        <div class="term-desc">Runs <em>repeatedly</em> — 60 times per second by default. The main animation loop. Everything that changes or updates goes here.</div>
+      </div>
+      <div id="preload" class="term" data-search="preload load assets before setup image data">
+        <div class="term-name"><code>preload()</code></div>
+        <div class="term-desc">Runs <em>before</em> <code>setup()</code> and waits for all loading to finish. Use it for <code>loadImage()</code>, <code>loadJSON()</code>, and <code>loadTable()</code> so assets are ready when the sketch starts.</div>
+      </div>
+
+      <div class="subsection-label">Canvas</div>
+
+      <div id="createCanvas" class="term" data-search="createcanvas create canvas width height size">
+        <div class="term-name"><code>createCanvas(w, h)</code></div>
+        <div class="term-desc">Creates the drawing surface with the given width and height in pixels. Call it inside <code>setup()</code>. Returns a reference to the canvas element.</div>
+      </div>
+      <div id="pixelDensity" class="term" data-search="pixeldensity pixel density retina high dpi 1 riso">
+        <div class="term-name"><code>pixelDensity(1)</code></div>
+        <div class="term-desc">Forces the canvas to use a 1:1 pixel ratio. <strong>Required for p5.riso</strong> — without it, dithering and halftone effects calculate pixel offsets incorrectly on retina screens.</div>
+      </div>
+      <div id="width-height" class="term" data-search="width height canvas dimension pixels variable">
+        <div class="term-name"><code>width / height</code></div>
+        <div class="term-desc">Built-in variables holding the canvas width and height in pixels. Use these instead of hardcoding numbers so your sketch adapts if the canvas size changes.</div>
+      </div>
+      <div id="background" class="term" data-search="background fill canvas color clear">
+        <div class="term-name"><code>background(value)</code></div>
+        <div class="term-desc">Fills the entire canvas with a color. Pass a grayscale value (0–255), RGB values, or a CSS color string. Called at the start of <code>draw()</code> to clear the previous frame.</div>
+      </div>
+      <div id="frameRate" class="term" data-search="framerate fps frames per second speed">
+        <div class="term-name"><code>frameRate(n)</code></div>
+        <div class="term-desc">Sets how many times <code>draw()</code> runs per second. Default is 60. Lower values slow down animation; useful for debugging or intentional effects.</div>
+      </div>
+
+      <div class="subsection-label">Shapes</div>
+
+      <div id="circle" class="term" data-search="circle draw shape round diameter">
+        <div class="term-name"><code>circle(x, y, d)</code></div>
+        <div class="term-desc">Draws a circle centered at <code>(x, y)</code> with diameter <code>d</code>. Uses the current <code>fill()</code> and <code>stroke()</code> settings.</div>
+      </div>
+      <div id="ellipse" class="term" data-search="ellipse draw shape oval width height">
+        <div class="term-name"><code>ellipse(x, y, w, h)</code></div>
+        <div class="term-desc">Draws an ellipse centered at <code>(x, y)</code> with width <code>w</code> and height <code>h</code>. If <code>w === h</code>, it's a circle.</div>
+      </div>
+      <div id="rect" class="term" data-search="rect rectangle draw shape corner radius">
+        <div class="term-name"><code>rect(x, y, w, h)</code></div>
+        <div class="term-desc">Draws a rectangle. By default, <code>(x, y)</code> is the top-left corner. Add a 5th argument for rounded corners. Change reference point with <code>rectMode(CENTER)</code>.</div>
+      </div>
+      <div id="line" class="term" data-search="line draw stroke two points">
+        <div class="term-name"><code>line(x1, y1, x2, y2)</code></div>
+        <div class="term-desc">Draws a line between two points. No fill — only uses <code>stroke()</code> and <code>strokeWeight()</code>.</div>
+      </div>
+      <div id="triangle" class="term" data-search="triangle draw shape three points">
+        <div class="term-name"><code>triangle(x1, y1, x2, y2, x3, y3)</code></div>
+        <div class="term-desc">Draws a triangle connecting three points. Each pair of arguments is an (x, y) coordinate for one vertex.</div>
+      </div>
+
+      <div class="subsection-label">Color &amp; Stroke</div>
+
+      <div id="fill" class="term" data-search="fill color interior shape rgb grayscale">
+        <div class="term-name"><code>fill(r, g, b)</code></div>
+        <div class="term-desc">Sets the fill color for shapes drawn after this call. Pass three values for RGB (0–255), one value for grayscale, or a <code>color()</code> object. On a Riso layer, the single value controls <em>ink density</em> (0–255), not color.</div>
+      </div>
+      <div id="noFill" class="term" data-search="nofill no fill transparent empty outline">
+        <div class="term-name"><code>noFill()</code></div>
+        <div class="term-desc">Disables fill so shapes are drawn as outlines only. Reverts to filled when you call <code>fill()</code> again.</div>
+      </div>
+      <div id="stroke" class="term" data-search="stroke color outline line rgb">
+        <div class="term-name"><code>stroke(r, g, b)</code></div>
+        <div class="term-desc">Sets the outline color for shapes and lines. Accepts the same arguments as <code>fill()</code>.</div>
+      </div>
+      <div id="noStroke" class="term" data-search="nostroke no stroke no outline">
+        <div class="term-name"><code>noStroke()</code></div>
+        <div class="term-desc">Disables outlines on shapes. Common when drawing filled shapes cleanly without a border.</div>
+      </div>
+      <div id="strokeWeight" class="term" data-search="strokeweight line thickness width weight">
+        <div class="term-name"><code>strokeWeight(n)</code></div>
+        <div class="term-desc">Sets the thickness of lines and shape outlines in pixels. Default is 1. Call before drawing to affect subsequent shapes.</div>
+      </div>
+      <div id="color" class="term" data-search="color object create rgb alpha">
+        <div class="term-name"><code>color(r, g, b)</code></div>
+        <div class="term-desc">Creates a color object that can be stored in a variable and reused. Useful for referencing RISO channel colors: <code>let c = riso.channelColor</code>.</div>
+      </div>
+
+      <div class="subsection-label">Text</div>
+
+      <div id="text" class="term" data-search="text draw string display position">
+        <div class="term-name"><code>text(str, x, y)</code></div>
+        <div class="term-desc">Draws text at position <code>(x, y)</code>. Styling is controlled by <code>textSize()</code>, <code>textFont()</code>, and <code>fill()</code>.</div>
+      </div>
+      <div id="textSize" class="term" data-search="textsize font size pixels">
+        <div class="term-name"><code>textSize(n)</code></div>
+        <div class="term-desc">Sets the font size in pixels for subsequent <code>text()</code> calls.</div>
+      </div>
+      <div id="textFont" class="term" data-search="textfont font family typeface">
+        <div class="term-name"><code>textFont(name)</code></div>
+        <div class="term-desc">Sets the font. Pass a CSS font family name as a string, or a font loaded with <code>loadFont()</code>.</div>
+      </div>
+      <div id="textAlign" class="term" data-search="textalign alignment left center right top bottom">
+        <div class="term-name"><code>textAlign(h, v)</code></div>
+        <div class="term-desc">Sets horizontal and vertical alignment for <code>text()</code>. Horizontal: <code>LEFT</code>, <code>CENTER</code>, <code>RIGHT</code>. Vertical: <code>TOP</code>, <code>CENTER</code>, <code>BOTTOM</code>.</div>
+      </div>
+      <div id="textWidth" class="term" data-search="textwidth text width measure pixels string">
+        <div class="term-name"><code>textWidth(str)</code></div>
+        <div class="term-desc">Returns the pixel width of a string at the current text size. Useful for positioning labels precisely relative to their content.</div>
+      </div>
+
+      <div class="subsection-label">Transforms</div>
+
+      <div id="push-pop" class="term" data-search="push pop save restore drawing state transform">
+        <div class="term-name"><code>push() / pop()</code></div>
+        <div class="term-desc">Save and restore the current drawing state (fill, stroke, transforms). Everything between <code>push()</code> and <code>pop()</code> is isolated — changes don't leak out.</div>
+      </div>
+      <div id="translate" class="term" data-search="translate move origin position x y">
+        <div class="term-name"><code>translate(x, y)</code></div>
+        <div class="term-desc">Moves the drawing origin by <code>(x, y)</code> pixels. Subsequent drawing is offset by this amount. Stack with <code>push()</code>/<code>pop()</code> to scope the effect.</div>
+      </div>
+      <div id="rotate" class="term" data-search="rotate angle rotation radians degrees">
+        <div class="term-name"><code>rotate(angle)</code></div>
+        <div class="term-desc">Rotates all subsequent drawing by the given angle (in radians by default). Use <code>radians(degrees)</code> to convert. Combine with <code>translate()</code> to rotate around a point.</div>
+      </div>
+      <div id="rectMode" class="term" data-search="rectmode center corner rectangle mode">
+        <div class="term-name"><code>rectMode(mode)</code></div>
+        <div class="term-desc">Changes how <code>rect()</code> interprets its position. <code>CORNER</code> (default) uses top-left; <code>CENTER</code> uses the center point. Useful for centering shapes before rotating them.</div>
+      </div>
+
+      <div class="subsection-label">Images</div>
+
+      <div id="loadImage" class="term" data-search="loadimage load image file path preload">
+        <div class="term-name"><code>loadImage(path)</code></div>
+        <div class="term-desc">Loads an image file and returns a <code>p5.Image</code> object. <strong>Must be called inside <code>preload()</code></strong> so the image is ready before <code>setup()</code> runs.</div>
+      </div>
+      <div id="image" class="term" data-search="image draw display canvas position size">
+        <div class="term-name"><code>image(img, x, y)</code></div>
+        <div class="term-desc">Draws an image on the canvas at position <code>(x, y)</code>. Optionally pass width and height to resize: <code>image(img, x, y, w, h)</code>.</div>
+      </div>
+      <div id="img-resize" class="term" data-search="resize image scale width height 0 aspect">
+        <div class="term-name"><code>img.resize(w, h)</code></div>
+        <div class="term-desc">Resizes a <code>p5.Image</code> in place. Pass <code>0</code> for either dimension to scale it proportionally: <code>img.resize(400, 0)</code> sets width to 400 and auto-calculates height.</div>
+      </div>
+      <div id="filter-gray" class="term" data-search="filter gray grayscale image canvas effect">
+        <div class="term-name"><code>filter(GRAY)</code></div>
+        <div class="term-desc">Applies a grayscale filter to the canvas or image. Required before dithering — dither functions expect a grayscale (black-and-white) image as input.</div>
+      </div>
+
+      <div class="subsection-label">Input</div>
+
+      <div id="mouseX-mouseY" class="term" data-search="mousex mousey mouse position cursor x y">
+        <div class="term-name"><code>mouseX / mouseY</code></div>
+        <div class="term-desc">Built-in variables tracking the current mouse cursor position relative to the top-left corner of the canvas. Updated automatically every frame.</div>
+      </div>
+      <div id="mousePressed" class="term" data-search="mousepressed mouse click event function">
+        <div class="term-name"><code>mousePressed()</code></div>
+        <div class="term-desc">A function you define that p5.js calls automatically whenever the mouse button is pressed. Use it to trigger actions on click.</div>
+      </div>
+      <div id="keyPressed" class="term" data-search="keypressed key keyboard press event function">
+        <div class="term-name"><code>keyPressed()</code></div>
+        <div class="term-desc">A function you define that p5.js calls whenever a key is pressed. Check the <code>key</code> variable inside it to see which key was pressed.</div>
+      </div>
+      <div id="key" class="term" data-search="key variable pressed keyboard character">
+        <div class="term-name"><code>key</code></div>
+        <div class="term-desc">A built-in string variable holding the most recently pressed key character. Example: <code>if (key === 's') saveCanvas()</code>.</div>
+      </div>
+
+      <div class="subsection-label">Loop Control</div>
+
+      <div id="noLoop" class="term" data-search="noloop stop draw pause animation">
+        <div class="term-name"><code>noLoop()</code></div>
+        <div class="term-desc">Stops <code>draw()</code> from repeating — the sketch freezes on the current frame. Use when you want a static output or manual control over redrawing.</div>
+      </div>
+      <div id="loop" class="term" data-search="loop resume draw animation restart">
+        <div class="term-name"><code>loop()</code></div>
+        <div class="term-desc">Resumes <code>draw()</code> after it was stopped with <code>noLoop()</code>.</div>
+      </div>
+      <div id="redraw" class="term" data-search="redraw draw once manual trigger">
+        <div class="term-name"><code>redraw()</code></div>
+        <div class="term-desc">Runs <code>draw()</code> once manually. Use with <code>noLoop()</code> to redraw only when something changes — like after a keypress.</div>
+      </div>
+
+      <div class="subsection-label">Math Functions</div>
+
+      <div id="random" class="term" data-search="random number range min max pick array p5">
+        <div class="term-name"><code>random(min, max)</code></div>
+        <div class="term-desc">Returns a random number between <code>min</code> and <code>max</code>. Pass just one value for 0 to that value. Pass an array to pick a random element from it: <code>random(['a','b','c'])</code>.</div>
+      </div>
+      <div id="randomSeed" class="term" data-search="randomseed seed lock reproducible random">
+        <div class="term-name"><code>randomSeed(n)</code></div>
+        <div class="term-desc">Locks the random number sequence to a specific seed so results are reproducible. Same seed = same "random" values every time. Call at the top of <code>draw()</code> and press space to pick a new seed for a new composition.</div>
+      </div>
+      <div id="shuffle" class="term" data-search="shuffle array random order rearrange">
+        <div class="term-name"><code>shuffle(array)</code></div>
+        <div class="term-desc">Returns a new array with the same elements in a randomized order. Controlled by <code>randomSeed()</code>. The original array is not modified. Use with <code>slice()</code> to pick a random subset without repeats.</div>
+      </div>
+      <div id="map" class="term" data-search="map remap value range scale transform data">
+        <div class="term-name"><code>map(value, l1, h1, l2, h2)</code></div>
+        <div class="term-desc">Re-maps a value from one range to another. Example: <code>map(temp, 0, 100, 0, width)</code> converts a temperature to a canvas x-position. The workhorse of data-driven design.</div>
+      </div>
+      <div id="constrain" class="term" data-search="constrain clamp limit range min max">
+        <div class="term-name"><code>constrain(value, min, max)</code></div>
+        <div class="term-desc">Clamps a value so it never goes below <code>min</code> or above <code>max</code>. Prevents values from flying off the canvas or exceeding valid ranges.</div>
+      </div>
+      <div id="dist" class="term" data-search="dist distance between two points x y">
+        <div class="term-name"><code>dist(x1, y1, x2, y2)</code></div>
+        <div class="term-desc">Returns the distance in pixels between two points. Useful for proximity checks or for scaling effects based on how far something is from the mouse.</div>
+      </div>
+      <div id="sin-cos" class="term" data-search="sin cos sine cosine angle radians trigonometry">
+        <div class="term-name"><code>sin(angle) / cos(angle)</code></div>
+        <div class="term-desc">Trigonometric functions that return values between -1 and 1. Angle is in radians. Used for circular motion, waves, and oscillating effects.</div>
+      </div>
+      <div id="noise" class="term" data-search="noise perlin smooth random organic texture">
+        <div class="term-name"><code>noise(x)</code></div>
+        <div class="term-desc">Perlin noise — returns smoothly varying random values between 0 and 1. Unlike <code>random()</code>, neighboring values are similar, producing organic textures and flows.</div>
+      </div>
+
+      <div class="subsection-label">Data Loading</div>
+
+      <div id="loadJSON" class="term" data-search="loadjson json api url load data fetch">
+        <div class="term-name"><code>loadJSON(url)</code></div>
+        <div class="term-desc">Loads JSON data from a URL or local file. Use in <code>preload()</code> to ensure data is ready, or pass a callback as the second argument for loading after setup.</div>
+      </div>
+      <div id="loadTable" class="term" data-search="loadtable csv table spreadsheet data load">
+        <div class="term-name"><code>loadTable(path, 'csv', 'header')</code></div>
+        <div class="term-desc">Loads a CSV file and returns a <code>p5.Table</code> object. Use in <code>preload()</code>. The <code>'header'</code> flag tells p5 the first row contains column names.</div>
+      </div>
+      <div id="getRowCount" class="term" data-search="table getrowcount rows count length">
+        <div class="term-name"><code>table.getRowCount()</code></div>
+        <div class="term-desc">Returns the number of data rows in a loaded CSV table (not counting the header row).</div>
+      </div>
+      <div id="getRow" class="term" data-search="table getrow row index access p5table">
+        <div class="term-name"><code>table.getRow(i)</code></div>
+        <div class="term-desc">Returns a single row from the table by index as a <code>p5.TableRow</code> object. Then use <code>row.getString(col)</code> or <code>row.getNum(col)</code> to read values.</div>
+      </div>
+      <div id="getString-getNum" class="term" data-search="row getstring getnum column value csv">
+        <div class="term-name"><code>row.getString(col) / row.getNum(col)</code></div>
+        <div class="term-desc">Read a value from a specific column in a table row. <code>getString</code> returns text, <code>getNum</code> returns a number. Pass the column name (from the header row) as a string.</div>
+      </div>
+
+      <div class="subsection-label">Output</div>
+
+      <div id="saveCanvas" class="term" data-search="savecanvas save export download png jpg image">
+        <div class="term-name"><code>saveCanvas(name, format)</code></div>
+        <div class="term-desc">Downloads the current canvas as an image file. Format can be <code>'png'</code> or <code>'jpg'</code>. Often triggered with a keypress: <code>if (key === 's') saveCanvas('output', 'png')</code>.</div>
+      </div>
+
+      <div class="subsection-label">Constants</div>
+
+      <div id="pi" class="term" data-search="PI pi math constant radians circle angle TWO_PI HALF_PI">
+        <div class="term-name"><code>PI / TWO_PI / HALF_PI</code></div>
+        <div class="term-desc">Built-in angle constants: <code>PI</code> ≈ 3.14159 (half circle), <code>TWO_PI</code> = full circle, <code>HALF_PI</code> = quarter circle. Use with <code>sin()</code>, <code>cos()</code>, and <code>rotate()</code>.</div>
+      </div>
+      <div id="alignment" class="term" data-search="left center right top bottom alignment constant">
+        <div class="term-name"><code>LEFT / CENTER / RIGHT / TOP / BOTTOM</code></div>
+        <div class="term-desc">Alignment constants used with <code>textAlign()</code> and <code>rectMode()</code>. Written in caps — they're p5.js-specific named values.</div>
+      </div>
+    </section>
+
+    <!-- ── p5.riso ─────────────────────────────── -->
+    <section class="glossary-section" data-category="riso">
+      <div class="section-heading">
+        <h2>p5.riso</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="subsection-label">Core Workflow</div>
+
+      <div id="new-Riso" class="term" data-search="new riso create channel color layer ink">
+        <div class="term-name"><code>new Riso('COLOR')</code></div>
+        <div class="term-desc">Creates a new ink layer (channel) using a RISO ink color name. Example: <code>let pink = new Riso('FLUORESCENTPINK')</code>. You draw to this object using the same methods as p5.js.</div>
+      </div>
+      <div id="clearRiso" class="term" data-search="clearriso clear erase all layers start draw">
+        <div class="term-name"><code>clearRiso()</code></div>
+        <div class="term-desc">Clears all Riso layers at the start of each <code>draw()</code> call. <strong>Must be the first thing in your draw loop</strong> — forgetting it causes layers to accumulate and fill solid.</div>
+      </div>
+      <div id="drawRiso" class="term" data-search="drawriso composite blend display show render">
+        <div class="term-name"><code>drawRiso()</code></div>
+        <div class="term-desc">Composites all Riso layers together onto the main canvas and displays the result. <strong>Must be the last thing in your draw loop</strong> — forgetting it means nothing appears on screen.</div>
+      </div>
+      <div id="exportRiso" class="term" data-search="exportriso export png separate layers files">
+        <div class="term-name"><code>exportRiso()</code></div>
+        <div class="term-desc">Downloads each Riso layer as a separate grayscale PNG file, ready for RISO print production. Each file is named by its ink color. Usually triggered with a keypress.</div>
+      </div>
+      <div id="Riso-channels" class="term" data-search="riso channels array all layers active">
+        <div class="term-name"><code>Riso.channels</code></div>
+        <div class="term-desc">A built-in array containing all active Riso layer objects. Useful when you want to loop over every layer without listing them individually.</div>
+      </div>
+
+      <div class="subsection-label">Drawing on Layers</div>
+
+      <div id="layer-fill" class="term" data-search="layer fill density ink opacity 0 255">
+        <div class="term-name"><code>layer.fill(density)</code></div>
+        <div class="term-desc">Sets ink density for shapes drawn to this layer. Pass a value from 0 (no ink) to 255 (full ink). Lower values simulate lighter ink coverage or halftone effects.</div>
+      </div>
+      <div id="layer-stroke" class="term" data-search="layer stroke density outline weight">
+        <div class="term-name"><code>layer.stroke(density)</code></div>
+        <div class="term-desc">Sets the stroke (outline) density for this layer. Same 0–255 range as <code>layer.fill()</code>.</div>
+      </div>
+      <div id="layer-noStroke" class="term" data-search="layer nostroke nofill disable remove">
+        <div class="term-name"><code>layer.noStroke() / layer.noFill()</code></div>
+        <div class="term-desc">Disables stroke or fill on the layer — same as in p5.js, but scoped to the Riso layer's drawing context.</div>
+      </div>
+      <div id="layer-shapes" class="term" data-search="layer circle ellipse rect line triangle draw shapes">
+        <div class="term-name"><code>layer.circle() / .rect() / .line() / …</code></div>
+        <div class="term-desc">All standard p5.js shape functions are available on Riso layers. Drawing here goes to the layer's channel, not the main canvas. Only appears after <code>drawRiso()</code>.</div>
+      </div>
+      <div id="layer-image" class="term" data-search="layer image draw photo layer channel">
+        <div class="term-name"><code>layer.image(img, x, y)</code></div>
+        <div class="term-desc">Draws an image onto a Riso layer. Typically used with pre-dithered or halftoned images to place them in a specific ink color channel.</div>
+      </div>
+      <div id="layer-text" class="term" data-search="layer text draw string font layer channel">
+        <div class="term-name"><code>layer.text(str, x, y)</code></div>
+        <div class="term-desc">Draws text onto a Riso layer. Combine with <code>layer.fill()</code> to control ink density and with <code>layer.textSize()</code> and <code>layer.textFont()</code> to style.</div>
+      </div>
+      <div id="layer-push-pop" class="term" data-search="layer push pop save restore state transform">
+        <div class="term-name"><code>layer.push() / layer.pop()</code></div>
+        <div class="term-desc">Save and restore drawing state within a Riso layer's context. Works the same as p5's <code>push()</code>/<code>pop()</code>, but scoped to that layer.</div>
+      </div>
+      <div id="layer-transform" class="term" data-search="layer translate rotate transform position move">
+        <div class="term-name"><code>layer.translate() / layer.rotate()</code></div>
+        <div class="term-desc">Apply transforms within a Riso layer's drawing context. Useful for positioning or rotating elements independently per layer.</div>
+      </div>
+      <div id="layer-erase" class="term" data-search="erase noerase cut out punch hole layer">
+        <div class="term-name"><code>layer.erase() / layer.noErase()</code></div>
+        <div class="term-desc">Erasing mode cuts through previously drawn areas on the layer — like a knockout or mask. Call <code>layer.noErase()</code> to return to normal drawing mode.</div>
+      </div>
+      <div id="channelColor" class="term" data-search="channelcolor channel color rgb property layer">
+        <div class="term-name"><code>layer.channelColor</code></div>
+        <div class="term-desc">A <code>p5.Color</code> object representing the RGB screen preview color of this Riso layer. Useful for matching label colors, UI elements, or drawing swatches.</div>
+      </div>
+      <div id="channelName" class="term" data-search="channelname channel name string ink color layer">
+        <div class="term-name"><code>layer.channelName</code></div>
+        <div class="term-desc">A string with the name of this layer's RISO ink color (e.g., <code>'FLUORESCENTPINK'</code>). Useful for labeling exports or displaying the active ink names.</div>
+      </div>
+
+      <div class="subsection-label">Image Processing</div>
+
+      <div id="ditherImage" class="term" data-search="ditherimage dither algorithm threshold atkinson floyd bayer">
+        <div class="term-name"><code>ditherImage(img, algorithm, threshold)</code></div>
+        <div class="term-desc">Converts a grayscale image to a black-and-white dithered image. Returns a new <code>p5.Image</code> — draw it onto a Riso layer with <code>layer.image()</code>.<br><br>
+          <strong>Algorithms:</strong> <code>'atkinson'</code> — high contrast, clean edges; <code>'floydsteinberg'</code> — smooth gradients; <code>'bayer'</code> — ordered grid pattern; <code>'none'</code> — hard threshold only.<br>
+          <strong>Threshold:</strong> 0–255 — controls the cutoff between black and white.
+        </div>
+      </div>
+      <div id="halftoneImage" class="term" data-search="halftoneimage halftone dot screen shape frequency angle intensity">
+        <div class="term-name"><code>halftoneImage(img, shape, freq, angle, intensity)</code></div>
+        <div class="term-desc">Converts a grayscale image to a halftone dot pattern. Returns a <code>p5.Image</code> to draw onto a Riso layer.<br><br>
+          <strong>Shape:</strong> <code>'circle'</code>, <code>'square'</code>, <code>'line'</code>, <code>'ellipse'</code>, <code>'cross'</code>.<br>
+          <strong>Frequency:</strong> density of dots (higher = more dots, smaller).<br>
+          <strong>Angle:</strong> rotation of the dot grid in degrees.<br>
+          <strong>Intensity:</strong> controls dot size relative to brightness.
+        </div>
+      </div>
+
+      <div class="subsection-label">Colors</div>
+
+      <div id="RISOCOLORS" class="term" data-search="risocolors array 81 all colors list available">
+        <div class="term-name"><code>RISOCOLORS</code></div>
+        <div class="term-desc">A built-in array of all 81 available RISO ink colors. Each item has a <code>.name</code> (string) and a <code>.color</code> (p5.Color). Use <code>random(RISOCOLORS)</code> to pick one at random.</div>
+      </div>
+      <div id="RISOCOLORS-props" class="term" data-search="risocolors name color property access item">
+        <div class="term-name"><code>RISOCOLORS[i].name / .color</code></div>
+        <div class="term-desc"><code>.name</code> is the RISO ink name as a string (e.g., <code>'FLUORESCENTPINK'</code>). <code>.color</code> is the screen-preview RGB color. Pass <code>.name</code> to <code>new Riso()</code> to create a layer in that color.</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('search');
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const sections = document.querySelectorAll('.glossary-section');
+    const noResults = document.getElementById('no-results');
+
+    function updateCounts() {
+      sections.forEach(section => {
+        const visible = section.querySelectorAll('.term:not([hidden])').length;
+        const count = section.querySelector('.section-count');
+        if (count) count.textContent = visible + ' term' + (visible !== 1 ? 's' : '');
+      });
+    }
+
+    const filterTabsEl = document.querySelector('.filter-tabs');
+
+    function filterAll() {
+      const query = searchInput.value.toLowerCase().trim();
+      const activeFilter = document.querySelector('[data-filter].active').dataset.filter;
+      let anyVisible = false;
+
+      // Hide category tabs while searching — they're meaningless when results span all categories
+      filterTabsEl.style.display = query ? 'none' : '';
+
+      sections.forEach(section => {
+        const cat = section.dataset.category;
+        const catMatch = activeFilter === 'all' || activeFilter === cat;
+
+        if (!catMatch) { section.hidden = true; return; }
+
+        const terms = section.querySelectorAll('.term');
+        let sectionHasVisible = false;
+
+        terms.forEach(term => {
+          const termMatch = !query ||
+            term.querySelector('.term-name').textContent.toLowerCase().includes(query);
+          term.hidden = !termMatch;
+          if (termMatch) sectionHasVisible = true;
+        });
+
+        section.hidden = !sectionHasVisible;
+        if (sectionHasVisible) anyVisible = true;
+
+        // Hide subsection labels that have no visible terms following them
+        const children = Array.from(section.children);
+        children.forEach((el, idx) => {
+          if (!el.classList.contains('subsection-label')) return;
+          const nextTerms = [];
+          for (let i = idx + 1; i < children.length; i++) {
+            if (children[i].classList.contains('subsection-label')) break;
+            if (children[i].classList.contains('term')) nextTerms.push(children[i]);
+          }
+          el.hidden = nextTerms.every(t => t.hidden);
+        });
+      });
+
+      noResults.style.display = anyVisible ? 'none' : 'block';
+      updateCounts();
+    }
+
+    searchInput.addEventListener('input', filterAll);
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterAll();
+      });
+    });
+
+    updateCounts();
+
+    // When arriving from a link with a hash, search for that term directly
+    window.addEventListener('load', () => {
+      if (location.hash) {
+        const target = document.querySelector(location.hash);
+        if (target && target.classList.contains('term')) {
+          searchInput.value = target.querySelector('.term-name').textContent.trim();
+          filterAll();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

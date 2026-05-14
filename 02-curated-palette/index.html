@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -29,17 +30,17 @@
 
       <h3>Defining your colors</h3>
       <pre><code>let myColors = ["fluorescentpink", "blue", "yellow", "orange", "teal"];</code></pre>
-      <p>An array of strings matching RISO color names (lowercase, no spaces). The full list is on the <a href="https://antiboredom.github.io/p5.riso/">p5.riso site</a>.</p>
+      <p>An <a class="gref" href="../00-glossary/index.html#array">array</a> of strings matching RISO color names (lowercase, no spaces). The full list is in the <a class="gref" href="../00-glossary/index.html#RISOCOLORS"><code>RISOCOLORS</code></a> array or on the <a href="https://antiboredom.github.io/p5.riso/">p5.riso site</a>.</p>
 
       <h3>Getting the RGB value</h3>
       <pre><code>let r = new Riso(myColors[i]);
 fill(r.channelColor);</code></pre>
-      <p><code>new Riso()</code> creates a Riso layer. Here it's used to grab the RGB preview color from <code>.channelColor</code> for drawing swatches.</p>
+      <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a Riso layer. Here it's used to grab the RGB preview color from <a class="gref" href="../00-glossary/index.html#channelColor"><code>.channelColor</code></a> for drawing swatches.</p>
       <p><code>i</code> is the <strong>loop counter</strong> — it steps through 0, 1, 2, 3, 4, drawing one swatch per color.</p>
 
       <h3>Auto-sizing</h3>
       <pre><code>let w = width / myColors.length;</code></pre>
-      <p>Each swatch width is the canvas divided by the number of colors — add or remove colors and the layout adjusts automatically.</p>
+      <p>Each swatch width is the canvas divided by the number of colors — add or remove colors and the layout adjusts automatically. <a class="gref" href="../00-glossary/index.html#array-length"><code>array.length</code></a> always reflects the current count.</p>
      
   </div>
 </body>

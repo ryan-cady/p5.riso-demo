@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -29,7 +30,7 @@
 
       <h3>Threshold control</h3>
       <pre><code>let threshold = map(mouseX, 0, width, 0, 255);</code></pre>
-      <p><code>map()</code> converts one number range to another. Mouse X position (0 to canvas width) becomes a brightness threshold (0–255). Left side = low threshold (more dots, darker). Right side = high threshold (fewer dots, lighter).</p>
+      <p><a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a> converts one number range to another. <a class="gref" href="../00-glossary/index.html#mouseX-mouseY"><code>mouseX</code></a> position (0 to canvas width) becomes a brightness threshold (0–255). Left side = low threshold (more dots, darker). Right side = high threshold (fewer dots, lighter).</p>
 
       <h3>The four dither types</h3>
       <ul>
@@ -38,6 +39,7 @@
         <li><strong><code>"bayer"</code></strong> — ordered grid pattern, very mechanical/digital</li>
         <li><strong><code>"none"</code></strong> — hard threshold, not real dithering — everything above the cutoff is white, below is black</li>
       </ul>
+      <p>See the full <a class="gref" href="../00-glossary/index.html#ditherImage"><code>ditherImage()</code></a> reference for details on each algorithm.</p>
 
       <h3>Choosing a dither type</h3>
       <p>Different types suit different images. Portraits often look best with <code>floydsteinberg</code>, while graphic content works well with <code>atkinson</code>.</p>

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -25,22 +26,22 @@
   <div class="explanation">
     
       <h2>How it works</h2>
-      <p>Displays an uploaded image on the canvas. Simple, but the <code>preload()</code> pattern here is critical for every demo that follows.</p>
+      <p>Displays an uploaded image on the canvas. Simple, but the <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a> pattern here is critical for every demo that follows.</p>
 
       <h3>Loading in preload()</h3>
       <pre><code>function preload() {
   img = loadImage("../images/lee-scratch-perry.jpg");
 }</code></pre>
-      <p><code>preload()</code> runs <strong>before</strong> <code>setup()</code>. P5 waits until everything inside it is fully loaded before continuing. If you load images in <code>setup()</code> instead, the image might not be ready yet and you'll get a blank canvas or an error.</p>
+      <p><a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a> runs <strong>before</strong> <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a>. P5 waits until everything inside it is fully loaded before continuing. If you call <a class="gref" href="../00-glossary/index.html#loadImage"><code>loadImage()</code></a> in <code>setup()</code> instead, the image might not be ready yet and you'll get a blank canvas or an error.</p>
 
       <h3>Matching canvas to image</h3>
       <pre><code>pixelDensity(1);
 img.resize(825, 0); // resize to half-letter width
 createCanvas(img.width, img.height);</code></pre>
-      <p><code>pixelDensity(1)</code> ensures consistent pixel behavior for p5.riso. The image is resized to 825px wide (half-letter at 150 DPI), and the canvas is then sized to match the resized image.</p>
+      <p><a class="gref" href="../00-glossary/index.html#pixelDensity"><code>pixelDensity(1)</code></a> ensures consistent pixel behavior for p5.riso. The image is resized to 825px wide with <a class="gref" href="../00-glossary/index.html#img-resize"><code>img.resize()</code></a> (half-letter at 150 DPI), and <a class="gref" href="../00-glossary/index.html#createCanvas"><code>createCanvas()</code></a> is then sized to match.</p>
 
       <h3>Common issues</h3>
-      <p>This is the most common failure point — wrong filename, wrong folder path, or forgetting to use <code>preload()</code>. Always double-check the path matches your uploaded file.</p>
+      <p>This is the most common failure point — wrong filename, wrong folder path, or forgetting to use <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a>. Always double-check the path matches your uploaded file.</p>
      
   </div>
 </body>

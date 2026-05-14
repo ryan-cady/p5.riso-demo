@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -36,11 +37,11 @@
 let dithered = ditherImage(img, "atkinson");
 black.image(dithered, 0, 0);
 drawRiso();</code></pre>
-      <p><code>ditherImage()</code> converts a continuous-tone photo into pure black and white pixels using a pattern algorithm. <code>"atkinson"</code> is the classic Macintosh dither — high contrast with a retro, textured look.</p>
-      <p>Notice you're drawing to the Riso layer (<code>black.image()</code>), not the main canvas. That's the key difference from regular P5.</p>
+      <p><a class="gref" href="../00-glossary/index.html#ditherImage"><code>ditherImage()</code></a> converts a continuous-tone photo into pure black and white pixels using a pattern algorithm. <code>"atkinson"</code> is the classic Macintosh dither — high contrast with a retro, textured look.</p>
+      <p>Notice you're drawing to the Riso layer (<a class="gref" href="../00-glossary/index.html#layer-image"><code>black.image()</code></a>), not the main canvas. That's the key difference from regular P5. Don't forget <a class="gref" href="../00-glossary/index.html#clearRiso"><code>clearRiso()</code></a> at the top and <a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a> at the bottom.</p>
 
       <h3>Ink density, not color</h3>
-      <p>When using <code>fill()</code> on a Riso layer, the value (0–255) controls <strong>ink density</strong>, not color. The color was already set when you created the layer with <code>new Riso("black")</code>.</p>
+      <p>When using <a class="gref" href="../00-glossary/index.html#layer-fill"><code>fill()</code></a> on a Riso layer, the value (0–255) controls <strong>ink density</strong>, not color. The color was already set when you created the layer with <a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso("black")</code></a>.</p>
      
   </div>
 </body>

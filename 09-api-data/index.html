@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -26,7 +27,7 @@
 
     <h2>How it works</h2>
     <p>
-      <code>loadJSON()</code> fetches any URL that returns JSON and automatically parses it into a JavaScript object. No extra libraries needed — p5 handles the request and the parsing. Each Pokémon's stats then map directly to visual parameters: speed controls grid density, attack controls circle size, defense controls square size, and HP controls rotation angle.
+      <a class="gref" href="../00-glossary/index.html#loadJSON"><code>loadJSON()</code></a> fetches any URL that returns JSON and automatically parses it into a JavaScript object. No extra libraries needed — p5 handles the request and the parsing. Each Pokémon's stats then <a class="gref" href="../00-glossary/index.html#map">map</a> directly to visual parameters: speed controls grid density, attack controls circle size, defense controls square size, and HP controls rotation angle.
     </p>
 
     <h3>Step 1: fetch the data in preload()</h3>
@@ -37,7 +38,7 @@ function preload() {
   pokemon = loadJSON("https://pokeapi.co/api/v2/pokemon/bulbasaur");
 }</code></pre>
     <p>
-      <code>preload()</code> is p5's built-in loading phase — it runs before <code>setup()</code> and blocks until every <code>loadJSON()</code>, <code>loadImage()</code>, or <code>loadTable()</code> call inside it completes. By the time your code reaches <code>setup()</code>, <code>pokemon</code> is fully loaded.
+      <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a> is p5's built-in loading phase — it runs before <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a> and blocks until every <a class="gref" href="../00-glossary/index.html#loadJSON"><code>loadJSON()</code></a>, <a class="gref" href="../00-glossary/index.html#loadImage"><code>loadImage()</code></a>, or <a class="gref" href="../00-glossary/index.html#loadTable"><code>loadTable()</code></a> call inside it completes. By the time your code reaches <code>setup()</code>, <code>pokemon</code> is fully loaded.
     </p>
 
     <h3>Step 2: understand the JSON structure</h3>
@@ -52,7 +53,7 @@ function preload() {
   ]
 }</code></pre>
     <p>
-      <code>pokemon.name</code> is a string. <code>pokemon.stats</code> is an <strong>array of objects</strong>. Each object has two keys: <code>base_stat</code> (a number) and <code>stat</code> (another object with a <code>name</code> field). You navigate nested objects with dot notation, just like any other JavaScript object.
+      <code>pokemon.name</code> is a string. <code>pokemon.stats</code> is an <strong><a class="gref" href="../00-glossary/index.html#array">array</a> of <a class="gref" href="../00-glossary/index.html#object">objects</a></strong>. Each object has two keys: <code>base_stat</code> (a number) and <code>stat</code> (another object with a <code>name</code> field). You navigate nested objects with <a class="gref" href="../00-glossary/index.html#object-property">dot notation</a>, just like any other JavaScript object.
     </p>
 
     <h3>Step 3: extract values with a helper function</h3>
@@ -66,7 +67,7 @@ function preload() {
 // Usage:
 let attack = getStat("attack");  // 49 for bulbasaur</code></pre>
     <p>
-      Because stats are stored in an array (not a named object), we can't just write <code>pokemon.stats.attack</code>. We loop through the array and check each element's <code>stat.name</code> field. When we find a match, we <code>return</code> the <code>base_stat</code>. This is a common real-world pattern when working with APIs.
+      Because stats are stored in an array (not a named object), we can't just write <code>pokemon.stats.attack</code>. We use <a class="gref" href="../00-glossary/index.html#for-of"><code>for...of</code></a> to loop through the array and check each element's <code>stat.name</code> field. When we find a match, we <a class="gref" href="../00-glossary/index.html#return"><code>return</code></a> the <code>base_stat</code>. This is a common real-world pattern when working with APIs.
     </p>
 
     <h3>Step 4: map stat values to visual parameters</h3>
@@ -75,7 +76,7 @@ let pinkSize = map(attack,  5, 190,  8, 56);
 let blueSize = map(defense, 5, 230,  6, 48);
 let angle    = map(hp,      1, 255,  0, HALF_PI);</code></pre>
     <p>
-      <code>map()</code> converts a value from one range to another. The stat ranges (5–180, 5–190, etc.) come from the actual min/max values in the PokéAPI. A Pokémon with speed 180 gets 10 grid columns; one with speed 5 gets 3. This is the same technique from Demo 07 — the stat becomes the data, and the visual parameters follow.
+      <a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a> converts a value from one range to another. The stat ranges (5–180, 5–190, etc.) come from the actual min/max values in the PokéAPI. A Pokémon with speed 180 gets 10 grid columns; one with speed 5 gets 3. This is the same technique from Demo 07 — the stat becomes the data, and the visual parameters follow.
     </p>
 
     <h3>Step 5: draw directly to Riso layers</h3>
@@ -100,7 +101,7 @@ for (let c = 0; c < cols; c++) {
   }
 }</code></pre>
     <p>
-      Riso layers (<code>pink</code>, <code>blue</code>) are graphics buffers — you can call drawing methods directly on them. <code>push()</code> and <code>pop()</code> save and restore the transformation state, so each square can be rotated around its own center without affecting neighboring squares. The offset grid (blue squares offset by half a cell) is a classic two-color RISO registration pattern.
+      Riso layers (<code>pink</code>, <code>blue</code>) are graphics buffers — you can call drawing methods directly on them. <a class="gref" href="../00-glossary/index.html#layer-push-pop"><code>push()</code> and <code>pop()</code></a> save and restore the transformation state, so each square can be <a class="gref" href="../00-glossary/index.html#rotate">rotated</a> around its own center without affecting neighboring squares. <a class="gref" href="../00-glossary/index.html#rectMode"><code>rectMode(CENTER)</code></a> makes <code>rect()</code> center itself at the translated origin.
     </p>
 
     <h3>Step 6: reload data with a callback</h3>
@@ -113,7 +114,7 @@ loadJSON(
   }
 );</code></pre>
     <p>
-      Outside of <code>preload()</code>, <code>loadJSON()</code> is <strong>asynchronous</strong> — it starts the request and immediately moves on. The callback function runs when the data arrives, possibly seconds later. This is why we set <code>loading = true</code> first and show a "fetching..." message: the canvas needs to communicate what's happening while we wait.
+      Outside of <a class="gref" href="../00-glossary/index.html#preload"><code>preload()</code></a>, <a class="gref" href="../00-glossary/index.html#loadJSON"><code>loadJSON()</code></a> is <strong>asynchronous</strong> — it starts the request and immediately moves on. The <a class="gref" href="../00-glossary/index.html#callback">callback</a> function runs when the data arrives, possibly seconds later. This is why we set <code>loading = true</code> first and show a "fetching..." message: the canvas needs to communicate what's happening while we wait.
     </p>
 
     <h3>The five Pokémon compared</h3>

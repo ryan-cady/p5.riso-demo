@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -33,17 +34,17 @@
 
   <div class="explanation">
     <h2>How Riso layers work</h2>
-    <p>Each <code>Riso()</code> creates a separate ink channel. Draw on the channel just like a normal p5 graphics buffer, then call <code>drawRiso()</code> at the end to composite them onto the canvas.</p>
+    <p>Each <a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a separate ink channel. Draw on the channel just like a normal p5 graphics buffer, then call <a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a> at the end to composite them onto the canvas.</p>
 
     <h3>Setting up colors</h3>
-    <p>Pass any color name (all caps) to <code>new Riso()</code>:</p>
+    <p>Pass any color name (all caps) to <a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a>:</p>
     <pre><code>let pink   = new Riso("FLUORESCENTPINK");
 let blue   = new Riso("BLUE");
 let yellow = new Riso("YELLOW");</code></pre>
-    <p>Available names include: <code>YELLOW</code>, <code>BLUE</code>, <code>BURGUNDY</code>, <code>SUNFLOWER</code>, <code>ORANGE</code>, <code>GREEN</code>, <code>LIGHTLIME</code>, <code>MINT</code>, <code>MIST</code>, <code>COPPER</code>, <code>TEAL</code>, <code>FLUORESCENTPINK</code>, <code>BRIGHTRED</code>, <code>BLACK</code>, <code>AQUA</code>.</p>
+    <p>Available names include: <code>YELLOW</code>, <code>BLUE</code>, <code>BURGUNDY</code>, <code>SUNFLOWER</code>, <code>ORANGE</code>, <code>GREEN</code>, <code>LIGHTLIME</code>, <code>MINT</code>, <code>MIST</code>, <code>COPPER</code>, <code>TEAL</code>, <code>FLUORESCENTPINK</code>, <code>BRIGHTRED</code>, <code>BLACK</code>, <code>AQUA</code>. See the full <a class="gref" href="../00-glossary/index.html#RISOCOLORS"><code>RISOCOLORS</code></a> array for all 81.</p>
 
     <h3>Drawing on a layer</h3>
-    <p>Use the layer as a graphics context. <code>fill(255)</code> means full ink density:</p>
+    <p>Use the layer as a graphics context. <a class="gref" href="../00-glossary/index.html#layer-fill"><code>fill(255)</code></a> means full ink density:</p>
     <pre><code>pink.fill(255);           // full ink
 pink.fill(128);           // ~50% ink (halftone in print)
 pink.noFill();

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/global.css">
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -25,7 +26,7 @@
   <div class="explanation">
     
       <h2>How it works</h2>
-      <p>An array of four numbers controls the entire visual output. Click to randomize the data. Press "e" to export.</p>
+      <p>An <a class="gref" href="../00-glossary/index.html#array">array</a> of four numbers controls the entire visual output. Click to randomize the data. Press "e" to export.</p>
 
       <h3>The data set</h3>
       <pre><code>let data = [42, 87, 15, 63];</code></pre>
@@ -36,13 +37,13 @@
 let frequency = map(data[1], 0, 100, 2, 15);
 let intensity = map(data[2], 0, 100, 50, 200);
 let angle     = map(data[3], 0, 100, 0, 90);</code></pre>
-      <p>Each data point drives a visual parameter through <code>map()</code>. The data doesn't control color — colors are fixed (pink and blue). The data controls <em>how the image is processed</em>: dither threshold, halftone dot density, intensity, and angle.</p>
+      <p>Each data point drives a visual parameter through <a class="gref" href="../00-glossary/index.html#map"><code>map()</code></a>. The data doesn't control color — colors are fixed (pink and blue). The data controls <em>how the image is processed</em>: <a class="gref" href="../00-glossary/index.html#ditherImage">dither threshold</a>, <a class="gref" href="../00-glossary/index.html#halftoneImage">halftone dot density</a>, intensity, and angle.</p>
 
       <h3>Randomizing</h3>
       <pre><code>for (let i = 0; i < data.length; i++) {
   data[i] = floor(random(100));
 }</code></pre>
-      <p><code>i</code> is the loop counter — it walks through each position in the array and replaces it with a new random whole number. <code>floor(random(100))</code> gives an integer from 0 to 99.</p>
+      <p><code>i</code> is the <a class="gref" href="../00-glossary/index.html#for-loop">loop</a> counter — it walks through each position in the array and replaces it with a new random whole number. <a class="gref" href="../00-glossary/index.html#math-floor"><code>floor</code></a>(<a class="gref" href="../00-glossary/index.html#random"><code>random</code></a>(100)) gives an integer from 0 to 99.</p>
 
       <h3>The big idea</h3>
       <p>Same image, same colors, but every data set produces a different print. Click a few times to see how dramatically different values change the output. This is the core concept behind Project 2.</p>

@@ -13,6 +13,7 @@
   <style>:root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-pink); }</style>
 </head>
 <body class="demo-page">
+  <script src="../nav.js"></script>
   <header>
     <a href="../index.html" class="back">&larr; All demos</a>
     <div class="demo-header">
@@ -39,7 +40,7 @@ let shuffled = shuffle(data);
 // a random subset with no repeats.
 let selected = shuffled.slice(0, 5);</code></pre>
     <p>
-      Slicing the first N items after shuffling is a clean way to pick a random subset without repeating anything. Change <code>5</code> to any number up to <code>data.length</code>.
+      <a class="gref" href="../00-glossary/index.html#array-slice">Slicing</a> the first N items after <a class="gref" href="../00-glossary/index.html#shuffle">shuffling</a> is a clean way to pick a random subset without repeating anything. Change <code>5</code> to any number up to <a class="gref" href="../00-glossary/index.html#array-length"><code>data.length</code></a>.
     </p>
 
     <h3>randomSeed() — reproducible results</h3>
@@ -51,10 +52,10 @@ function draw() {
   // ...
 }</code></pre>
     <p>
-      Without <code>randomSeed()</code>, every call to <code>random()</code> and <code>shuffle()</code> pulls from an unpredictable sequence — good for live animation, bad for reproducible prints. <code>randomSeed(n)</code> resets the sequence to a known starting point, so the same seed always produces the same shuffle and the same composition.
+      Without <a class="gref" href="../00-glossary/index.html#randomSeed"><code>randomSeed()</code></a>, every call to <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> and <a class="gref" href="../00-glossary/index.html#shuffle"><code>shuffle()</code></a> pulls from an unpredictable sequence — good for live animation, bad for reproducible prints. <code>randomSeed(n)</code> resets the sequence to a known starting point, so the same seed always produces the same shuffle and the same composition.
     </p>
     <p>
-      Calling <code>randomSeed()</code> at the very top of <code>draw()</code> ensures the entire drawing is locked to one seed.
+      Calling <a class="gref" href="../00-glossary/index.html#randomSeed"><code>randomSeed()</code></a> at the very top of <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> ensures the entire drawing is locked to one seed.
     </p>
 
     <h3>Picking a new seed</h3>
@@ -67,14 +68,14 @@ function draw() {
   }
 }</code></pre>
     <p>
-      The key insight: <code>seed = floor(random(9999))</code> runs <em>after</em> <code>draw()</code> has finished, outside the seeded context — so it gives a genuinely new, unpredictable number each time. That new seed then locks the next composition.
+      The key insight: <code>seed = floor(random(9999))</code> runs <em>after</em> <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> has finished, outside the seeded context — so it gives a genuinely new, unpredictable number each time. <a class="gref" href="../00-glossary/index.html#redraw"><code>redraw()</code></a> triggers a single frame with the new seed.
     </p>
 
     <h3>random(array) — pick one item</h3>
     <pre><code>let names = ["sub", "kick", "bass", "pad", "lead"];
 let pick = random(names); // one item chosen at random</code></pre>
     <p>
-      Pass an array to <code>random()</code> and it returns one element at random. Useful for picking a random color, a random record from your data, or a random word from a list.
+      Pass an <a class="gref" href="../00-glossary/index.html#array">array</a> to <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> and it returns one element at random. Useful for picking a random color, a random record from your data, or a random word from a list.
     </p>
 
     <h3>The difference from demo 13</h3>
