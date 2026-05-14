@@ -128,6 +128,41 @@
     .resource-card:nth-child(1) .resource-card-title { color: var(--riso-blue); }
     .resource-card:nth-child(2) .resource-card-title { color: var(--riso-orange); }
     .resource-card:nth-child(3) .resource-card-title { color: var(--riso-blue); }
+    .resource-card:nth-child(4) .resource-card-title { color: var(--riso-pink); }
+    .resource-card:nth-child(5) .resource-card-title { color: var(--riso-orange); }
+    .resource-card:nth-child(6) .resource-card-title { color: var(--riso-blue); }
+
+    /* ── Bookmarks embed ────────────────────── */
+    .bookmarks-embed {
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .bookmarks-embed iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      border: none;
+    }
+
+    .bookmarks-fallback {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: #999;
+      margin-top: 0.6rem;
+    }
+
+    .bookmarks-fallback a {
+      color: var(--riso-blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .bookmarks-fallback a:hover {
+      border-color: var(--riso-blue);
+    }
 
     /* ── Get started links ──────────────────── */
     .start-links {
@@ -310,7 +345,37 @@
           <div class="resource-card-desc">Searchable definitions for every JavaScript, p5.js, and p5.riso term used in the demos.</div>
           <div class="resource-card-arrow">→ Open</div>
         </a>
+        <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6Zy51Q-x9tMWIv9cueOFTFA" target="_blank" class="resource-card">
+          <div class="resource-card-label">Video</div>
+          <div class="resource-card-title">The Coding Train</div>
+          <div class="resource-card-desc">Daniel Shiffman's p5.js tutorial series — great companion for learning the fundamentals.</div>
+          <div class="resource-card-arrow">↗ YouTube</div>
+        </a>
+        <a href="https://spectrolite.app/" target="_blank" class="resource-card">
+          <div class="resource-card-label">Tool</div>
+          <div class="resource-card-title">Spectrolite</div>
+          <div class="resource-card-desc">Color separation and halftone tool designed for Risograph printing.</div>
+          <div class="resource-card-arrow">↗ spectrolite.app</div>
+        </a>
+        <a href="https://stencil.wiki/" target="_blank" class="resource-card">
+          <div class="resource-card-label">Reference</div>
+          <div class="resource-card-title">Stencil Wiki</div>
+          <div class="resource-card-desc">Community wiki covering stencil and Risograph printing techniques, inks, and workflows.</div>
+          <div class="resource-card-arrow">↗ stencil.wiki</div>
+        </a>
       </div>
+    </div>
+
+    <!-- ── Class Bookmarks ───────────────────── -->
+    <div class="home-section">
+      <div class="home-section-title">Class Bookmarks</div>
+      <div class="bookmarks-embed">
+        <iframe src="https://app.raindrop.io/my/64874866" title="Class bookmark collection"></iframe>
+      </div>
+      <p class="bookmarks-fallback">
+        Can't see the embed? <a href="https://app.raindrop.io/my/64874866" target="_blank">Open bookmarks in Raindrop ↗</a>
+        — the collection may need to be set to public for others to view it.
+      </p>
     </div>
 
     <!-- ── Get started ───────────────────────── -->
