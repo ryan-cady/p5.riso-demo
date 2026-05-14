@@ -6,74 +6,79 @@
     {
       label: 'Reference',
       demos: [
-        { path: '00-glossary',   num: '00', title: 'Glossary' },
-        { path: '00-bookmarks',  num: '00', title: 'Class Bookmarks' },
-        { path: '00-template',   num: '00', title: 'Template' },
-        { path: '00-debugging',  num: '00', title: 'Debugging' },
+        { path: '00-glossary',   title: 'Glossary' },
+        { path: '00-bookmarks',  title: 'Class Bookmarks' },
+        { path: '00-template',   title: 'Template' },
+        { path: '00-debugging',  title: 'Debugging' },
       ]
     },
     {
       label: 'Basics',
       demos: [
-        { path: '00-p5js',  num: '00', title: 'p5.js Overview' },
-        { path: '00-setup', num: '00', title: 'Setting Up p5.js' },
-        { path: '00-intro', num: '00', title: 'Intro to p5.riso' },
+        { path: '00-p5js',  title: 'p5.js Overview' },
+        { path: '00-setup', title: 'Setting Up p5.js' },
+        { path: '00-intro', title: 'Intro to p5.riso' },
       ]
     },
     {
       label: 'Printing',
       demos: [
-        { path: '00-riso-color', num: '00', title: 'How RISO Color Works' },
-        { path: '00-export',     num: '00', title: 'Exporting for Print' },
+        { path: '00-riso-color', title: 'How RISO Color Works' },
+        { path: '00-export',     title: 'Exporting for Print' },
       ]
     },
     {
       label: 'Color',
       demos: [
-        { path: '01-color-array',     num: '01', title: 'RISO Color Array' },
-        { path: '02-curated-palette', num: '02', title: 'Curated Palette' },
+        { path: '01-color-array',     title: 'RISO Color Array' },
+        { path: '02-curated-palette', title: 'Curated Palette' },
       ]
     },
     {
       label: 'Images',
       demos: [
-        { path: '03-load-image',        num: '03', title: 'Load Image' },
-        { path: '04-basic-dither',      num: '04', title: 'Basic Dither' },
-        { path: '05-dither-comparison', num: '05', title: 'Dither Comparison' },
-        { path: '06-two-color-dither',  num: '06', title: 'Two-Color Print' },
-        { path: '15-image-array',       num: '15', title: 'Image Array' },
-        { path: '12-webcam',            num: '12', title: 'Webcam Riso' },
+        { path: '03-load-image',        title: 'Load Image' },
+        { path: '04-basic-dither',      title: 'Basic Dither' },
+        { path: '05-dither-comparison', title: 'Dither Comparison' },
+        { path: '06-two-color-dither',  title: 'Two-Color Print' },
+        { path: '15-image-array',       title: 'Image Array' },
+        { path: '12-webcam',            title: 'Webcam Riso' },
       ]
     },
     {
       label: 'Code',
       demos: [
-        { path: '08-functions',    num: '08', title: 'Functions' },
-        { path: '13-arrays',       num: '13', title: 'Arrays' },
-        { path: '14-random-array', num: '14', title: 'Randomize Array' },
-        { path: '00-fonts',        num: '00', title: 'Working with Fonts' },
+        { path: '08-functions',    title: 'Functions' },
+        { path: '13-arrays',       title: 'Arrays' },
+        { path: '14-random-array', title: 'Randomize Array' },
+        { path: '00-fonts',        title: 'Working with Fonts' },
       ]
     },
     {
       label: 'Data',
       demos: [
-        { path: '07-data-driven', num: '07', title: 'Data-Driven' },
-        { path: '09-api-data',    num: '09', title: 'API Data' },
-        { path: '10-csv-data',    num: '10', title: 'CSV Data' },
-        { path: '11-random-data', num: '11', title: 'Random Data' },
+        { path: '07-data-driven', title: 'Data-Driven' },
+        { path: '09-api-data',    title: 'API Data' },
+        { path: '10-csv-data',    title: 'CSV Data' },
+        { path: '11-random-data', title: 'Random Data' },
       ]
     },
     {
       label: 'Tools',
       demos: [
-        { path: '16-data-cruncher', num: '16', title: 'Data Cruncher' },
+        { path: '16-data-cruncher', title: 'Data Cruncher' },
       ]
     },
   ];
 
   const currentPath = location.pathname;
+  const savedState = JSON.parse(localStorage.getItem('sidebar-state') || '{}');
 
   const navItems = categories.map(cat => {
+    const hasActive = cat.demos.some(d => currentPath.includes('/' + d.path + '/'));
+    // Active category always open; otherwise use saved state, default open
+    const isOpen = hasActive ? true : (savedState[cat.label] !== false);
+
     const items = cat.demos.map(d => {
       const href = root + d.path + '/index.html';
       const isActive = currentPath.includes('/' + d.path + '/');
@@ -81,7 +86,16 @@
         `<span class="nav-title">${d.title}</span>` +
         `</a>`;
     }).join('');
-    return `<div class="nav-category-label">${cat.label}</div>` + items;
+
+    return (
+      `<div class="nav-category">` +
+        `<button class="nav-category-btn" aria-expanded="${isOpen}" data-label="${cat.label}">` +
+          `<span>${cat.label}</span>` +
+          `<span class="nav-chevron"></span>` +
+        `</button>` +
+        `<div class="nav-category-items"${isOpen ? '' : ' style="max-height:0"'}>${items}</div>` +
+      `</div>`
+    );
   }).join('');
 
   const html =
@@ -102,4 +116,27 @@
 
   document.body.insertAdjacentHTML('afterbegin', html);
   document.body.classList.add('has-sidebar');
+
+  // Wire up accordion toggles
+  document.querySelectorAll('.nav-category-btn').forEach(btn => {
+    const items = btn.nextElementSibling;
+
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      const nowOpen = !isOpen;
+
+      btn.setAttribute('aria-expanded', nowOpen);
+      items.style.maxHeight = nowOpen ? items.scrollHeight + 'px' : '0';
+
+      // Persist state (but never save active category as closed)
+      const state = JSON.parse(localStorage.getItem('sidebar-state') || '{}');
+      state[btn.dataset.label] = nowOpen;
+      localStorage.setItem('sidebar-state', JSON.stringify(state));
+    });
+
+    // Set initial max-height so transitions work from the start
+    if (btn.getAttribute('aria-expanded') === 'true') {
+      items.style.maxHeight = items.scrollHeight + 'px';
+    }
+  });
 })();
