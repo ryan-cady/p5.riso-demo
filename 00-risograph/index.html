@@ -11,35 +11,23 @@
   <style>
     :root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-blue); }
 
-    .machine-wrap {
-      display: flex;
-      align-items: flex-start;
-      gap: 2.5rem;
-      margin: 0 0 2rem;
-      flex-wrap: wrap;
-    }
-
     .machine-img {
-      flex-shrink: 0;
-      width: 220px;
+      margin: 2rem 0 3.75rem;
+      text-align: center;
     }
 
     .machine-img img {
+      max-width: 480px;
       width: 100%;
-      display: block;
+      display: inline-block;
     }
 
     .machine-caption {
       font-family: 'Space Mono', monospace;
       font-size: 0.6rem;
       color: #aaa;
-      margin-top: 0.5rem;
+      margin-top: 0.6rem;
       line-height: 1.4;
-    }
-
-    .machine-intro {
-      flex: 1;
-      min-width: 220px;
     }
 
     .process-steps {
@@ -112,7 +100,6 @@
     }
 
     @media (max-width: 680px) {
-      .machine-img { width: 160px; }
       .aesthetic-row {
         grid-template-columns: 1fr;
       }
@@ -134,20 +121,17 @@
 
   <div class="explanation">
 
-    <div class="machine-wrap">
-      <div class="machine-img">
-        <img src="../images/MZ-770-v006.gif" alt="Riso MZ-770 Risograph machine">
-        <div class="machine-caption">Riso MZ-770 — a single-drum Risograph<br>manufactured by Riso Kagaku Corporation</div>
-      </div>
-      <div class="machine-intro">
-        <h2>The Machine</h2>
-        <p>
-          The Risograph is manufactured by Riso Kagaku Corporation, a Japanese company. The name combines <em>Riso</em> (理想, "ideal") with <em>graph</em>. It was designed for fast, affordable duplication — not for fine art — but its mechanical quirks and semi-transparent inks have made it a beloved tool for zine makers, printmakers, and designers worldwide.
-        </p>
-        <p>
-          At its core, the machine is a <strong>stencil duplicator</strong>. It burns your artwork into a master stencil wrapped around an ink-filled drum, then presses paper against the drum at high speed, forcing ink through the stencil onto the page. Each ink color is a separate drum — a two-color print requires two passes through the machine.
-        </p>
-      </div>
+    <h2>The Machine</h2>
+    <p>
+      The Risograph is manufactured by Riso Kagaku Corporation, a Japanese company. The name combines <em>Riso</em> (理想, "ideal") with <em>graph</em>. It was designed for fast, affordable duplication — not for fine art — but its mechanical quirks and semi-transparent inks have made it a beloved tool for zine makers, printmakers, and designers worldwide.
+    </p>
+    <p>
+      At its core, the machine is a <strong>stencil duplicator</strong>. It burns your artwork into a master stencil wrapped around an ink-filled drum, then presses paper against the drum at high speed, forcing ink through the stencil onto the page. Each ink color is a separate drum — a two-color print requires two passes through the machine.
+    </p>
+
+    <div class="machine-img">
+      <img src="../images/MZ-770-v006.gif" alt="Riso MZ-770 Risograph machine">
+      <div class="machine-caption">Riso MZ-770 — a single-drum Risograph manufactured by Riso Kagaku Corporation</div>
     </div>
 
     <h2>How It Works</h2>
