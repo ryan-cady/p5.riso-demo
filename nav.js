@@ -25,6 +25,7 @@
     {
       label: 'Printing',
       demos: [
+        { path: '00-risograph',  title: 'What is a Risograph?' },
         { path: '00-riso-color', title: 'How RISO Color Works' },
         { path: '00-two-color',  title: 'Two-Color Design' },
         { path: '00-dither-ref', title: 'Dither & Halftone' },

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is a Risograph?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    :root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-blue); }
+
+    .machine-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      margin: 0 0 2rem;
+      flex-wrap: wrap;
+    }
+
+    .machine-img {
+      flex-shrink: 0;
+      width: 220px;
+    }
+
+    .machine-img img {
+      width: 100%;
+      display: block;
+    }
+
+    .machine-caption {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #aaa;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .machine-intro {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+      margin: 0.75rem 0 1.25rem;
+    }
+
+    .process-step {
+      background: var(--riso-paper);
+      padding: 1rem 1.1rem;
+    }
+
+    .step-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--riso-pink);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .step-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--riso-black);
+      margin-bottom: 0.3rem;
+    }
+
+    .step-desc {
+      font-size: 0.78rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+      .machine-img { width: 160px; }
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>What is a Risograph?</h1>
+    </div>
+  </header>
+
+  <p class="desc">A Risograph is a digital stencil duplicator — part photocopier, part screen print, part mimeograph. Understanding how it works makes you a better designer for it.</p>
+
+  <div class="explanation">
+
+    <div class="machine-wrap">
+      <div class="machine-img">
+        <img src="../images/MZ-770-v006.gif" alt="Riso MZ-770 Risograph machine">
+        <div class="machine-caption">Riso MZ-770 — a single-drum Risograph<br>manufactured by Riso Kagaku Corporation</div>
+      </div>
+      <div class="machine-intro">
+        <h2>The Machine</h2>
+        <p>
+          The Risograph is manufactured by Riso Kagaku Corporation, a Japanese company. The name combines <em>Riso</em> (理想, "ideal") with <em>graph</em>. It was designed for fast, affordable duplication — not for fine art — but its mechanical quirks and semi-transparent inks have made it a beloved tool for zine makers, printmakers, and designers worldwide.
+        </p>
+        <p>
+          At its core, the machine is a <strong>stencil duplicator</strong>. It burns your artwork into a master stencil wrapped around an ink-filled drum, then presses paper against the drum at high speed, forcing ink through the stencil onto the page. Each ink color is a separate drum — a two-color print requires two passes through the machine.
+        </p>
+      </div>
+    </div>
+
+    <h2>How It Works</h2>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-label">Master creation</div>
+        <div class="step-desc">The machine burns your artwork into a thin thermoplastic master using a thermal print head. Black areas become open, ink-permeable holes; white areas remain sealed.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-label">Drum wrapping</div>
+        <div class="step-desc">The master wraps around the ink drum. The drum is a cylinder with a porous screen surface; ink sits inside and is pressed outward through the screen and master onto the paper.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-label">Printing</div>
+        <div class="step-desc">Paper feeds through at speed — typically 60–130 sheets per minute. A press roller pushes each sheet against the spinning drum, transferring ink through the stencil.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-label">Second color</div>
+        <div class="step-desc">For two-color prints, the stack runs through a second time with a different drum loaded. Paper feeds through again — hence the slight misregistration that is characteristic of RISO.</div>
+      </div>
+    </div>
+
+    <h2>The Inks</h2>
+    <p>
+      RISO inks are rice-bran oil based, which makes them more biodegradable than petroleum-based alternatives and produces less heat during printing than laser or inkjet processes. More importantly for designers: the inks are <strong>semi-transparent</strong>.
+    </p>
+    <p>
+      Unlike offset or screen printing inks that sit opaquely on the surface, RISO ink soaks slightly into the paper and lets the substrate show through. This transparency is what makes overprinting interesting — wherever two ink layers overlap, they mix both optically and physically to create a third color.
+    </p>
+    <p>
+      The ink range includes standard colors as well as fluorescent inks — fluorescent pink, lime, and orange — that glow with a saturation no screen can accurately preview. These are a defining part of the RISO aesthetic.
+    </p>
+
+    <h2>History</h2>
+    <p>
+      The Risograph descends from the <strong>mimeograph</strong>, a stencil-based duplicating machine invented in the late 19th century. Mimeographs used hand-cut or typed stencils and a hand-cranked drum; they were the dominant self-publishing technology through the mid-20th century, fueling the fanzine and underground press movements of the 1940s–70s.
+    </p>
+    <p>
+      Riso Kagaku introduced the Risograph in 1980, merging the mimeograph's stencil-and-drum mechanics with photocopier-style digital scanning and automated master-making. It quickly found a market in schools, churches, and community organizations printing medium runs cheaply and quickly.
+    </p>
+    <p>
+      The art world rediscovered it in the 2000s and 2010s. Its constraints — limited ink colors, semi-transparent inks, visible misregistration, and grain from the stencil — became aesthetic assets rather than flaws. RISO print shops now operate in most major cities, serving independent publishers, artists, and designers.
+    </p>
+
+    <h2>The RISO Aesthetic</h2>
+    <p>
+      RISO prints are recognizable by a few consistent characteristics, all of which come directly from the process:
+    </p>
+    <ul>
+      <li><strong>Misregistration</strong> — because paper feeds through twice, the two color layers never align perfectly. A 1–3mm offset is normal and expected. Designs that embrace this read as more authentically RISO than designs that try to fight it.</li>
+      <li><strong>Grain and halftone</strong> — the stencil process introduces texture. Gradients and photographs are converted to dot patterns (halftone or dither) that are visible at close range.</li>
+      <li><strong>Ink unevenness</strong> — ink coverage varies slightly across the sheet, particularly at the edges. This gives prints a handmade quality absent from digital output.</li>
+      <li><strong>Paper show-through</strong> — the paper's texture and color are visible through the semi-transparent ink, contributing warmth and materiality.</li>
+      <li><strong>Fluorescent pops</strong> — fluorescent inks hit differently in person. They read almost neon under daylight and warm light, well beyond what any screen can show.</li>
+    </ul>
+
+    <h2>Ideal Print Runs</h2>
+    <p>
+      The Risograph works best for runs of <strong>50 to 5,000 copies</strong>. Below that, setup time (making the master, loading the drum, running test sheets) isn't worth it versus digital printing. Above that, offset printing becomes more economical.
+    </p>
+    <p>
+      For class projects, most shops will print small runs — even single copies — though the per-unit cost is higher. Check with your print shop about their minimum run and setup fees.
+    </p>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="../00-riso-color/index.html">How RISO Color Works</a> &nbsp;·&nbsp;
+      <a href="../00-two-color/index.html">Two-Color Design</a> &nbsp;·&nbsp;
+      <a href="https://stencil.wiki/" target="_blank">Stencil Wiki</a> &nbsp;·&nbsp;
+      <a href="https://www.pagemasters.co/risograph" target="_blank">PageMasters — Risograph</a>
+    </p>
+
+  </div>
+</body>
+</html>
