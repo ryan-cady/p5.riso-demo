@@ -26,6 +26,9 @@
       label: 'Printing',
       demos: [
         { path: '00-riso-color', title: 'How RISO Color Works' },
+        { path: '00-two-color',  title: 'Two-Color Design' },
+        { path: '00-dither-ref', title: 'Dither & Halftone' },
+        { path: '00-paper',      title: 'Paper & Print Prep' },
         { path: '00-export',     title: 'Exporting for Print' },
       ]
     },

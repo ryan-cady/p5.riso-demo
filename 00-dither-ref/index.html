@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dither &amp; Halftone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Dither &amp; Halftone</h1>
+    </div>
+  </header>
+
+  <p class="desc">RISO prints in binary — each dot of ink is either fully on or fully off. Dithering and halftone convert continuous-tone images into dot patterns that simulate shading and photography.</p>
+
+  <div class="explanation">
+
+    <h2>Why It's Necessary</h2>
+    <p>
+      A RISO drum can't vary ink density mid-print. To reproduce the appearance of a gradient or photograph, p5.riso converts your image into a field of dots — areas with more dots look darker; areas with fewer look lighter. The two main techniques for doing this are dithering and halftone.
+    </p>
+
+    <h2>ditherImage()</h2>
+    <p>
+      <code>ditherImage()</code> converts an image into a scattered dot pattern using an error-diffusion or threshold algorithm. Call it on a Riso layer:
+    </p>
+    <pre><code>let img;
+let pink;
+
+function preload() {
+  img = loadImage("photo.jpg");
+}
+
+function setup() {
+  createCanvas(825, 1275);
+  pixelDensity(1);
+  noLoop();
+  pink = new Riso("fluorescentpink");
+}
+
+function draw() {
+  clearRiso();
+  pink.ditherImage(img, "atkinson");
+  drawRiso();
+}</code></pre>
+
+    <h3>Dither Modes</h3>
+    <p>
+      The second argument to <code>ditherImage()</code> sets the algorithm:
+    </p>
+    <ul>
+      <li>
+        <strong>"atkinson"</strong> — the default. Spreads error to nearby pixels, producing a high-contrast, graphic result with strong blacks and whites. Loses some midtone detail but reads well in print.
+      </li>
+      <li>
+        <strong>"floyd"</strong> — Floyd-Steinberg. Spreads error more evenly than Atkinson, preserving more midtone detail. Finer texture, closer to a photographic feel. Can look slightly muddy in very dark areas.
+      </li>
+      <li>
+        <strong>"ordered"</strong> — Bayer matrix dither. Produces a regular, grid-like pattern. The structure is visible and gives a retro screen-print look. Less naturalistic, more graphic.
+      </li>
+      <li>
+        <strong>"random"</strong> — random threshold per pixel. Noisy, high-contrast, gritty. Detail is lost but the texture is raw and unpredictable.
+      </li>
+      <li>
+        <strong>"horizontal"</strong> / <strong>"vertical"</strong> — threshold lines running horizontally or vertically. Produces a striped, scan-line aesthetic.
+      </li>
+      <li>
+        <strong>"blob"</strong> — clusters dots together into irregular blobs. Looser and more organic than ordered dither.
+      </li>
+      <li>
+        <strong>"square"</strong> — threshold in a square tile pattern. Geometric and regular.
+      </li>
+    </ul>
+    <p>
+      See the <a href="../05-dither-comparison/index.html">Dither Comparison</a> demo to preview each mode side by side.
+    </p>
+
+    <h2>halftoneImage()</h2>
+    <p>
+      Halftone converts an image into a regular grid of dots whose size varies with the brightness of the original. It's the technique used in traditional offset printing and newspapers.
+    </p>
+    <pre><code>pink.halftoneImage(img, frequency, angle);</code></pre>
+    <ul>
+      <li><strong>frequency</strong> — how many dot rows per inch (roughly). Lower = bigger dots, more visible grid. Higher = finer grid, more detail. Try values between 10 and 40.</li>
+      <li><strong>angle</strong> — rotation of the dot grid in degrees. 45° is the classic halftone angle. Changing the angle between layers in a two-color print reduces moiré patterns.</li>
+    </ul>
+    <pre><code>// Classic halftone:
+pink.halftoneImage(img, 20, 45);
+
+// Two-color with offset angles to reduce moiré:
+pink.halftoneImage(img, 20, 45);
+blue.halftoneImage(img, 20, 75);</code></pre>
+
+    <h2>Dither vs. Halftone — When to Use Each</h2>
+    <ul>
+      <li><strong>Dither</strong> — better for photographs and images with a lot of tonal variation. The scattered dot pattern reads as natural and photographic. Atkinson is a safe default.</li>
+      <li><strong>Halftone</strong> — better when you want a visible, structured dot pattern as part of the aesthetic. The grid is legible and graphic. Great for portraits, bold images, or a deliberately retro look.</li>
+    </ul>
+
+    <h2>Tips for Better Results</h2>
+    <ul>
+      <li><strong>Start with a high-contrast image</strong> — dithering compresses the tonal range. An image that already has good contrast will survive the conversion better than a flat, low-contrast photo.</li>
+      <li><strong>Resize your image to match the canvas</strong> — if your image is much smaller than the canvas, the dither pattern will be scaled up and look chunky. Load an image at or above your canvas resolution.</li>
+      <li><strong>Test at 100% zoom</strong> — dither patterns look different at screen scale vs. actual print size. Preview your exported PNG at 100% to see what will actually print.</li>
+      <li><strong>Fluorescent inks dither beautifully</strong> — fluorescent pink and lime produce especially vivid dithered images because their saturation stays high even at partial coverage.</li>
+      <li><strong>Adjust brightness before dithering</strong> — use <code>tint()</code> or image filters to lighten or darken the source image before passing it to <code>ditherImage()</code>. This shifts where the midtone threshold falls.</li>
+    </ul>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso Docs</a> &nbsp;·&nbsp;
+      <a href="../04-basic-dither/index.html">Basic Dither demo</a> &nbsp;·&nbsp;
+      <a href="../05-dither-comparison/index.html">Dither Comparison demo</a> &nbsp;·&nbsp;
+      <a href="../06-two-color-dither/index.html">Two-Color Print demo</a>
+    </p>
+
+  </div>
+</body>
+</html>

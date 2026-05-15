@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper &amp; Print Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    :root { --demo-accent: var(--riso-orange); --demo-accent2: var(--riso-orange); }
+
+    .checklist {
+      list-style: none;
+      margin: 0.4rem 0 1rem;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--riso-paper-dark);
+      font-size: 0.88rem;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+
+    .checklist li::before {
+      content: '☐';
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #bbb;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Paper &amp; Print Prep</h1>
+    </div>
+  </header>
+
+  <p class="desc">What to know about paper stock, how it affects your print, and what to hand off to the printer so the job runs smoothly.</p>
+
+  <div class="explanation">
+
+    <h2>How Paper Affects the Print</h2>
+    <p>
+      RISO ink is oil-based and semi-transparent. The paper you print on changes the result significantly — more than in most other printing processes.
+    </p>
+    <ul>
+      <li><strong>Uncoated / bond paper</strong> — the most common RISO stock. Ink absorbs into the fibers, producing a slightly matte, slightly textured result. Colors appear slightly muted compared to screen. Most RISO printers stock a mid-weight uncoated paper (60–80 lb text).</li>
+      <li><strong>Newsprint</strong> — very absorbent, ink spreads and feathers slightly. Colors look warmer and more saturated due to the paper's yellowish tone. Great for a zine or newspaper aesthetic but less precise for fine detail.</li>
+      <li><strong>Colored paper</strong> — the paper color tints everything, including "unprinted" areas. Printing fluorescent pink on cream paper looks different than on white. Factor the paper color into your design; it effectively acts as a third ink.</li>
+      <li><strong>Heavier stock (100+ lb)</strong> — less show-through from back-to-back printing, but may not feed reliably in all machines. Check with the print shop before designing for heavy stock.</li>
+      <li><strong>Coated paper</strong> — ink sits on the surface rather than absorbing, which can result in smearing or slow dry times. Most RISO shops avoid it. Ask first.</li>
+    </ul>
+
+    <h2>Standard Print Sizes</h2>
+    <p>
+      RISO machines print up to a maximum paper size (usually A3 or 11×17"). Common finished sizes:
+    </p>
+    <pre><code>// At 150 DPI — multiply inches by 150 for canvas size:
+// Half-letter:  5.5" × 8.5"   →  createCanvas(825, 1275)
+// Letter:       8.5" × 11"    →  createCanvas(1275, 1650)
+// A5:           5.8" × 8.3"   →  createCanvas(870, 1245)
+// A4:           8.3" × 11.7"  →  createCanvas(1245, 1755)
+// Tabloid:      11"  × 17"    →  createCanvas(1650, 2550)
+// A3:           11.7" × 16.5" →  createCanvas(1755, 2475)</code></pre>
+    <p>
+      Half-letter (5.5×8.5") is the most common size for class projects — it's easy to handle, fits standard paper, and prints quickly. Larger sizes cost more and take longer to set up.
+    </p>
+
+    <h2>Bleed</h2>
+    <p>
+      If your design goes to the edge of the paper, add a <strong>bleed</strong> — artwork that extends past the trim line so there's no white edge if the cut is slightly off. Standard bleed is 0.125" on each side:
+    </p>
+    <pre><code>// Half-letter with 0.125" bleed on all sides:
+// Width:  5.5 + 0.25 = 5.75"  →  5.75 × 150 = 863px
+// Height: 8.5 + 0.25 = 8.75"  →  8.75 × 150 = 1313px
+createCanvas(863, 1313);
+pixelDensity(1);</code></pre>
+    <p>
+      Note that most RISO printing is not trimmed — you design to the paper edge and what you see is what you get. Bleed only matters if the print shop is cutting the sheets after printing.
+    </p>
+
+    <h2>What Fluorescent Inks Look Like on Paper</h2>
+    <p>
+      Fluorescent inks (fluorescent pink, fluorescent lime, fluorescent orange) look dramatically different in print than on screen. On screen they appear bright but fairly normal. On paper they glow — the fluorescent pigment reacts to ambient light in a way no display can replicate.
+    </p>
+    <p>
+      This means: don't judge fluorescent ink colors by the screen preview. They will be more vivid and saturated in print, especially in well-lit or naturally lit environments.
+    </p>
+
+    <h2>Pre-Submission Checklist</h2>
+    <p>
+      Before sending files to the printer, verify:
+    </p>
+    <ul class="checklist">
+      <li>One grayscale PNG per ink layer — e.g. <code>fluorescentpink_0.png</code>, <code>blue_1.png</code></li>
+      <li>A composite PNG as a reference for how layers should align</li>
+      <li>Canvas dimensions match your intended print size at 150 DPI</li>
+      <li>Files are grayscale — no color tint on the layer PNGs</li>
+      <li>Each file is clearly named with the ink color it represents</li>
+      <li>You've noted which layer prints first (if it matters to your design)</li>
+      <li>You've noted the paper size, orientation (portrait / landscape), and any paper stock preference</li>
+      <li>Bleed is included if the design goes to the edge</li>
+      <li>Any important notes about registration or alignment are written out</li>
+    </ul>
+
+    <h2>Talking to the Printer</h2>
+    <p>
+      When you hand off files, include a short note with:
+    </p>
+    <ul>
+      <li><strong>Paper size and orientation</strong> — "half-letter, portrait"</li>
+      <li><strong>Ink colors by layer</strong> — "layer 0 = fluorescent pink, layer 1 = blue"</li>
+      <li><strong>Print order</strong> — which color goes down first (if you have a preference)</li>
+      <li><strong>Paper stock</strong> — if you have a preference, say so; otherwise the shop will use their default</li>
+      <li><strong>Quantity</strong> — how many copies</li>
+    </ul>
+    <p>
+      The more clearly you communicate, the fewer surprises you'll get back from the press.
+    </p>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="../00-export/index.html">Exporting for Print</a> &nbsp;·&nbsp;
+      <a href="../00-riso-color/index.html">How RISO Color Works</a> &nbsp;·&nbsp;
+      <a href="https://stencil.wiki/" target="_blank">Stencil Wiki</a>
+    </p>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two-Color Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    :root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-blue); }
+
+    .zone-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+      margin: 0.75rem 0 1.25rem;
+    }
+
+    .zone-box {
+      background: var(--riso-paper);
+      padding: 0.75rem 0.75rem 0.6rem;
+    }
+
+    .zone-swatch {
+      height: 48px;
+      border-radius: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .zone-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--riso-black);
+      margin-bottom: 0.2rem;
+    }
+
+    .zone-desc {
+      font-size: 0.72rem;
+      color: #888;
+      line-height: 1.4;
+    }
+
+    .overprint-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.5rem 0 1.25rem;
+      font-size: 0.82rem;
+    }
+
+    .overprint-table th {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #999;
+      font-weight: 700;
+      text-align: left;
+      padding: 0.4rem 0.75rem;
+      border-bottom: 1px solid var(--riso-paper-dark);
+    }
+
+    .overprint-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--riso-paper-dark);
+      color: #444;
+    }
+
+    .overprint-table tr:last-child td { border-bottom: none; }
+
+    .swatch-inline {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      vertical-align: middle;
+      margin-right: 0.35rem;
+      position: relative;
+      top: -1px;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Two-Color Design</h1>
+    </div>
+  </header>
+
+  <p class="desc">How to think about composition, layer separation, and ink choice when designing a two-color RISO print.</p>
+
+  <div class="explanation">
+
+    <h2>Think in Four Zones</h2>
+    <p>
+      A two-color RISO print has four distinct zones. Good compositions use all of them intentionally:
+    </p>
+
+    <div class="zone-grid">
+      <div class="zone-box">
+        <div class="zone-swatch" style="background: #FF48B0;"></div>
+        <div class="zone-label">Color 1 only</div>
+        <div class="zone-desc">Areas printed in ink 1 alone</div>
+      </div>
+      <div class="zone-box">
+        <div class="zone-swatch" style="background: #0078BF;"></div>
+        <div class="zone-label">Color 2 only</div>
+        <div class="zone-desc">Areas printed in ink 2 alone</div>
+      </div>
+      <div class="zone-box">
+        <div class="zone-swatch" style="background: #6B3A8F;"></div>
+        <div class="zone-label">Overprint</div>
+        <div class="zone-desc">Both inks overlap — a third color emerges</div>
+      </div>
+      <div class="zone-box">
+        <div class="zone-swatch" style="background: #f5f0e8; border: 1px solid #ece5d8;"></div>
+        <div class="zone-label">Paper</div>
+        <div class="zone-desc">Unprinted — the paper color contributes to the composition</div>
+      </div>
+    </div>
+
+    <p>
+      Beginners often use only two zones (color 1 and color 2 in separate areas). The most interesting prints deliberately design the overprint and treat the paper as a fourth color.
+    </p>
+
+    <h2>Choosing Colors for a Good Overprint</h2>
+    <p>
+      The overprint color is produced by both inks mixing on the paper. Some combinations produce more useful third colors than others:
+    </p>
+
+    <table class="overprint-table">
+      <thead>
+        <tr>
+          <th>Ink 1</th>
+          <th>Ink 2</th>
+          <th>Overprint result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="swatch-inline" style="background:#FF48B0;"></span>Fluor. Pink</td>
+          <td><span class="swatch-inline" style="background:#FFE800;"></span>Yellow</td>
+          <td><span class="swatch-inline" style="background:#FF9D00;"></span>Orange</td>
+        </tr>
+        <tr>
+          <td><span class="swatch-inline" style="background:#FF48B0;"></span>Fluor. Pink</td>
+          <td><span class="swatch-inline" style="background:#0078BF;"></span>Blue</td>
+          <td><span class="swatch-inline" style="background:#6B3A8F;"></span>Purple</td>
+        </tr>
+        <tr>
+          <td><span class="swatch-inline" style="background:#0078BF;"></span>Blue</td>
+          <td><span class="swatch-inline" style="background:#FFE800;"></span>Yellow</td>
+          <td><span class="swatch-inline" style="background:#00836A;"></span>Green</td>
+        </tr>
+        <tr>
+          <td><span class="swatch-inline" style="background:#FF6C2F;"></span>Orange</td>
+          <td><span class="swatch-inline" style="background:#0078BF;"></span>Blue</td>
+          <td><span class="swatch-inline" style="background:#3B4A2E;"></span>Dark brown/olive</td>
+        </tr>
+        <tr>
+          <td><span class="swatch-inline" style="background:#00A95C;"></span>Green</td>
+          <td><span class="swatch-inline" style="background:#FF48B0;"></span>Fluor. Pink</td>
+          <td><span class="swatch-inline" style="background:#6B7A32;"></span>Muddy yellow-green</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      The screen preview uses a multiply blend mode — a reasonable approximation, but the real overprint will look different. Print a test swatch of your combination before running a full edition.
+    </p>
+
+    <h2>Ink Density and Overprint Control</h2>
+    <p>
+      The fill value on a Riso layer (0–255) controls ink density. Lower density means less ink, which lightens the layer and produces a softer overprint:
+    </p>
+    <pre><code>pink.fill(255); // full density
+blue.fill(150); // ~60% — lighter blue, softer overprint where they meet</code></pre>
+    <p>
+      Varying density across layers lets you control how prominent the overprint zone is relative to the individual color areas.
+    </p>
+
+    <h2>Layer Order</h2>
+    <p>
+      In p5.riso, the layer printed first goes down first — later layers print on top. This matters for overprints: whichever ink is printed second will tend to show more in the overlap area because it's laid down on top of dried ink.
+    </p>
+    <pre><code>let pink = new Riso("fluorescentpink"); // printed first
+let blue = new Riso("blue");            // printed second — sits on top</code></pre>
+    <p>
+      In practice, the RISO operator determines the actual print order. Make sure your file names and notes communicate which layer goes first.
+    </p>
+
+    <h2>Common Approaches</h2>
+
+    <h3>Subject / Background split</h3>
+    <p>
+      Put the main subject on one layer and a background texture or shape on the other. The overlap creates depth where the subject sits on the background.
+    </p>
+
+    <h3>Outline / Fill split</h3>
+    <p>
+      Line art or contours on one layer, filled shapes on the other. The overprint zone — where lines cross fills — adds a third color that defines edges.
+    </p>
+
+    <h3>Geometry + photography</h3>
+    <p>
+      A dithered photograph on one layer, bold geometric shapes on the other. The photo provides texture; the geometry provides structure. They create a third reading wherever they intersect.
+    </p>
+
+    <h3>Shifted duplicates</h3>
+    <p>
+      Draw the same or similar composition on both layers, offset slightly. The slight shift creates a shadow/echo effect, and the overlap zone darkens the image in the center of each shape.
+    </p>
+
+    <h2>What to Avoid</h2>
+    <ul>
+      <li><strong>Fine text in two colors</strong> — misregistration will blur thin letterforms. Put text on a single layer.</li>
+      <li><strong>Designs that only work with perfect alignment</strong> — a 1–3mm shift is normal. If your composition depends on exact registration, it will look wrong in print.</li>
+      <li><strong>Ignoring the paper</strong> — white/unprinted areas are part of the composition. Design them deliberately rather than leaving them as empty leftover space.</li>
+      <li><strong>Muddy overprint combinations</strong> — complementary colors (opposite on the color wheel) tend to produce dull brownish-green overprints. Test before committing.</li>
+    </ul>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="../00-riso-color/index.html">How RISO Color Works</a> &nbsp;·&nbsp;
+      <a href="../06-two-color-dither/index.html">Two-Color Print demo</a> &nbsp;·&nbsp;
+      <a href="../02-curated-palette/index.html">Curated Palette demo</a>
+    </p>
+
+  </div>
+</body>
+</html>
