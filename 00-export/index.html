@@ -21,7 +21,7 @@
     </div>
   </header>
 
-  <p class="desc">How to export your p5.riso sketch as print-ready files — canvas sizing, resolution, layer export, and what to hand off to the printer.</p>
+  <p class="desc">How to export your p5.riso sketch as print-ready files — canvas sizing, resolution, layer export, combining into a PDF, and what to hand off to the printer.</p>
 
   <div class="explanation">
 
@@ -92,18 +92,38 @@ function keyReleased() {
     <pre><code>let pink = new Riso("fluorescentpink"); // → fluorescentpink_0.png
 let blue = new Riso("blue");            // → blue_1.png</code></pre>
 
+    <h2>Combining Layers into a PDF</h2>
+    <p>
+      For a two-color print, your layer PNGs need to be combined into a single multi-page PDF before sending to the printer. Each page in the PDF represents one color drum — page 1 is printed first, page 2 is printed second.
+    </p>
+    <p>
+      Page order matters: it tells the operator which drum to load for each pass. Make sure page 1 corresponds to your first color and page 2 to your second.
+    </p>
+    <p>
+      <strong>On Mac using Preview:</strong>
+    </p>
+    <ol>
+      <li>Open your first layer PNG (<code>fluorescentpink_0.png</code>) in Preview</li>
+      <li>Show the Thumbnails sidebar — <strong>View &rarr; Thumbnails</strong></li>
+      <li>Drag the second layer PNG (<code>blue_1.png</code>) into the thumbnails panel below the first page</li>
+      <li>Export as PDF — <strong>File &rarr; Export as PDF&hellip;</strong></li>
+    </ol>
+    <p>
+      The resulting PDF has two pages: page 1 = fluorescent pink drum, page 2 = blue drum. Include a note with the ink color name for each page so the operator knows which drum to load.
+    </p>
+
     <h2>What to Send to the Printer</h2>
     <p>
-      Hand off the individual layer PNGs — one file per ink color. Include:
+      Hand off the combined PDF along with a few key details:
     </p>
     <ul>
-      <li>The layer PNG for each ink (e.g. <code>fluorescentpink_0.png</code> and <code>blue_1.png</code>)</li>
-      <li>The ink color name for each file so the operator can load the right drum</li>
+      <li>The multi-page PDF — one page per ink color, in print order</li>
+      <li>The ink color name for each page (e.g. "page 1 = fluorescent pink, page 2 = blue")</li>
       <li>The composite PNG as a reference for how the final print should look</li>
-      <li>Paper stock, if you have a preference</li>
+      <li>Paper size, orientation, and stock if you have a preference</li>
     </ul>
     <p>
-      The layer PNGs are <strong>grayscale</strong> — black areas will print in ink, white areas won't. Don't convert them to color before sending.
+      Each page in the PDF is <strong>grayscale</strong> — black areas print in ink, white areas don't. Don't convert to color before sending.
     </p>
 
     <h2>Bleed</h2>
