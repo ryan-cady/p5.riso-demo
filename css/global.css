@@ -233,7 +233,7 @@ header {
 ────────────────────────────────────────────── */
 
 .demo-page header {
-  padding: 1.5rem 2rem 1rem;
+  padding: 100px 2rem 1rem;
   display: flex;
   align-items: baseline;
   gap: 1rem;
