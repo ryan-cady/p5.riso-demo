@@ -6,23 +6,14 @@
     {
       label: 'Reference',
       demos: [
-        { path: '00-glossary',   title: 'Glossary' },
-        { path: '00-bookmarks',  title: 'Class Bookmarks' },
-        { path: '00-template',   title: 'Template' },
-        { path: '00-debugging',  title: 'Debugging' },
+        { path: '00-glossary',  title: 'Glossary' },
+        { path: '00-bookmarks', title: 'Class Bookmarks' },
+        { path: '00-template',  title: 'Template' },
+        { path: '00-debugging', title: 'Debugging' },
       ]
     },
     {
-      label: 'Basics',
-      demos: [
-        { path: '00-p5js',       title: 'p5.js Overview' },
-        { path: '00-setup',      title: 'Setting Up p5.js' },
-        { path: '00-intro',      title: 'Intro to p5.riso' },
-        { path: '00-interaction', title: 'Mouse & Keyboard' },
-      ]
-    },
-    {
-      label: 'Printing',
+      label: 'Risograph',
       demos: [
         { path: '00-risograph',  title: 'What is a Risograph?' },
         { path: '00-riso-color', title: 'How RISO Color Works' },
@@ -33,15 +24,22 @@
       ]
     },
     {
-      label: 'Color',
+      label: 'P5',
       demos: [
-        { path: '01-color-array',     title: 'RISO Color Array' },
-        { path: '02-curated-palette', title: 'Curated Palette' },
+        { path: '00-p5js',        title: 'p5.js Overview' },
+        { path: '00-setup',       title: 'Setting Up p5.js' },
+        { path: '00-interaction', title: 'Mouse & Keyboard' },
+        { path: '00-transforms',  title: 'Transforms' },
+        { path: '00-random',      title: 'Random & Noise' },
+        { path: '00-fonts',       title: 'Working with Fonts' },
       ]
     },
     {
-      label: 'Images',
+      label: 'P5.riso',
       demos: [
+        { path: '00-intro',             title: 'Intro to p5.riso' },
+        { path: '01-color-array',       title: 'RISO Color Array' },
+        { path: '02-curated-palette',   title: 'Curated Palette' },
         { path: '03-load-image',        title: 'Load Image' },
         { path: '04-basic-dither',      title: 'Basic Dither' },
         { path: '05-dither-comparison', title: 'Dither Comparison' },
@@ -51,29 +49,21 @@
       ]
     },
     {
-      label: 'Code',
+      label: 'JavaScript',
       demos: [
-        { path: '08-functions',    title: 'Functions' },
         { path: '00-variables',    title: 'Variables & Conditionals' },
-        { path: '00-transforms',   title: 'Transforms' },
+        { path: '08-functions',    title: 'Functions' },
         { path: '13-arrays',       title: 'Arrays' },
         { path: '14-random-array', title: 'Randomize Array' },
-        { path: '00-random',       title: 'Random & Noise' },
-        { path: '00-fonts',        title: 'Working with Fonts' },
       ]
     },
     {
       label: 'Data',
       demos: [
-        { path: '07-data-driven', title: 'Data-Driven' },
-        { path: '09-api-data',    title: 'API Data' },
-        { path: '10-csv-data',    title: 'CSV Data' },
-        { path: '11-random-data', title: 'Random Data' },
-      ]
-    },
-    {
-      label: 'Tools',
-      demos: [
+        { path: '07-data-driven',   title: 'Data-Driven' },
+        { path: '09-api-data',      title: 'API Data' },
+        { path: '10-csv-data',      title: 'CSV Data' },
+        { path: '11-random-data',   title: 'Random Data' },
         { path: '16-data-cruncher', title: 'Data Cruncher' },
       ]
     },
