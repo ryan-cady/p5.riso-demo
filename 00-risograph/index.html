@@ -79,8 +79,44 @@
       line-height: 1.5;
     }
 
-    @media (max-width: 600px) {
+    .aesthetic-row {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--riso-paper-dark);
+    }
+
+    .aesthetic-row:last-of-type { border-bottom: none; }
+
+    .aesthetic-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--riso-black);
+      margin-bottom: 0.4rem;
+    }
+
+    .aesthetic-desc {
+      font-size: 0.84rem;
+      line-height: 1.65;
+      color: #555;
+      margin: 0;
+    }
+
+    .aesthetic-canvas {
+      display: block;
+      border: 1px solid var(--riso-paper-dark);
+      border-radius: 2px;
+    }
+
+    @media (max-width: 680px) {
       .machine-img { width: 160px; }
+      .aesthetic-row {
+        grid-template-columns: 1fr;
+      }
+      .aesthetic-canvas { width: 100%; height: auto; }
     }
   </style>
 </head>
@@ -165,13 +201,46 @@
     <p>
       RISO prints are recognizable by a few consistent characteristics, all of which come directly from the process:
     </p>
-    <ul>
-      <li><strong>Misregistration</strong> — because paper feeds through twice, the two color layers never align perfectly. A 1–3mm offset is normal and expected. Designs that embrace this read as more authentically RISO than designs that try to fight it.</li>
-      <li><strong>Grain and halftone</strong> — the stencil process introduces texture. Gradients and photographs are converted to dot patterns (halftone or dither) that are visible at close range.</li>
-      <li><strong>Ink unevenness</strong> — ink coverage varies slightly across the sheet, particularly at the edges. This gives prints a handmade quality absent from digital output.</li>
-      <li><strong>Paper show-through</strong> — the paper's texture and color are visible through the semi-transparent ink, contributing warmth and materiality.</li>
-      <li><strong>Fluorescent pops</strong> — fluorescent inks hit differently in person. They read almost neon under daylight and warm light, well beyond what any screen can show.</li>
-    </ul>
+
+    <div class="aesthetic-row">
+      <div>
+        <div class="aesthetic-title">Misregistration</div>
+        <p class="aesthetic-desc">Because paper feeds through twice — once per ink color — the two layers never align perfectly. A 1–3mm offset is normal and expected. Designs that embrace this read as more authentically RISO than designs that try to fight it.</p>
+      </div>
+      <canvas id="sketch-misreg" class="aesthetic-canvas" width="240" height="120"></canvas>
+    </div>
+
+    <div class="aesthetic-row">
+      <div>
+        <div class="aesthetic-title">Grain &amp; Halftone</div>
+        <p class="aesthetic-desc">The stencil process can't reproduce continuous tone — gradients and photographs are converted to dot patterns (halftone or dither) that are visible at close range. The dot structure is a defining part of the RISO look.</p>
+      </div>
+      <canvas id="sketch-halftone" class="aesthetic-canvas" width="240" height="120"></canvas>
+    </div>
+
+    <div class="aesthetic-row">
+      <div>
+        <div class="aesthetic-title">Ink Unevenness</div>
+        <p class="aesthetic-desc">Ink coverage varies slightly across the sheet — denser in some areas, lighter in others — especially near the edges. This gives prints a handmade quality absent from digital output. It's not a defect; it's part of the character.</p>
+      </div>
+      <canvas id="sketch-uneven" class="aesthetic-canvas" width="240" height="120"></canvas>
+    </div>
+
+    <div class="aesthetic-row">
+      <div>
+        <div class="aesthetic-title">Paper Show-Through &amp; Overprint</div>
+        <p class="aesthetic-desc">RISO inks are semi-transparent — the paper color shows through, and wherever two inks overlap they mix to produce a third color. The paper itself is an active part of the composition, not just a neutral background.</p>
+      </div>
+      <canvas id="sketch-overprint" class="aesthetic-canvas" width="240" height="120"></canvas>
+    </div>
+
+    <div class="aesthetic-row">
+      <div>
+        <div class="aesthetic-title">Fluorescent Pops</div>
+        <p class="aesthetic-desc">Fluorescent inks — pink, lime, orange — glow with a saturation no screen can accurately preview. They react to ambient and UV light in a way that makes them look almost neon on paper. You have to see a fluorescent RISO print in person to understand it.</p>
+      </div>
+      <canvas id="sketch-fluoro" class="aesthetic-canvas" width="240" height="120"></canvas>
+    </div>
 
     <h2>Ideal Print Runs</h2>
     <p>
@@ -190,5 +259,161 @@
     </p>
 
   </div>
+
+  <script>
+  (function () {
+    const PAPER  = '#f5f0e8';
+    const PINK   = '#FF48B0';
+    const BLUE   = '#0078BF';
+    const LIME   = '#BBE000';
+    const ORANGE = '#FF7477';
+
+    function paperBg(ctx, w, h) {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = PAPER;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    // 1. Misregistration — same shapes on two layers, blue offset right+down
+    (function () {
+      const c = document.getElementById('sketch-misreg');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      paperBg(ctx, W, H);
+
+      function drawLayer(ox, oy, color) {
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 1;
+        // Rectangle
+        ctx.fillRect(30 + ox, 20 + oy, 70, 80);
+        // Circle
+        ctx.beginPath();
+        ctx.arc(155 + ox, H / 2 + oy, 42, 0, Math.PI * 2);
+        ctx.fill();
+        // Triangle
+        ctx.beginPath();
+        ctx.moveTo(210 + ox, 18 + oy);
+        ctx.lineTo(235 + ox, 100 + oy);
+        ctx.lineTo(185 + ox, 100 + oy);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      drawLayer(0, 0, PINK);
+      drawLayer(6, 5, BLUE);
+    })();
+
+    // 2. Halftone — blue dot grid, large dots left (dark) → small dots right (light)
+    (function () {
+      const c = document.getElementById('sketch-halftone');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      paperBg(ctx, W, H);
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillStyle = BLUE;
+
+      const spacing = 15;
+      for (let row = 0; row * spacing < H + spacing; row++) {
+        for (let col = 0; col * spacing < W + spacing; col++) {
+          const x = col * spacing + (row % 2 === 1 ? spacing / 2 : 0);
+          const y = row * spacing;
+          const t = Math.max(0, Math.min(1, x / W));
+          const r = 6.5 * (1 - t) + 0.8 * t;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    })();
+
+    // 3. Ink unevenness — pink fill with subtle lighter streaks, darker at edges
+    (function () {
+      const c = document.getElementById('sketch-uneven');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      paperBg(ctx, W, H);
+
+      // Base pink fill
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = PINK;
+      ctx.fillRect(16, 14, W - 32, H - 28);
+
+      // Simulate lighter coverage bands across the sheet
+      function rand(n) { return Math.abs(Math.sin(n * 127.1 + 311.7) * 43758.5453) % 1; }
+      ctx.globalCompositeOperation = 'source-over';
+      for (let i = 0; i < 14; i++) {
+        const x = 16 + rand(i * 3) * (W - 32);
+        const bw = rand(i * 3 + 1) * 28 + 8;
+        const alpha = rand(i * 3 + 2) * 0.13;
+        ctx.fillStyle = `rgba(245,240,232,${alpha})`;
+        ctx.fillRect(x, 14, bw, H - 28);
+      }
+      // Darker vignette at edges
+      const grad = ctx.createLinearGradient(0, 0, W, 0);
+      grad.addColorStop(0,    'rgba(255,72,176,0.18)');
+      grad.addColorStop(0.12, 'rgba(255,72,176,0)');
+      grad.addColorStop(0.88, 'rgba(255,72,176,0)');
+      grad.addColorStop(1,    'rgba(255,72,176,0.18)');
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillStyle = grad;
+      ctx.fillRect(16, 14, W - 32, H - 28);
+    })();
+
+    // 4. Overprint — pink circle + blue circle overlapping, third color in the middle
+    (function () {
+      const c = document.getElementById('sketch-overprint');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      paperBg(ctx, W, H);
+      ctx.globalCompositeOperation = 'multiply';
+
+      ctx.fillStyle = PINK;
+      ctx.beginPath();
+      ctx.arc(W * 0.38, H / 2, 46, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = BLUE;
+      ctx.beginPath();
+      ctx.arc(W * 0.62, H / 2, 46, 0, Math.PI * 2);
+      ctx.fill();
+    })();
+
+    // 5. Fluorescent pops — vivid fluoro shapes
+    (function () {
+      const c = document.getElementById('sketch-fluoro');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      paperBg(ctx, W, H);
+      ctx.globalCompositeOperation = 'multiply';
+
+      // Pink circle
+      ctx.fillStyle = PINK;
+      ctx.beginPath();
+      ctx.arc(60, H / 2, 48, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Lime rectangle
+      ctx.fillStyle = LIME;
+      ctx.fillRect(118, 12, 82, 82);
+
+      // Orange triangle
+      ctx.fillStyle = ORANGE;
+      ctx.beginPath();
+      ctx.moveTo(180, H - 10);
+      ctx.lineTo(235, H - 10);
+      ctx.lineTo(235, H - 65);
+      ctx.closePath();
+      ctx.fill();
+    })();
+  })();
+  </script>
 </body>
 </html>
