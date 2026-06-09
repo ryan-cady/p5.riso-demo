@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Talk to a Computer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    :root { --demo-accent: var(--riso-pink); --demo-accent2: var(--riso-blue); }
+
+    .prompt-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--riso-paper-dark);
+      border: 1px solid var(--riso-paper-dark);
+      margin: 0.5rem 0 1rem;
+    }
+
+    .prompt-box {
+      background: var(--riso-paper);
+      padding: 1rem 1.1rem;
+    }
+
+    .prompt-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .prompt-label.bad  { color: #cc4444; }
+    .prompt-label.good { color: #2a8a4a; }
+
+    .prompt-text {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #444;
+      font-style: italic;
+    }
+
+    .vocab-loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 1rem 0 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .vocab-node {
+      background: var(--riso-black);
+      color: var(--riso-paper);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.5rem 0.9rem;
+      border-radius: 2px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .vocab-arrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      color: #bbb;
+      padding: 0 0.5rem;
+    }
+
+    .pattern-block {
+      background: var(--riso-paper-dark);
+      border-left: 3px solid var(--riso-pink);
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0 1rem;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: #444;
+    }
+
+    .pattern-block strong {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--riso-pink);
+      margin-bottom: 0.35rem;
+    }
+
+    @media (max-width: 600px) {
+      .prompt-compare { grid-template-columns: 1fr; }
+      .vocab-loop { flex-direction: column; gap: 0.25rem; }
+      .vocab-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>How to Talk to a Computer</h1>
+    </div>
+  </header>
+
+  <p class="desc">Using AI to write code is a powerful skill — but it works best when you know the language you're asking it to speak. Here's how to get more out of AI tools and why learning syntax makes you a better prompter.</p>
+
+  <div class="explanation">
+
+    <h2>What is Vibe Coding?</h2>
+    <p>
+      Vibe coding means describing what you want in plain language and letting an AI tool (ChatGPT, Claude, Copilot, etc.) write the code for you. Instead of knowing every syntax rule by heart, you describe the idea — "I want 50 circles scattered randomly across the canvas, each a random size between 20 and 80 pixels" — and the AI translates it into working code.
+    </p>
+    <p>
+      This isn't cheating. It's a real workflow used by professional developers. The key is that it's a <strong>conversation, not a vending machine</strong>. You describe, it writes, you test, you refine. The quality of the output depends almost entirely on the quality of your description.
+    </p>
+
+    <h2>Why Syntax Still Matters</h2>
+    <p>
+      You might wonder: if AI writes the code, why learn the syntax at all? There are three reasons it still matters deeply:
+    </p>
+    <ul>
+      <li>
+        <strong>You need vocabulary to ask specific questions.</strong> If you don't know that <code>ditherImage()</code> exists, you'll ask for something vague like "make the image look grainy" — and get unpredictable results. Knowing the function name means you can ask for exactly what you want.
+      </li>
+      <li>
+        <strong>You need to recognize when the AI is wrong.</strong> AI tools hallucinate — they confidently write code using functions that don't exist, parameters in the wrong order, or logic that looks right but breaks at runtime. If you can't read the code at all, you have no way to catch these errors.
+      </li>
+      <li>
+        <strong>You need to debug when things don't work.</strong> AI can generate the starting point, but when something breaks — and it will break — you're the one reading the error message and figuring out what to fix. That requires understanding what the code is trying to do.
+      </li>
+    </ul>
+
+    <h2>The Vocabulary Loop</h2>
+    <p>
+      Learning syntax and vibe coding aren't opposites — they reinforce each other. The more you understand, the better your prompts. The better your prompts, the more you can accomplish. The more you accomplish, the more you learn from reading the output.
+    </p>
+
+    <div class="vocab-loop">
+      <div class="vocab-node">Learn<br>syntax</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-node">Write better<br>prompts</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-node">Get better<br>output</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-node">Read &amp; learn<br>from code</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-node">Learn<br>syntax</div>
+    </div>
+
+    <p>
+      The reference pages on this site — the Glossary, the JavaScript pages, the p5.js and p5.riso pages — exist specifically to give you this vocabulary. The more of it you absorb, the more precisely you can direct an AI tool.
+    </p>
+
+    <h2>Vague vs. Specific Prompts</h2>
+    <p>
+      The difference between a useful AI response and a useless one usually comes down to specificity. Here are examples of the same request at different levels of precision:
+    </p>
+
+    <div class="prompt-compare">
+      <div class="prompt-box">
+        <div class="prompt-label bad">Too vague</div>
+        <div class="prompt-text">"Make my sketch look more interesting."</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label good">Specific</div>
+        <div class="prompt-text">"I have a p5.riso sketch with a fluorescent pink Riso layer. Add a for loop that draws 40 circles at random positions, with sizes between 20 and 80 pixels, using <code>pink.fill(255)</code> and <code>pink.circle()</code>."</div>
+      </div>
+    </div>
+
+    <div class="prompt-compare">
+      <div class="prompt-box">
+        <div class="prompt-label bad">Too vague</div>
+        <div class="prompt-text">"Add a way to export the file."</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label good">Specific</div>
+        <div class="prompt-text">"Add a <code>keyReleased()</code> function that calls <code>exportRiso()</code> when I press 'e', and calls <code>redraw()</code> when I press the space bar."</div>
+      </div>
+    </div>
+
+    <div class="prompt-compare">
+      <div class="prompt-box">
+        <div class="prompt-label bad">Too vague</div>
+        <div class="prompt-text">"Make the image look like a RISO print."</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label good">Specific</div>
+        <div class="prompt-text">"Use <code>ditherImage(img, 'atkinson')</code> to convert my loaded image, then draw the result to a blue Riso layer using <code>blue.image()</code> at position (0, 0), sized to fill the canvas."</div>
+      </div>
+    </div>
+
+    <h2>When AI Gets It Wrong</h2>
+    <p>
+      AI tools make mistakes in specific, recognizable ways. Knowing these patterns helps you catch them:
+    </p>
+    <ul>
+      <li>
+        <strong>Hallucinated functions.</strong> The AI might write <code>pink.dither(img)</code> or <code>riso.export()</code> — functions that sound right but don't exist in p5.riso. If you get a "X is not a function" error, check the actual p5.riso docs. The Glossary on this site lists every real function.
+      </li>
+      <li>
+        <strong>Wrong argument order.</strong> <code>text(str, x, y)</code> and <code>rect(x, y, w, h)</code> have specific argument orders. AI sometimes swaps them. If shapes appear in the wrong place or nothing renders, check that the arguments match the reference.
+      </li>
+      <li>
+        <strong>Missing p5.riso structure.</strong> AI trained on general p5.js code often forgets to include <code>clearRiso()</code> and <code>drawRiso()</code>, or draws shapes to the main canvas instead of to a Riso layer. If your output is all one color or looks like normal p5.js, this is usually why.
+      </li>
+      <li>
+        <strong>Confidently wrong explanations.</strong> The AI will explain its broken code as if it's correct. Don't trust the explanation — test the code and look at what actually happens.
+      </li>
+    </ul>
+
+    <h2>Practical Prompt Patterns</h2>
+    <p>
+      A few templates that consistently get useful results for p5.riso work:
+    </p>
+
+    <div class="pattern-block">
+      <strong>Setting context</strong>
+      "I'm working in p5.js with the p5.riso library. My sketch uses a canvas of 825×1275 pixels at pixelDensity(1). I have two Riso layers: <code>let pink = new Riso('fluorescentpink')</code> and <code>let blue = new Riso('blue')</code>. My draw() function calls clearRiso() at the start and drawRiso() at the end."
+    </div>
+
+    <div class="pattern-block">
+      <strong>Asking for a specific feature</strong>
+      "Add [specific thing] using [specific function or approach]. It should go inside [setup / draw / keyReleased / etc.]. The result should [describe what you expect to see]."
+    </div>
+
+    <div class="pattern-block">
+      <strong>Debugging with an error</strong>
+      "My p5.riso sketch is throwing this error: [paste exact error message]. Here is the relevant code: [paste the function or block]. What's wrong and how do I fix it?"
+    </div>
+
+    <div class="pattern-block">
+      <strong>Asking for an explanation</strong>
+      "Explain what this line does in plain English: [paste line of code]. I know that [what you already understand] but I don't understand [specific thing]."
+    </div>
+
+    <h2>The Bottom Line</h2>
+    <p>
+      Vibe coding lowers the barrier to getting something on screen quickly. But the ceiling of what you can do — and how reliably you can do it — rises with every piece of syntax you learn. Treat the AI as a collaborator that knows a lot of code but needs you to direct it. The more clearly you can describe what you want, the better the collaboration gets.
+    </p>
+    <p>
+      Use the reference pages on this site to build your vocabulary. When you learn a new function, try prompting the AI to use it in a specific way. Then read the output and see if it matches what you expected.
+    </p>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="../00-glossary/index.html">Glossary</a> &nbsp;·&nbsp;
+      <a href="../00-p5js/index.html">p5.js Overview</a> &nbsp;·&nbsp;
+      <a href="../00-debugging/index.html">Debugging</a> &nbsp;·&nbsp;
+      <a href="https://p5js.org/reference/" target="_blank">p5.js Reference</a> &nbsp;·&nbsp;
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso Docs</a>
+    </p>
+
+  </div>
+</body>
+</html>

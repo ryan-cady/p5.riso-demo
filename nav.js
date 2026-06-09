@@ -6,10 +6,11 @@
     {
       label: 'Reference',
       demos: [
-        { path: '00-glossary',  title: 'Glossary' },
-        { path: '00-bookmarks', title: 'Class Bookmarks' },
-        { path: '00-template',  title: 'Template' },
-        { path: '00-debugging', title: 'Debugging' },
+        { path: '00-glossary',    title: 'Glossary' },
+        { path: '00-bookmarks',   title: 'Class Bookmarks' },
+        { path: '00-template',    title: 'Template' },
+        { path: '00-debugging',   title: 'Debugging' },
+        { path: '00-vibe-coding', title: 'How to Talk to a Computer' },
       ]
     },
     {
