@@ -121,6 +121,30 @@
       This isn't cheating. It's a real workflow used by professional developers. The key is that it's a <strong>conversation, not a vending machine</strong>. You describe, it writes, you test, you refine. The quality of the output depends almost entirely on the quality of your description.
     </p>
 
+    <h2>How a Computer Thinks</h2>
+    <p>
+      Before you can talk to a computer effectively — with AI or without — it helps to understand how a computer actually reads instructions. Unlike a person, a computer has no context, no intuition, and no ability to fill in gaps. It does exactly what you say, in exactly the order you say it, one step at a time.
+    </p>
+    <p>
+      That means a task that feels simple to a human often needs to be broken into several smaller, more explicit steps. "Draw a pink circle in the middle of the canvas" sounds straightforward, but a computer needs each part spelled out:
+    </p>
+    <ol>
+      <li>Set the fill color to pink</li>
+      <li>Turn off the stroke (or set a stroke color)</li>
+      <li>Calculate the center of the canvas</li>
+      <li>Decide on a diameter</li>
+      <li>Call the function that draws a circle at those coordinates with that size</li>
+    </ol>
+    <p>
+      Miss a step, or put them in the wrong order, and you get something wrong — or nothing at all. This isn't a flaw in how computers work; it's the entire point. Computers are precise because they never assume.
+    </p>
+    <p>
+      <strong>Syntax is the rulebook that makes this possible.</strong> Every programming language has a specific way of writing instructions — where the parentheses go, what order the arguments come in, which words mean what. Syntax isn't arbitrary; it's the grammar that removes ambiguity. <code>circle(x, y, diameter)</code> means something exact. <code>circle(diameter, y, x)</code> means something different. The computer can't tell which one you "meant."
+    </p>
+    <p>
+      When you use an AI tool to generate code, you're essentially translating your human-language description into this step-by-step, syntax-precise form. The better you understand the steps involved and the rules of the language, the better you can check whether the translation is right.
+    </p>
+
     <h2>Why Syntax Still Matters</h2>
     <p>
       You might wonder: if AI writes the code, why learn the syntax at all? There are three reasons it still matters deeply:
