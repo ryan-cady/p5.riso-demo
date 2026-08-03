@@ -86,7 +86,6 @@ h1 .arrow{color:var(--riso-pink);}
   color:var(--accent,var(--riso-blue));
 }
 .row-title{font-weight:500;font-size:.95rem;}
-.why{margin-top:.25rem;font-size:.88rem;color:#4a453b;}
 .tag{
   font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.08em;
   text-transform:uppercase;color:#fff;background:var(--riso-pink);
@@ -156,68 +155,60 @@ footer a{color:var(--riso-blue);}
 <!-- SEGMENT 1 -->
 <section class="seg s1">
   <div class="seg-head">
+    <span class="seg-num">01</span>
     <span class="seg-title">What is a Risograph?</span>
     <span class="seg-time">8 min</span>
   </div>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-risograph/index.html">
     <div class="row-top"><span class="slug">risograph</span><span class="row-title">The machine, explained</span></div>
-    <div class="why">The anchor for this segment — what the riso is and why designers use it.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-riso-color/index.html">
     <div class="row-top"><span class="slug">riso-color</span><span class="row-title">Ink colors &amp; drums</span></div>
-    <div class="why">Makes "one color = one layer = one pass" concrete before any code.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-two-color/index.html">
     <div class="row-top"><span class="slug">two-color</span><span class="row-title">Two-color printing</span></div>
-    <div class="why">How two passes overprint — the payoff students are working toward.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-paper/index.html">
     <div class="row-top"><span class="slug">paper</span><span class="row-title">Paper &amp; stock</span></div>
-    <div class="why">A quick aside — paper choice surprises first-time riso printers.</div>
   </a>
 </section>
 
 <!-- SEGMENT 2 -->
 <section class="seg s2">
   <div class="seg-head">
+    <span class="seg-num">02</span>
     <span class="seg-title">What is p5.js?</span>
     <span class="seg-time">7 min</span>
   </div>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-p5js/index.html">
     <div class="row-top"><span class="slug">p5js</span><span class="row-title">p5.js overview</span></div>
-    <div class="why">Lead here — "What is p5.js?" and the setup()/draw() sketch structure.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-setup/index.html">
     <div class="row-top"><span class="slug">setup</span><span class="row-title">Getting running</span></div>
-    <div class="why">The web-editor steps — how everyone gets a live sketch open.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-intro/index.html">
     <div class="row-top"><span class="slug">intro</span><span class="row-title">First sketch</span></div>
-    <div class="why">Show something drawing immediately so p5 stops being abstract.</div>
   </a>
 </section>
 
 <!-- SEGMENT 3 -->
 <section class="seg s3">
   <div class="seg-head">
+    <span class="seg-num">03</span>
     <span class="seg-title">p5 Basics — shapes, patterns, randomness</span>
     <span class="seg-time">25 min</span>
   </div>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-p5js/index.html">
     <div class="row-top"><span class="slug">p5js</span><span class="row-title">Shapes · color · coordinates</span></div>
-    <div class="why">Same overview page — the canvas, the origin, fill/stroke, drawing primitives.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-variables/index.html">
     <div class="row-top"><span class="slug">variables</span><span class="row-title">Variables &amp; math</span></div>
-    <div class="why">The step that turns fixed numbers into things you can drive.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-random/index.html">
     <div class="row-top"><span class="slug">random</span><span class="row-title">Randomness</span></div>
-    <div class="why">random() plus randomSeed() — repeatable rolls, which print work needs.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-transforms/index.html">
     <div class="row-top"><span class="slug">transforms</span><span class="row-title">Transforms</span></div>
-    <div class="why">push/pop/translate/rotate — the tools behind grid patterns.</div>
   </a>
   <div class="note"><b>LIVE-CODE THIS →</b> There's no dedicated loops/grid page yet. The <code>for</code>-loop-into-a-grid is the one basics concept without its own page — the ideal moment to build live (or add a <code>00-loops</code> page later).</div>
 </section>
@@ -225,28 +216,24 @@ footer a{color:var(--riso-blue);}
 <!-- SEGMENT 4 -->
 <section class="seg s4">
   <div class="seg-head">
+    <span class="seg-num">04</span>
     <span class="seg-title">p5.riso &amp; exporting for print</span>
     <span class="seg-time">20 min</span>
   </div>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-template/index.html">
     <div class="row-top"><span class="slug">template</span><span class="row-title">Starter file</span><span class="tag start">Start here</span></div>
-    <div class="why">Half-letter at 150 DPI — hand this out so print dimensions are right from line one.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-intro/index.html">
     <div class="row-top"><span class="slug">intro</span><span class="row-title">Channels &amp; compositing</span></div>
-    <div class="why">The core mental model: draw to layers, then drawRiso() to preview overprint.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/00-export/index.html">
     <div class="row-top"><span class="slug">export</span><span class="row-title">Exporting layers</span></div>
-    <div class="why">The segment's payoff — exportRiso() writes one grayscale file per ink.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/01-color-array/index.html">
     <div class="row-top"><span class="slug">color-array</span><span class="row-title">Worked demo — RISO colors</span><span class="tag demo">Code-only</span></div>
-    <div class="why">No image upload needed, so nobody stalls hunting for a file.</div>
   </a>
   <a class="row" href="https://ryan-cady.github.io/p5.riso-demo/02-curated-palette/index.html">
     <div class="row-top"><span class="slug">curated-palette</span><span class="row-title">Worked demo — build a palette</span><span class="tag demo">Code-only</span></div>
-    <div class="why">Pick a two-ink subset and draw swatches — a clean lead-in to the hands-on hour.</div>
   </a>
 </section>
 
