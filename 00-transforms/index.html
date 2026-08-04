@@ -95,21 +95,37 @@ for (let i = 0; i &lt; 8; i++) {
     translate(width / 2, height / 2); // move to canvas center
     rotate(i * TWO_PI / 8);           // rotate to position
     translate(200, 0);                // move out from center
-    pink.fill(255);
-    pink.rect(-30, -30, 60, 60);
+    fill(255);
+    rect(-30, -30, 60, 60);
   pop();
 }</code></pre>
 
     <h2>Transforms on Riso Layers</h2>
     <p>
-      Transforms work with Riso layers exactly as they do globally — apply them before drawing to a layer:
+      A Riso layer keeps its own drawing state, separate from the canvas — so the global <code>push()</code>, <code>translate()</code>, and <code>rotate()</code> above have <strong>no effect</strong> on shapes drawn to a layer. Calling <code>pink.rect(...)</code> after a global <code>rotate()</code> draws the rectangle un-rotated, at its plain coordinates.
     </p>
-    <pre><code>push();
-  translate(width / 2, height / 2);
-  rotate(PI / 4);
+    <p>
+      To transform a layer's drawing, call <a class="gref" href="../00-glossary/index.html#layer-push-pop"><code>layer.push() / layer.pop()</code></a> and <a class="gref" href="../00-glossary/index.html#layer-transform"><code>layer.translate() / layer.rotate()</code></a> — the same functions, but scoped to that layer:
+    </p>
+    <pre><code>pink.push();
+  pink.translate(width / 2, height / 2);
+  pink.rotate(PI / 4);
   pink.fill(255);
   pink.rect(-100, -100, 200, 200); // rotated 45° around canvas center
-pop();</code></pre>
+pink.pop();</code></pre>
+    <p>
+      The combining example above works the same way on a layer — just prefix every transform call with the layer name:
+    </p>
+    <pre><code>// 8 rectangles arranged in a circle, on the pink layer:
+for (let i = 0; i &lt; 8; i++) {
+  pink.push();
+    pink.translate(width / 2, height / 2);
+    pink.rotate(i * TWO_PI / 8);
+    pink.translate(200, 0);
+    pink.fill(255);
+    pink.rect(-30, -30, 60, 60);
+  pink.pop();
+}</code></pre>
 
     <h3>Reference</h3>
     <p>
