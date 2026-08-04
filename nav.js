@@ -31,6 +31,7 @@
         { path: '00-setup',       title: 'Setting Up p5.js' },
         { path: '00-interaction', title: 'Mouse & Keyboard' },
         { path: '00-transforms',  title: 'Transforms' },
+        { path: '00-loops',       title: 'Loops & Grids' },
         { path: '00-random',      title: 'Random & Noise' },
         { path: '00-fonts',       title: 'Working with Fonts' },
       ]
@@ -39,6 +40,7 @@
       label: 'P5.riso',
       demos: [
         { path: '00-intro',             title: 'Intro to p5.riso' },
+        { path: '00-riso-setup',        title: 'Setting Up p5.riso' },
         { path: '01-color-array',       title: 'RISO Color Array' },
         { path: '02-curated-palette',   title: 'Curated Palette' },
         { path: '03-load-image',        title: 'Load Image' },

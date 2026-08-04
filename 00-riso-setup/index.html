@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>00 — Setting Up p5.riso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+
+      <h1>Setting Up p5.riso</h1>
+    </div>
+  </header>
+  <p class="desc">The exact &lt;head&gt; tags and setup() calls a page needs before you can draw with p5.riso.</p>
+
+  <div class="explanation">
+
+    <h2>1. Add the script tags</h2>
+    <p>
+      p5.riso extends p5.js — it has to load <strong>after</strong> the p5.js script tag, not before. Put both in <code>&lt;head&gt;</code>:
+    </p>
+    <pre><code>&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.riso/lib/p5.riso.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script src="sketch.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+    <p>
+      Swap the order and <code>new Riso()</code> throws an error, since p5.riso is looking for a <code>p5</code> object that hasn't loaded yet.
+    </p>
+    <p>
+      Working in the <a href="https://editor.p5js.org" target="_blank">p5.js web editor</a> instead? It doesn't load p5.riso automatically — see <a href="../00-setup/index.html">Setting Up p5.js</a> for the extra step of adding it as a file.
+    </p>
+
+    <h2>2. The setup() checklist</h2>
+    <p>Every p5.riso sketch needs these four lines before it can draw anything:</p>
+    <pre><code>let pink, blue;
+
+function setup() {
+  createCanvas(825, 1275); // print size at 150 DPI
+  pixelDensity(1);
+  noLoop();
+
+  pink = new Riso("fluorescentpink");
+  blue = new Riso("blue");
+}</code></pre>
+    <ul>
+      <li><code>createCanvas(w, h)</code> — sized to your print dimensions at 150 DPI. See <a href="../00-export/index.html">Exporting for Print</a> for the conversion table.</li>
+      <li><code>pixelDensity(1)</code> — without this, Retina/HiDPI screens double the canvas resolution and your exported PNGs come out the wrong size.</li>
+      <li><code>noLoop()</code> — optional, but recommended for single-print pieces. It stops <code>draw()</code> after one frame, which keeps <code>exportRiso()</code> predictable.</li>
+      <li><code>new Riso("colorname")</code> — one call per ink layer. See the full <a class="gref" href="../00-glossary/index.html#RISOCOLORS"><code>RISOCOLORS</code></a> list for every available name.</li>
+    </ul>
+
+    <h2>3. The draw() shape</h2>
+    <p>
+      Layers get wiped, drawn to, then composited — in that order, every frame. See <a href="../00-intro/index.html">Intro to p5.riso</a> for the full explanation.
+    </p>
+    <pre><code>function draw() {
+  clearRiso();
+
+  pink.fill(200);
+  pink.circle(300, 400, 200);
+
+  blue.fill(180);
+  blue.rect(100, 300, 400, 200);
+
+  drawRiso();
+}</code></pre>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="../00-template/index.html">Template</a> &nbsp;·&nbsp;
+      <a href="../00-setup/index.html">Setting Up p5.js</a> &nbsp;·&nbsp;
+      <a href="https://antiboredom.github.io/p5.riso/" target="_blank">p5.riso docs</a>
+    </p>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loops & Grids</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <style>:root { --demo-accent: var(--riso-blue); --demo-accent2: var(--riso-blue); }</style>
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+      <h1>Loops & Grids</h1>
+    </div>
+  </header>
+
+  <p class="desc">Using <code>for</code> loops to repeat shapes across a grid — the pattern behind halftones, textures, and repeated motifs.</p>
+
+  <div class="explanation">
+
+    <h2>The for loop</h2>
+    <p>
+      A <code>for</code> loop repeats a block of code, changing one variable each time through. It has three parts, separated by semicolons:
+    </p>
+    <pre><code>for (let i = 0; i &lt; 10; i++) {
+  circle(i * 40, 100, 20);
+}</code></pre>
+    <ul>
+      <li><code>let i = 0</code> — runs once, before the loop starts</li>
+      <li><code>i &lt; 10</code> — checked before every pass; the loop stops once it's false</li>
+      <li><code>i++</code> — runs after every pass, incrementing <code>i</code> by 1</li>
+    </ul>
+    <p>
+      That draws 10 circles in a row, each 40px further right than the last — <code>i</code> goes 0, 1, 2 … 9, and <code>i * 40</code> turns that count into an x position.
+    </p>
+
+    <h2>Nested loops make a grid</h2>
+    <p>
+      Put a loop inside a loop to cover two dimensions. The outer loop steps down the rows; the inner loop steps across the columns:
+    </p>
+    <pre><code>for (let row = 0; row &lt; 5; row++) {
+  for (let col = 0; col &lt; 5; col++) {
+    let x = col * 60 + 30;
+    let y = row * 60 + 30;
+    circle(x, y, 20);
+  }
+}</code></pre>
+    <p>
+      For every row, the inner loop runs all the way through its columns before the outer loop moves to the next row — so a 5×5 grid draws 25 circles total.
+    </p>
+
+    <h2>Turning index into position</h2>
+    <p>
+      Hard-coded spacing (like the <code>60</code> above) only fits one canvas size. Divide the canvas by the number of columns and rows instead, so the grid scales with <code>createCanvas()</code>:
+    </p>
+    <pre><code>let cols = 8;
+let rows = 6;
+let spacing = width / cols;
+
+for (let row = 0; row &lt; rows; row++) {
+  for (let col = 0; col &lt; cols; col++) {
+    let x = col * spacing + spacing / 2; // center of each cell
+    let y = row * spacing + spacing / 2;
+    circle(x, y, spacing * 0.6);
+  }
+}</code></pre>
+
+    <h2>Adding variation per cell</h2>
+    <p>
+      Combine the loop with <a href="../00-random/index.html"><code>random()</code></a> to vary each cell instead of repeating one shape identically. Use <code>randomSeed()</code> if you want the variation to be repeatable:
+    </p>
+    <pre><code>randomSeed(1);
+
+for (let row = 0; row &lt; rows; row++) {
+  for (let col = 0; col &lt; cols; col++) {
+    let x = col * spacing + spacing / 2;
+    let y = row * spacing + spacing / 2;
+    let d = random(spacing * 0.2, spacing * 0.9);
+    circle(x, y, d);
+  }
+}</code></pre>
+    <p>
+      Wrap each cell in <a href="../00-transforms/index.html"><code>push()</code> / <code>pop()</code></a> to rotate or scale individual cells without affecting the rest of the grid:
+    </p>
+    <pre><code>for (let row = 0; row &lt; rows; row++) {
+  for (let col = 0; col &lt; cols; col++) {
+    push();
+      translate(col * spacing + spacing / 2, row * spacing + spacing / 2);
+      rotate(random(TWO_PI));
+      rect(-spacing * 0.3, -spacing * 0.3, spacing * 0.6, spacing * 0.6);
+    pop();
+  }
+}</code></pre>
+
+    <h2>Grids on Riso layers</h2>
+    <p>
+      Everything above works the same on a Riso layer — draw the grid to the layer instead of the canvas. Varying <code>fill()</code> density per cell is what a halftone pattern actually is:
+    </p>
+    <pre><code>let pink = new Riso("fluorescentpink");
+
+function draw() {
+  clearRiso();
+
+  let cols = 10, rows = 14;
+  let spacing = width / cols;
+
+  for (let row = 0; row &lt; rows; row++) {
+    for (let col = 0; col &lt; cols; col++) {
+      let x = col * spacing + spacing / 2;
+      let y = row * spacing + spacing / 2;
+      pink.fill(random(80, 255)); // ink density varies per dot
+      pink.circle(x, y, spacing * 0.7);
+    }
+  }
+
+  drawRiso();
+}</code></pre>
+
+    <h3>Reference</h3>
+    <p>
+      <a href="https://p5js.org/reference/p5/for/" target="_blank">p5.js for loop</a> &nbsp;·&nbsp;
+      <a href="../00-random/index.html">Random &amp; Noise</a> &nbsp;·&nbsp;
+      <a href="../00-transforms/index.html">Transforms</a>
+    </p>
+
+  </div>
+</body>
+</html>
