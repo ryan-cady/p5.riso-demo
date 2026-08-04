@@ -20,23 +20,32 @@
       <h1>Pattern Generator</h1>
     </div>
   </header>
-  <p class="desc">A grid of rotated arcs in two RISO inks, sized to a full 8.5&times;11 sheet. Click the canvas for a new layout.</p>
+  <p class="desc">A grid of rotated arcs across two RISO ink layers, sized to a full 8.5&times;11 sheet. Click the canvas for a new layout, press "e" to export each layer as a PNG.</p>
   <script src="sketch.js"></script>
   <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
   <div class="explanation">
 
     <h2>How it works</h2>
-    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets a quarter-circle arc, rotated to a random multiple of 90&deg; and filled with one of two RISO inks. Click anywhere on the canvas to reroll the whole pattern.</p>
+    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets a quarter-circle arc, rotated to a random multiple of 90&deg; and drawn onto one of two RISO ink layers. Click anywhere on the canvas to reroll the whole pattern, or press <strong>E</strong> to export each layer as its own PNG.</p>
 
     <h3>Sizing the canvas to paper</h3>
     <pre><code>createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
 pixelDensity(1);</code></pre>
     <p>RISO prints at 150 DPI, so an 8.5&times;11in sheet is <code>1275 &times; 1650</code> pixels (inches &times; 150). See <a href="../00-export/index.html">Exporting for Print</a> for the full conversion table. <a class="gref" href="../00-glossary/index.html#pixelDensity"><code>pixelDensity(1)</code></a> keeps that math accurate on Retina/HiDPI screens, which otherwise double the canvas resolution.</p>
 
-    <h3>Getting RISO colors</h3>
-    <pre><code>orangeColor = new Riso("orange").channelColor;
-tealColor = new Riso("teal").channelColor;</code></pre>
-    <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a Riso ink layer — here it's only used to read its <a class="gref" href="../00-glossary/index.html#channelColor"><code>.channelColor</code></a>, the RGB preview of that ink, so it can be passed to a normal <a class="gref" href="../00-glossary/index.html#fill"><code>fill()</code></a> call. This is the same trick used in <a href="../02-curated-palette/index.html">Curated Palette</a> — grab the color once, reuse it as a plain value.</p>
+    <h3>Setting up two ink layers</h3>
+    <pre><code>orangeLayer = new Riso("orange");
+sunflowerLayer = new Riso("sunflower");</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a separate ink channel — think of it as its own canvas that only holds one color of ink. Each layer is created once in <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a> and reused every time the pattern redraws.</p>
+
+    <h3>Clearing and compositing</h3>
+    <pre><code>function draw() {
+  background(255);
+  clearRiso();
+  // ...draw shapes onto the layers...
+  drawRiso();
+}</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#clearRiso"><code>clearRiso()</code></a> wipes both layers at the start of every redraw, so the old pattern doesn't stay mixed in with the new one. <a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a> blends the two layers together and displays the result on the canvas — nothing is visible until it's called.</p>
 
     <h3>Building the grid</h3>
     <pre><code>cols = int(random(6, 13));
@@ -60,20 +69,26 @@ for (let i = 0; i &lt; cols; i++) {
 }</code></pre>
     <p><code>%</code> is the <strong>modulo</strong> operator — it returns the remainder after division. When a cell's column and row indices add up to an even number, <code>(i + j) % 2</code> is <code>0</code>, so the condition is true. That leaves every other cell empty, like a checkerboard.</p>
 
-    <h3>Rotating each arc</h3>
-    <pre><code>push();
-  translate(x, y);
-  rotate(radians(rotation));
-  fill(fillColor);
-  arc(0, 0, circleSize, circleSize, PI, 0, CHORD);
-pop();</code></pre>
-    <p><a class="gref" href="../00-glossary/index.html#push-pop"><code>push()</code> / <code>pop()</code></a> isolate the <a class="gref" href="../00-glossary/index.html#translate"><code>translate()</code></a> and <a class="gref" href="../00-glossary/index.html#rotate"><code>rotate()</code></a> for each cell, so rotating one arc doesn't affect the next. <code>arc(0, 0, ...)</code> is drawn at the local origin — which, thanks to <code>translate()</code>, lands exactly on <code>(x, y)</code>. <code>PI</code> to <code>0</code> sweeps a half-circle, and <code>CHORD</code> closes it with a straight line instead of through the center, producing the quarter-circle wedge look. More on this in <a href="../00-transforms/index.html">Transforms</a>.</p>
+    <h3>Rotating each arc onto a layer</h3>
+    <pre><code>const rotation = radians(floor(random(4)) * 90);
+const layer = isOrange ? orangeLayer : sunflowerLayer;
+
+layer.noStroke();
+layer.fill(255); // full ink density
+layer.arc(x, y, circleSize, circleSize, PI + rotation, rotation, CHORD);</code></pre>
+    <p>Each cell picks one of the two layers at random and draws directly onto it. Riso layers don't pick up the canvas's <a href="../00-transforms/index.html"><code>translate()</code> / <code>rotate()</code></a> — a layer's shapes always draw in the canvas's untransformed coordinates. So instead of rotating the coordinate system, both arc angles get shifted by the same <code>rotation</code> amount. <code>PI</code> to <code>0</code> sweeps a half-circle; adding <code>rotation</code> to both ends spins that same sweep around the arc's center at <code>(x, y)</code> without moving it. <code>CHORD</code> closes the arc with a straight line instead of through the center, producing the quarter-circle wedge look.</p>
 
     <h3>Regenerating on click</h3>
     <pre><code>function mousePressed() {
   generatePattern();
 }</code></pre>
     <p>The sketch uses <a class="gref" href="../00-glossary/index.html#noLoop"><code>noLoop()</code></a>, so <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> only runs once on its own. <a class="gref" href="../00-glossary/index.html#mousePressed"><code>mousePressed()</code></a> picks new random column/row counts, then calls <a class="gref" href="../00-glossary/index.html#redraw"><code>redraw()</code></a> to run <code>draw()</code> exactly one more time with the new values.</p>
+
+    <h3>Exporting the layers</h3>
+    <pre><code>function keyReleased() {
+  if (key === "e") exportRiso();
+}</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#exportRiso"><code>exportRiso()</code></a> saves each Riso layer as its own grayscale PNG — one file per ink, ready to send to the machine. See <a href="../00-export/index.html">Exporting for Print</a> for what to do with the files afterward.</p>
 
   </div>
 </body>

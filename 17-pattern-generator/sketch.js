@@ -1,10 +1,10 @@
 // Demo 17: Pattern Generator
-// A grid of rotated arcs, colored with two RISO inks.
-// Click the canvas for a new random layout.
+// A grid of rotated arcs, drawn onto two RISO ink layers.
+// Click the canvas for a new random layout. Press "e" to export each layer as a PNG.
 
 let cols, rows; // number of columns and rows
 const circleSize = 80;
-let orangeColor, tealColor; // RGB colors pulled from two RISO inks
+let orangeLayer, sunflowerLayer; // two RISO ink layers
 
 function setup() {
   createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
@@ -12,9 +12,8 @@ function setup() {
   noLoop(); // stops looping of the draw function
   noStroke();
 
-  // Create temporary Riso layers just to read their RGB preview color
-  orangeColor = new Riso("orange").channelColor;
-  tealColor = new Riso("teal").channelColor;
+  orangeLayer = new Riso("orange");
+  sunflowerLayer = new Riso("sunflower");
 
   generatePattern(); // initializes cols and rows with random values and draws the pattern
 }
@@ -31,6 +30,7 @@ function generatePattern() {
 
 function draw() {
   background(255);
+  clearRiso(); // wipe both layers before redrawing
 
   //calculates spacing between the arcs by dividing the canvas width by the number of columns and rows
   const spacingX = width / cols;
@@ -45,24 +45,32 @@ function draw() {
 
       //checks if the sum of the current column and row are even (floor rounds to a solid number)
       if ((i + j) % 2 === 0) {
-        const rotation = floor(random(4)) * 90;
+        const rotation = radians(floor(random(4)) * 90);
         // random rotation in increments of 90 degrees
         const isOrange = random() < 0.5;
-        // 50% chance of being orange vs. teal
-        const fillColor = isOrange ? orangeColor : tealColor;
+        // 50% chance of landing on the orange layer vs. the sunflower layer
+        const layer = isOrange ? orangeLayer : sunflowerLayer;
 
-        push();
-        translate(x, y);
-        rotate(radians(rotation));
-        fill(fillColor);
-        arc(0, 0, circleSize, circleSize, PI, 0, CHORD);
-        pop();
+        layer.noStroke();
+        layer.fill(255); // full ink density
+
+        // Riso layers don't inherit the canvas's translate()/rotate() —
+        // so instead of transforming, shift both arc angles by the same
+        // amount. That "rotates" the arc without moving its center.
+        layer.arc(x, y, circleSize, circleSize, PI + rotation, rotation, CHORD);
       }
     }
   }
+
+  drawRiso();
 }
 
 //generates new pattern when mouse is pressed
 function mousePressed() {
   generatePattern();
+}
+
+//exports each RISO layer as a separate PNG
+function keyReleased() {
+  if (key === "e") exportRiso();
 }
