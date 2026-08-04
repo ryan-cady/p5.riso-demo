@@ -4,7 +4,7 @@
 
 let cols, rows; // number of columns and rows
 const circleSize = 80;
-let orangeLayer, sunflowerLayer; // two RISO ink layers
+let layerColor1, layerColor2; // two RISO ink layers — swap the color names below to try a different combo
 
 function setup() {
   createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
@@ -12,8 +12,8 @@ function setup() {
   noLoop(); // stops looping of the draw function
   noStroke();
 
-  orangeLayer = new Riso("orange");
-  sunflowerLayer = new Riso("sunflower");
+  layerColor1 = new Riso("orange");
+  layerColor2 = new Riso("sunflower");
 
   generatePattern(); // initializes cols and rows with random values and draws the pattern
 }
@@ -47,9 +47,9 @@ function draw() {
       if ((i + j) % 2 === 0) {
         const rotation = radians(floor(random(4)) * 90);
         // random rotation in increments of 90 degrees
-        const isOrange = random() < 0.5;
-        // 50% chance of landing on the orange layer vs. the sunflower layer
-        const layer = isOrange ? orangeLayer : sunflowerLayer;
+        const isLayer1 = random() < 0.5;
+        // 50% chance of landing on layerColor1 vs. layerColor2
+        const layer = isLayer1 ? layerColor1 : layerColor2;
 
         layer.noStroke();
         layer.fill(255); // full ink density

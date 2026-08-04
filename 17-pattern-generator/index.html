@@ -34,9 +34,9 @@ pixelDensity(1);</code></pre>
     <p>RISO prints at 150 DPI, so an 8.5&times;11in sheet is <code>1275 &times; 1650</code> pixels (inches &times; 150). See <a href="../00-export/index.html">Exporting for Print</a> for the full conversion table. <a class="gref" href="../00-glossary/index.html#pixelDensity"><code>pixelDensity(1)</code></a> keeps that math accurate on Retina/HiDPI screens, which otherwise double the canvas resolution.</p>
 
     <h3>Setting up two ink layers</h3>
-    <pre><code>orangeLayer = new Riso("orange");
-sunflowerLayer = new Riso("sunflower");</code></pre>
-    <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a separate ink channel — think of it as its own canvas that only holds one color of ink. Each layer is created once in <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a> and reused every time the pattern redraws.</p>
+    <pre><code>layerColor1 = new Riso("orange");
+layerColor2 = new Riso("sunflower");</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a separate ink channel — think of it as its own canvas that only holds one color of ink. Each layer is created once in <a class="gref" href="../00-glossary/index.html#setup"><code>setup()</code></a> and reused every time the pattern redraws. <code>layerColor1</code> / <code>layerColor2</code> are named after their role, not a specific color — swap the color names to try a different combo without renaming anything else in the sketch.</p>
 
     <h3>Clearing and compositing</h3>
     <pre><code>function draw() {
@@ -71,7 +71,7 @@ for (let i = 0; i &lt; cols; i++) {
 
     <h3>Rotating each arc onto a layer</h3>
     <pre><code>const rotation = radians(floor(random(4)) * 90);
-const layer = isOrange ? orangeLayer : sunflowerLayer;
+const layer = isLayer1 ? layerColor1 : layerColor2;
 
 layer.noStroke();
 layer.fill(255); // full ink density
