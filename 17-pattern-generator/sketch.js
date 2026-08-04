@@ -3,8 +3,8 @@
 // Click the canvas for a new random layout. Press "e" to export each layer as a PNG.
 
 let cols, rows; // number of columns and rows
-const shapeSize = 80;
-let shapeType = "arc"; // try: "arc", "triangle", "square"
+let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square"
+let shape2Type = "triangle", shape2Size = 60;
 let layerColor1, layerColor2; // two RISO ink layers — swap the color names below to try a different combo
 
 function setup() {
@@ -52,6 +52,12 @@ function draw() {
         // 50% chance of landing on layerColor1 vs. layerColor2
         const layer = isLayer1 ? layerColor1 : layerColor2;
 
+        const isShape1 = random() < 0.5;
+        // independent 50% chance of using shape1 vs. shape2 — any
+        // shape can land on either color layer
+        const type = isShape1 ? shape1Type : shape2Type;
+        const size = isShape1 ? shape1Size : shape2Size;
+
         layer.noStroke();
         layer.fill(255); // full ink density
 
@@ -61,7 +67,7 @@ function draw() {
         layer.push();
         layer.translate(x, y);
         layer.rotate(rotation);
-        drawShape(layer, shapeSize);
+        drawShape(layer, type, size);
         layer.pop();
       }
     }
@@ -70,11 +76,11 @@ function draw() {
   drawRiso();
 }
 
-// draws the current shapeType centered on the layer's local origin
-function drawShape(layer, size) {
-  if (shapeType === "triangle") {
+// draws the given shape type, at the given size, centered on the layer's local origin
+function drawShape(layer, type, size) {
+  if (type === "triangle") {
     layer.triangle(-size / 2, size / 2, size / 2, size / 2, 0, -size / 2);
-  } else if (shapeType === "square") {
+  } else if (type === "square") {
     layer.rect(-size / 2, -size / 2, size, size);
   } else {
     // "arc" — a quarter-circle wedge, same shape the original sketch used

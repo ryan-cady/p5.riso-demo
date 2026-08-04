@@ -26,7 +26,7 @@
   <div class="explanation">
 
     <h2>How it works</h2>
-    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets a shape — an arc, triangle, or square, set by <code>shapeType</code> — rotated to a random multiple of 90&deg; and drawn onto one of two RISO ink layers. Click anywhere on the canvas to reroll the whole pattern, or press <strong>E</strong> to export each layer as its own PNG.</p>
+    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets one of two shapes, at its own size, rotated to a random multiple of 90&deg; and drawn onto one of two RISO ink layers. Shape and ink color are picked independently, so any shape can land on either color. Click anywhere on the canvas to reroll the whole pattern, or press <strong>E</strong> to export each layer as its own PNG.</p>
 
     <h3>Sizing the canvas to paper</h3>
     <pre><code>createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
@@ -69,9 +69,17 @@ for (let i = 0; i &lt; cols; i++) {
 }</code></pre>
     <p><code>%</code> is the <strong>modulo</strong> operator — it returns the remainder after division. When a cell's column and row indices add up to an even number, <code>(i + j) % 2</code> is <code>0</code>, so the condition is true. That leaves every other cell empty, like a checkerboard.</p>
 
+    <h3>Picking a shape and a layer, independently</h3>
+    <pre><code>const isLayer1 = random() &lt; 0.5;
+const layer = isLayer1 ? layerColor1 : layerColor2;
+
+const isShape1 = random() &lt; 0.5;
+const type = isShape1 ? shape1Type : shape2Type;
+const size = isShape1 ? shape1Size : shape2Size;</code></pre>
+    <p>Two separate coin flips — one for ink color, one for shape. Because they're independent <a class="gref" href="../00-glossary/index.html#random"><code>random()</code></a> calls, all four combinations show up: shape1 in either color, shape2 in either color. <code>type</code> and <code>size</code> get read off whichever shape won the flip, ready to hand to <code>drawShape()</code>.</p>
+
     <h3>Rotating each shape onto a layer</h3>
     <pre><code>const rotation = radians(floor(random(4)) * 90);
-const layer = isLayer1 ? layerColor1 : layerColor2;
 
 layer.noStroke();
 layer.fill(255); // full ink density
@@ -79,23 +87,24 @@ layer.fill(255); // full ink density
 layer.push();
 layer.translate(x, y);
 layer.rotate(rotation);
-drawShape(layer, shapeSize);
+drawShape(layer, type, size);
 layer.pop();</code></pre>
-    <p>Each cell picks one of the two layers at random and draws directly onto it. A plain, global <code>push()</code> / <code>translate()</code> / <code>rotate()</code> wouldn't affect a Riso layer — a layer keeps its own drawing state, separate from the canvas. So the transforms are called <em>on the layer itself</em>: <a class="gref" href="../00-glossary/index.html#layer-push-pop"><code>layer.push() / layer.pop()</code></a> isolate <a class="gref" href="../00-glossary/index.html#layer-transform"><code>layer.translate() / layer.rotate()</code></a> to just this shape, the same way <a href="../00-transforms/index.html">Transforms</a> covers it. After moving the layer's local origin to <code>(x, y)</code> and rotating it, <code>drawShape()</code> just draws at <code>(0, 0)</code> — same as any other rotated shape.</p>
+    <p>A plain, global <code>push()</code> / <code>translate()</code> / <code>rotate()</code> wouldn't affect a Riso layer — a layer keeps its own drawing state, separate from the canvas. So the transforms are called <em>on the layer itself</em>: <a class="gref" href="../00-glossary/index.html#layer-push-pop"><code>layer.push() / layer.pop()</code></a> isolate <a class="gref" href="../00-glossary/index.html#layer-transform"><code>layer.translate() / layer.rotate()</code></a> to just this shape, the same way <a href="../00-transforms/index.html">Transforms</a> covers it. After moving the layer's local origin to <code>(x, y)</code> and rotating it, <code>drawShape()</code> just draws at <code>(0, 0)</code> — same as any other rotated shape.</p>
 
-    <h3>Swapping the shape</h3>
-    <pre><code>let shapeType = "arc"; // try: "arc", "triangle", "square"
+    <h3>Two shapes, two sizes</h3>
+    <pre><code>let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square"
+let shape2Type = "triangle", shape2Size = 60;
 
-function drawShape(layer, size) {
-  if (shapeType === "triangle") {
+function drawShape(layer, type, size) {
+  if (type === "triangle") {
     layer.triangle(-size / 2, size / 2, size / 2, size / 2, 0, -size / 2);
-  } else if (shapeType === "square") {
+  } else if (type === "square") {
     layer.rect(-size / 2, -size / 2, size, size);
   } else {
     layer.arc(0, 0, size, size, PI, 0, CHORD); // quarter-circle wedge
   }
 }</code></pre>
-    <p>Every shape gets drawn centered on the layer's local origin, after it's already been moved and rotated — so adding a new shape is just adding another <code>else if</code> branch that draws something centered on <code>(0, 0)</code> at roughly <code>size</code> across. Change <code>shapeType</code> at the top of the sketch to switch the whole pattern to triangles or squares without touching anything else.</p>
+    <p>Every shape gets drawn centered on the layer's local origin, after it's already been moved and rotated — so adding a new shape is just adding another <code>else if</code> branch that draws something centered on <code>(0, 0)</code> at roughly <code>size</code> across. <code>drawShape()</code> takes <code>type</code> and <code>size</code> as arguments instead of reading a single global, which is what makes two independent shapes possible — <code>shape1Type</code>/<code>shape1Size</code> and <code>shape2Type</code>/<code>shape2Size</code> can each be changed on their own, at the top of the sketch, without touching the drawing logic.</p>
 
     <h3>Regenerating on click</h3>
     <pre><code>function mousePressed() {
