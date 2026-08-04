@@ -34,8 +34,8 @@ pixelDensity(1);</code></pre>
     <p>RISO prints at 150 DPI, so an 8.5&times;11in sheet is <code>1275 &times; 1650</code> pixels (inches &times; 150). See <a href="../00-export/index.html">Exporting for Print</a> for the full conversion table. <a class="gref" href="../00-glossary/index.html#pixelDensity"><code>pixelDensity(1)</code></a> keeps that math accurate on Retina/HiDPI screens, which otherwise double the canvas resolution.</p>
 
     <h3>Getting RISO colors</h3>
-    <pre><code>darkColor = new Riso("orange").channelColor;
-lightColor = new Riso("sunflower").channelColor;</code></pre>
+    <pre><code>orangeColor = new Riso("orange").channelColor;
+tealColor = new Riso("teal").channelColor;</code></pre>
     <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a Riso ink layer — here it's only used to read its <a class="gref" href="../00-glossary/index.html#channelColor"><code>.channelColor</code></a>, the RGB preview of that ink, so it can be passed to a normal <a class="gref" href="../00-glossary/index.html#fill"><code>fill()</code></a> call. This is the same trick used in <a href="../02-curated-palette/index.html">Curated Palette</a> — grab the color once, reuse it as a plain value.</p>
 
     <h3>Building the grid</h3>

@@ -4,7 +4,7 @@
 
 let cols, rows; // number of columns and rows
 const circleSize = 80;
-let darkColor, lightColor; // RGB colors pulled from two RISO inks
+let orangeColor, tealColor; // RGB colors pulled from two RISO inks
 
 function setup() {
   createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
@@ -13,8 +13,8 @@ function setup() {
   noStroke();
 
   // Create temporary Riso layers just to read their RGB preview color
-  darkColor = new Riso("orange").channelColor;
-  lightColor = new Riso("sunflower").channelColor;
+  orangeColor = new Riso("orange").channelColor;
+  tealColor = new Riso("teal").channelColor;
 
   generatePattern(); // initializes cols and rows with random values and draws the pattern
 }
@@ -47,9 +47,9 @@ function draw() {
       if ((i + j) % 2 === 0) {
         const rotation = floor(random(4)) * 90;
         // random rotation in increments of 90 degrees
-        const isDarker = random() < 0.5;
-        // 50% chance of being the darker RISO ink
-        const fillColor = isDarker ? darkColor : lightColor;
+        const isOrange = random() < 0.5;
+        // 50% chance of being orange vs. teal
+        const fillColor = isOrange ? orangeColor : tealColor;
 
         push();
         translate(x, y);
