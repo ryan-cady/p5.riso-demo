@@ -45,7 +45,12 @@ h1{
 }
 h1 .arrow{color:var(--riso-pink);}
 .lede{
-  margin-top:1.1rem;max-width:56ch;font-size:1.05rem;color:#3a352c;
+  margin-top:1.1rem;max-width:60ch;font-size:.95rem;color:#3a352c;
+}
+.lede a{color:var(--riso-blue);}
+.lede code{
+  font-family:'Space Mono',monospace;font-size:.82rem;
+  background:var(--riso-paper-dark);padding:.15em .4em;border-radius:3px;
 }
 .meta{
   margin-top:1.4rem;display:flex;flex-wrap:wrap;gap:.5rem;
@@ -142,6 +147,7 @@ footer a{color:var(--riso-blue);}
 
 <header>
   <h1>p5.riso Workshop for Creative Coding Detroit</h1>
+  <p class="lede">Using the <a href="https://editor.p5js.org" target="_blank">p5.js web editor</a>? It doesn't load p5.riso by default. Open the file sidebar, add a new file named <code>p5.riso.js</code>, and paste in the <a href="https://raw.githubusercontent.com/antiboredom/p5.riso/master/lib/p5.riso.js" target="_blank">library source</a>. Then in <code>index.html</code>, add <code>&lt;script src="p5.riso.js"&gt;&lt;/script&gt;</code> right after the p5.js script tag. Full walkthrough: <a href="00-riso-setup/index.html">Setting Up p5.riso</a>.</p>
 </header>
 
 <!-- SEGMENT 1 -->
@@ -210,20 +216,20 @@ footer a{color:var(--riso-blue);}
     <span class="seg-num">04</span>
     <span class="seg-title">p5.riso &amp; exporting for print</span>
   </div>
+  <a class="row" href="00-riso-setup/index.html">
+    <div class="row-top"><span class="slug">riso-setup</span><span class="row-title">Adding p5.riso to a page</span></div>
+  </a>
   <a class="row" href="00-template/index.html">
-    <div class="row-top"><span class="slug">template</span><span class="row-title">Starter file</span><span class="tag start">Start here</span></div>
+    <div class="row-top"><span class="slug">template</span><span class="row-title">Starter file</span></div>
   </a>
   <a class="row" href="00-intro/index.html">
     <div class="row-top"><span class="slug">intro</span><span class="row-title">Channels &amp; compositing</span></div>
-  </a>
-  <a class="row" href="00-riso-setup/index.html">
-    <div class="row-top"><span class="slug">riso-setup</span><span class="row-title">Adding p5.riso to a page</span></div>
   </a>
   <a class="row" href="00-export/index.html">
     <div class="row-top"><span class="slug">export</span><span class="row-title">Exporting layers</span></div>
   </a>
   <a class="row" href="17-pattern-generator/index.html">
-    <div class="row-top"><span class="slug">pattern-generator</span><span class="row-title">Worked demo — grid of arcs</span><span class="tag demo">Code-only</span></div>
+    <div class="row-top"><span class="slug">pattern-generator</span><span class="row-title">Randomized grid pattern with RISO colors</span></div>
   </a>
 </section>
 
