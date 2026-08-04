@@ -92,7 +92,7 @@ layer.pop();</code></pre>
     <p>A plain, global <code>push()</code> / <code>translate()</code> / <code>rotate()</code> wouldn't affect a Riso layer — a layer keeps its own drawing state, separate from the canvas. So the transforms are called <em>on the layer itself</em>: <a class="gref" href="../00-glossary/index.html#layer-push-pop"><code>layer.push() / layer.pop()</code></a> isolate <a class="gref" href="../00-glossary/index.html#layer-transform"><code>layer.translate() / layer.rotate()</code></a> to just this shape, the same way <a href="../00-transforms/index.html">Transforms</a> covers it. After moving the layer's local origin to <code>(x, y)</code> and rotating it, <code>drawShape()</code> just draws at <code>(0, 0)</code> — same as any other rotated shape.</p>
 
     <h3>Two shapes, two sizes</h3>
-    <pre><code>let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square"
+    <pre><code>let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square", "circle"
 let shape2Type = "triangle", shape2Size = 60;
 
 function drawShape(layer, type, size) {
@@ -100,11 +100,14 @@ function drawShape(layer, type, size) {
     layer.triangle(-size / 2, size / 2, size / 2, size / 2, 0, -size / 2);
   } else if (type === "square") {
     layer.rect(-size / 2, -size / 2, size, size);
+  } else if (type === "circle") {
+    layer.circle(0, 0, size);
   } else {
     layer.arc(0, 0, size, size, PI, 0, CHORD); // quarter-circle wedge
   }
 }</code></pre>
     <p>Every shape gets drawn centered on the layer's local origin, after it's already been moved and rotated — so adding a new shape is just adding another <code>else if</code> branch that draws something centered on <code>(0, 0)</code> at roughly <code>size</code> across. <code>drawShape()</code> takes <code>type</code> and <code>size</code> as arguments instead of reading a single global, which is what makes two independent shapes possible — <code>shape1Type</code>/<code>shape1Size</code> and <code>shape2Type</code>/<code>shape2Size</code> can each be changed on their own, at the top of the sketch, without touching the drawing logic.</p>
+    <p>Note that <code>"arc"</code> and <code>"circle"</code> are two different options — <code>"arc"</code> is the quarter-circle wedge the original sketch used (a half-circle sliced by <code>CHORD</code>), while <code>"circle"</code> draws the whole thing with <a class="gref" href="../00-glossary/index.html#circle"><code>layer.circle()</code></a>.</p>
 
     <h3>Regenerating on click</h3>
     <pre><code>function mousePressed() {

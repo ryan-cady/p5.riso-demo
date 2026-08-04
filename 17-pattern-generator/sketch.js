@@ -3,7 +3,7 @@
 // Click the canvas for a new random layout. Press "e" to export each layer as a PNG.
 
 let cols, rows; // number of columns and rows
-let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square"
+let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square", "circle"
 let shape2Type = "triangle", shape2Size = 60;
 let layerColor1, layerColor2; // two RISO ink layers — swap the color names below to try a different combo
 
@@ -82,6 +82,8 @@ function drawShape(layer, type, size) {
     layer.triangle(-size / 2, size / 2, size / 2, size / 2, 0, -size / 2);
   } else if (type === "square") {
     layer.rect(-size / 2, -size / 2, size, size);
+  } else if (type === "circle") {
+    layer.circle(0, 0, size);
   } else {
     // "arc" — a quarter-circle wedge, same shape the original sketch used
     layer.arc(0, 0, size, size, PI, 0, CHORD);
