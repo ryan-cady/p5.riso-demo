@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>17 — Pattern Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.riso/lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+
+      <h1>Pattern Generator</h1>
+    </div>
+  </header>
+  <p class="desc">A grid of rotated arcs in two RISO inks, sized to a full 8.5&times;11 sheet. Click the canvas for a new layout.</p>
+  <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets a quarter-circle arc, rotated to a random multiple of 90&deg; and filled with one of two RISO inks. Click anywhere on the canvas to reroll the whole pattern.</p>
+
+    <h3>Sizing the canvas to paper</h3>
+    <pre><code>createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
+pixelDensity(1);</code></pre>
+    <p>RISO prints at 150 DPI, so an 8.5&times;11in sheet is <code>1275 &times; 1650</code> pixels (inches &times; 150). See <a href="../00-export/index.html">Exporting for Print</a> for the full conversion table. <a class="gref" href="../00-glossary/index.html#pixelDensity"><code>pixelDensity(1)</code></a> keeps that math accurate on Retina/HiDPI screens, which otherwise double the canvas resolution.</p>
+
+    <h3>Getting RISO colors</h3>
+    <pre><code>darkColor = new Riso("orange").channelColor;
+lightColor = new Riso("sunflower").channelColor;</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates a Riso ink layer — here it's only used to read its <a class="gref" href="../00-glossary/index.html#channelColor"><code>.channelColor</code></a>, the RGB preview of that ink, so it can be passed to a normal <a class="gref" href="../00-glossary/index.html#fill"><code>fill()</code></a> call. This is the same trick used in <a href="../02-curated-palette/index.html">Curated Palette</a> — grab the color once, reuse it as a plain value.</p>
+
+    <h3>Building the grid</h3>
+    <pre><code>cols = int(random(6, 13));
+rows = int(random(6, 13));
+
+const spacingX = width / cols;
+const spacingY = height / rows;
+
+for (let i = 0; i &lt; cols; i++) {
+  for (let j = 0; j &lt; rows; j++) {
+    const x = i * spacingX + spacingX / 2;
+    const y = j * spacingY + spacingY / 2;
+    // ...
+  }
+}</code></pre>
+    <p><code>int()</code> rounds down to a whole number — see <a class="gref" href="../00-glossary/index.html#math-floor"><code>floor()</code></a>, which it's equivalent to. Column and row counts are randomized between 6 and 12 each time, and <code>spacingX</code> / <code>spacingY</code> divide the canvas evenly so the grid always fits, no matter how many cells it has. This is the same pattern covered in <a href="../00-loops/index.html">Loops &amp; Grids</a>.</p>
+
+    <h3>Skipping every other cell</h3>
+    <pre><code>if ((i + j) % 2 === 0) {
+  // draw an arc here
+}</code></pre>
+    <p><code>%</code> is the <strong>modulo</strong> operator — it returns the remainder after division. When a cell's column and row indices add up to an even number, <code>(i + j) % 2</code> is <code>0</code>, so the condition is true. That leaves every other cell empty, like a checkerboard.</p>
+
+    <h3>Rotating each arc</h3>
+    <pre><code>push();
+  translate(x, y);
+  rotate(radians(rotation));
+  fill(fillColor);
+  arc(0, 0, circleSize, circleSize, PI, 0, CHORD);
+pop();</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#push-pop"><code>push()</code> / <code>pop()</code></a> isolate the <a class="gref" href="../00-glossary/index.html#translate"><code>translate()</code></a> and <a class="gref" href="../00-glossary/index.html#rotate"><code>rotate()</code></a> for each cell, so rotating one arc doesn't affect the next. <code>arc(0, 0, ...)</code> is drawn at the local origin — which, thanks to <code>translate()</code>, lands exactly on <code>(x, y)</code>. <code>PI</code> to <code>0</code> sweeps a half-circle, and <code>CHORD</code> closes it with a straight line instead of through the center, producing the quarter-circle wedge look. More on this in <a href="../00-transforms/index.html">Transforms</a>.</p>
+
+    <h3>Regenerating on click</h3>
+    <pre><code>function mousePressed() {
+  generatePattern();
+}</code></pre>
+    <p>The sketch uses <a class="gref" href="../00-glossary/index.html#noLoop"><code>noLoop()</code></a>, so <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> only runs once on its own. <a class="gref" href="../00-glossary/index.html#mousePressed"><code>mousePressed()</code></a> picks new random column/row counts, then calls <a class="gref" href="../00-glossary/index.html#redraw"><code>redraw()</code></a> to run <code>draw()</code> exactly one more time with the new values.</p>
+
+  </div>
+</body>
+</html>
