@@ -1,9 +1,10 @@
 // Demo 17: Pattern Generator
-// A grid of rotated arcs, drawn onto two RISO ink layers.
+// A grid of rotated shapes, drawn onto two RISO ink layers.
 // Click the canvas for a new random layout. Press "e" to export each layer as a PNG.
 
 let cols, rows; // number of columns and rows
-const circleSize = 80;
+const shapeSize = 80;
+let shapeType = "arc"; // try: "arc", "triangle", "square"
 let layerColor1, layerColor2; // two RISO ink layers — swap the color names below to try a different combo
 
 function setup() {
@@ -32,13 +33,13 @@ function draw() {
   background(255);
   clearRiso(); // wipe both layers before redrawing
 
-  //calculates spacing between the arcs by dividing the canvas width by the number of columns and rows
+  //calculates spacing between the shapes by dividing the canvas width by the number of columns and rows
   const spacingX = width / cols;
   const spacingY = height / rows;
 
-  //nested loop that iterates over each column (i) and row (j) to draw the arcs.
+  //nested loop that iterates over each column (i) and row (j) to draw the shapes.
   for (let i = 0; i < cols; i++) {
-    //calculates the coordinates for the center of the current arc based on the column/row index (i/j) and spacing.
+    //calculates the coordinates for the center of the current shape based on the column/row index (i/j) and spacing.
     for (let j = 0; j < rows; j++) {
       const x = i * spacingX + spacingX / 2;
       const y = j * spacingY + spacingY / 2;
@@ -54,15 +55,31 @@ function draw() {
         layer.noStroke();
         layer.fill(255); // full ink density
 
-        // Riso layers don't inherit the canvas's translate()/rotate() —
-        // so instead of transforming, shift both arc angles by the same
-        // amount. That "rotates" the arc without moving its center.
-        layer.arc(x, y, circleSize, circleSize, PI + rotation, rotation, CHORD);
+        // Transform the layer itself, then draw the shape at its local
+        // origin — layer.push()/translate()/rotate() are scoped to this
+        // layer, so they don't touch the canvas or the other layer.
+        layer.push();
+        layer.translate(x, y);
+        layer.rotate(rotation);
+        drawShape(layer, shapeSize);
+        layer.pop();
       }
     }
   }
 
   drawRiso();
+}
+
+// draws the current shapeType centered on the layer's local origin
+function drawShape(layer, size) {
+  if (shapeType === "triangle") {
+    layer.triangle(-size / 2, size / 2, size / 2, size / 2, 0, -size / 2);
+  } else if (shapeType === "square") {
+    layer.rect(-size / 2, -size / 2, size, size);
+  } else {
+    // "arc" — a quarter-circle wedge, same shape the original sketch used
+    layer.arc(0, 0, size, size, PI, 0, CHORD);
+  }
 }
 
 //generates new pattern when mouse is pressed

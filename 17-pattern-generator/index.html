@@ -20,13 +20,13 @@
       <h1>Pattern Generator</h1>
     </div>
   </header>
-  <p class="desc">A grid of rotated arcs across two RISO ink layers, sized to a full 8.5&times;11 sheet. Click the canvas for a new layout, press "e" to export each layer as a PNG. Open it in the p5 editor to remix it yourself.</p>
+  <p class="desc">A grid of rotated shapes across two RISO ink layers, sized to a full 8.5&times;11 sheet. Click the canvas for a new layout, press "e" to export each layer as a PNG. Open it in the p5 editor to remix it yourself.</p>
   <script src="sketch.js"></script>
   <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="https://editor.p5js.org/ryancady/sketches/WLwI4WnOK" target="_blank">Open in p5 Editor</a><a href="sketch.js" download>Download Sketch</a></div>
   <div class="explanation">
 
     <h2>How it works</h2>
-    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets a quarter-circle arc, rotated to a random multiple of 90&deg; and drawn onto one of two RISO ink layers. Click anywhere on the canvas to reroll the whole pattern, or press <strong>E</strong> to export each layer as its own PNG.</p>
+    <p>A nested loop walks a grid of cells. Every other cell (checkerboard-style) gets a shape — an arc, triangle, or square, set by <code>shapeType</code> — rotated to a random multiple of 90&deg; and drawn onto one of two RISO ink layers. Click anywhere on the canvas to reroll the whole pattern, or press <strong>E</strong> to export each layer as its own PNG.</p>
 
     <h3>Sizing the canvas to paper</h3>
     <pre><code>createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
@@ -65,18 +65,37 @@ for (let i = 0; i &lt; cols; i++) {
 
     <h3>Skipping every other cell</h3>
     <pre><code>if ((i + j) % 2 === 0) {
-  // draw an arc here
+  // draw a shape here
 }</code></pre>
     <p><code>%</code> is the <strong>modulo</strong> operator — it returns the remainder after division. When a cell's column and row indices add up to an even number, <code>(i + j) % 2</code> is <code>0</code>, so the condition is true. That leaves every other cell empty, like a checkerboard.</p>
 
-    <h3>Rotating each arc onto a layer</h3>
+    <h3>Rotating each shape onto a layer</h3>
     <pre><code>const rotation = radians(floor(random(4)) * 90);
 const layer = isLayer1 ? layerColor1 : layerColor2;
 
 layer.noStroke();
 layer.fill(255); // full ink density
-layer.arc(x, y, circleSize, circleSize, PI + rotation, rotation, CHORD);</code></pre>
-    <p>Each cell picks one of the two layers at random and draws directly onto it. Riso layers don't pick up the canvas's <a href="../00-transforms/index.html"><code>translate()</code> / <code>rotate()</code></a> — a layer's shapes always draw in the canvas's untransformed coordinates. So instead of rotating the coordinate system, both arc angles get shifted by the same <code>rotation</code> amount. <code>PI</code> to <code>0</code> sweeps a half-circle; adding <code>rotation</code> to both ends spins that same sweep around the arc's center at <code>(x, y)</code> without moving it. <code>CHORD</code> closes the arc with a straight line instead of through the center, producing the quarter-circle wedge look.</p>
+
+layer.push();
+layer.translate(x, y);
+layer.rotate(rotation);
+drawShape(layer, shapeSize);
+layer.pop();</code></pre>
+    <p>Each cell picks one of the two layers at random and draws directly onto it. A plain, global <code>push()</code> / <code>translate()</code> / <code>rotate()</code> wouldn't affect a Riso layer — a layer keeps its own drawing state, separate from the canvas. So the transforms are called <em>on the layer itself</em>: <a class="gref" href="../00-glossary/index.html#layer-push-pop"><code>layer.push() / layer.pop()</code></a> isolate <a class="gref" href="../00-glossary/index.html#layer-transform"><code>layer.translate() / layer.rotate()</code></a> to just this shape, the same way <a href="../00-transforms/index.html">Transforms</a> covers it. After moving the layer's local origin to <code>(x, y)</code> and rotating it, <code>drawShape()</code> just draws at <code>(0, 0)</code> — same as any other rotated shape.</p>
+
+    <h3>Swapping the shape</h3>
+    <pre><code>let shapeType = "arc"; // try: "arc", "triangle", "square"
+
+function drawShape(layer, size) {
+  if (shapeType === "triangle") {
+    layer.triangle(-size / 2, size / 2, size / 2, size / 2, 0, -size / 2);
+  } else if (shapeType === "square") {
+    layer.rect(-size / 2, -size / 2, size, size);
+  } else {
+    layer.arc(0, 0, size, size, PI, 0, CHORD); // quarter-circle wedge
+  }
+}</code></pre>
+    <p>Every shape gets drawn centered on the layer's local origin, after it's already been moved and rotated — so adding a new shape is just adding another <code>else if</code> branch that draws something centered on <code>(0, 0)</code> at roughly <code>size</code> across. Change <code>shapeType</code> at the top of the sketch to switch the whole pattern to triangles or squares without touching anything else.</p>
 
     <h3>Regenerating on click</h3>
     <pre><code>function mousePressed() {
