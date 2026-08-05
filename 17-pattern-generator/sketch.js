@@ -3,18 +3,19 @@
 // Click the canvas for a new random layout. Press "e" to export each layer as a PNG.
 
 let cols, rows; // number of columns and rows
-let shape1Type = "arc", shape1Size = 80; // try: "arc", "triangle", "square", "circle"
-let shape2Type = "triangle", shape2Size = 60;
+let shape1Type = "square", shape1Size = 100; // try: "arc", "triangle", "square", "circle"
+let shape2Type = "arc", shape2Size = 100;
 let layerColor1, layerColor2; // two RISO ink layers — swap the color names below to try a different combo
 
 function setup() {
-  createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
+  // createCanvas(1275, 1650); // 8.5 x 11in sheet at 150 DPI
+  createCanvas(2550, 3300) // 11 x 17 in sheet at 150 DPI
   pixelDensity(1);
   noLoop(); // stops looping of the draw function
   noStroke();
 
-  layerColor1 = new Riso("orange");
-  layerColor2 = new Riso("sunflower");
+  layerColor1 = new Riso("yellow");
+  layerColor2 = new Riso("fluorescentpink");
 
   generatePattern(); // initializes cols and rows with random values and draws the pattern
 }
@@ -24,8 +25,8 @@ function setup() {
 // the redraw() function is called within generatePattern(). When redraw() is called, it triggers the draw() function to execute once, effectively redrawing the pattern with the updated cols and rows. used with noLoop().
 
 function generatePattern() {
-  cols = int(random(6, 13));
-  rows = int(random(6, 13));
+  cols = int(random(12, 50));
+  rows = int(random(12, 26));
   redraw();
 }
 
