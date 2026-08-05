@@ -92,14 +92,6 @@ h1 .arrow{color:var(--riso-pink);}
   color:var(--accent,var(--riso-blue));
 }
 .row-title{font-weight:500;font-size:.95rem;}
-.row-split{display:flex;align-items:center;justify-content:space-between;gap:.75rem;}
-.row-main{flex:1;min-width:0;text-decoration:none;color:inherit;}
-.row-extra{
-  font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;
-  color:#fff;background:var(--accent,var(--riso-blue));text-decoration:none;
-  padding:.35rem .7rem;border-radius:3px;flex-shrink:0;white-space:nowrap;
-}
-.row-extra:hover{opacity:.82;}
 .tag{
   font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.08em;
   text-transform:uppercase;color:#fff;background:var(--riso-pink);
@@ -156,7 +148,7 @@ footer a{color:var(--riso-blue);}
 <div class="wrap">
 
 <header>
-  <div class="eyebrow"><a href="https://processing.org/download" target="_blank">&darr; Download Processing</a></div>
+  <div class="eyebrow"><a href="https://processing.org/download" target="_blank">&darr; Download Processing</a> &nbsp;·&nbsp; <a href="ccdet-p5RisoDemo.zip" download>&darr; Download Starter .zip</a></div>
   <h1>p5.riso Workshop for Creative Coding Detroit</h1>
   <p class="lede">Using the <a href="https://editor.p5js.org" target="_blank">p5.js web editor</a>? It doesn't load p5.riso by default. Open the file sidebar, add a new file named <code>p5.riso.js</code>, and paste in the <a href="https://raw.githubusercontent.com/antiboredom/p5.riso/master/lib/p5.riso.js" target="_blank">library source</a>. Then in <code>index.html</code>, add <code>&lt;script src="p5.riso.js"&gt;&lt;/script&gt;</code> right after the p5.js script tag. Full walkthrough: <a href="00-riso-setup/index.html">Setting Up p5.riso</a>.</p>
 </header>
@@ -227,12 +219,9 @@ footer a{color:var(--riso-blue);}
     <span class="seg-num">04</span>
     <span class="seg-title">p5.riso &amp; exporting for print</span>
   </div>
-  <div class="row row-split">
-    <a class="row-main" href="00-riso-setup/index.html">
-      <div class="row-top"><span class="slug">riso-setup</span><span class="row-title">Adding p5.riso to a page</span></div>
-    </a>
-    <a class="row-extra" href="ccdet-p5RisoDemo.zip" download>Download .zip</a>
-  </div>
+  <a class="row" href="00-riso-setup/index.html">
+    <div class="row-top"><span class="slug">riso-setup</span><span class="row-title">Adding p5.riso to a page</span></div>
+  </a>
   <!-- <a class="row" href="00-template/index.html">
     <div class="row-top"><span class="slug">template</span><span class="row-title">Starter file</span></div>
   </a> -->
