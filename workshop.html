@@ -92,6 +92,14 @@ h1 .arrow{color:var(--riso-pink);}
   color:var(--accent,var(--riso-blue));
 }
 .row-title{font-weight:500;font-size:.95rem;}
+.row-split{display:flex;align-items:center;justify-content:space-between;gap:.75rem;}
+.row-main{flex:1;min-width:0;text-decoration:none;color:inherit;}
+.row-extra{
+  font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700;
+  color:#fff;background:var(--accent,var(--riso-blue));text-decoration:none;
+  padding:.35rem .7rem;border-radius:3px;flex-shrink:0;white-space:nowrap;
+}
+.row-extra:hover{opacity:.82;}
 .tag{
   font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.08em;
   text-transform:uppercase;color:#fff;background:var(--riso-pink);
@@ -219,9 +227,12 @@ footer a{color:var(--riso-blue);}
     <span class="seg-num">04</span>
     <span class="seg-title">p5.riso &amp; exporting for print</span>
   </div>
-  <a class="row" href="00-riso-setup/index.html">
-    <div class="row-top"><span class="slug">riso-setup</span><span class="row-title">Adding p5.riso to a page</span></div>
-  </a>
+  <div class="row row-split">
+    <a class="row-main" href="00-riso-setup/index.html">
+      <div class="row-top"><span class="slug">riso-setup</span><span class="row-title">Adding p5.riso to a page</span></div>
+    </a>
+    <a class="row-extra" href="ccdet-p5RisoDemo.zip" download>Download .zip</a>
+  </div>
   <!-- <a class="row" href="00-template/index.html">
     <div class="row-top"><span class="slug">template</span><span class="row-title">Starter file</span></div>
   </a> -->
