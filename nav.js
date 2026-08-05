@@ -43,6 +43,7 @@
         { path: '00-riso-setup',        title: 'Setting Up p5.riso' },
         { path: '01-color-array',       title: 'RISO Color Array' },
         { path: '02-curated-palette',   title: 'Curated Palette' },
+        { path: '18-circle-grid',       title: 'Circle Grid' },
         { path: '17-pattern-generator', title: 'Pattern Generator' },
         { path: '03-load-image',        title: 'Load Image' },
         { path: '04-basic-dither',      title: 'Basic Dither' },

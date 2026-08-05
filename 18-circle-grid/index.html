@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>18 — Circle Grid</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/antiboredom/p5.riso/lib/p5.riso.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+</head>
+<body class="demo-page">
+  <script src="../nav.js"></script>
+  <header>
+    <a href="../index.html" class="back">&larr; All demos</a>
+    <div class="demo-header">
+
+      <h1>Circle Grid</h1>
+    </div>
+  </header>
+  <p class="desc">A beginner-level sketch combining three basics: a nested loop, one RISO ink color, and exporting. Press "e" to export the layer as a PNG.</p>
+  <script src="sketch.js"></script>
+  <div class="data-download"><a href="sketch.js" target="_blank">View Code</a><a href="sketch.js" download>Download Sketch</a></div>
+  <div class="explanation">
+
+    <h2>How it works</h2>
+    <p>This sketch is meant to be read top to bottom — every line is commented to explain what it does. It draws a 6&times;6 grid of pink circles using a nested <code>for</code> loop, all on a single RISO ink layer, and lets you export that layer with a keypress.</p>
+
+    <h3>Setting up</h3>
+    <pre><code>let pink; // will hold our one RISO ink layer
+
+function setup() {
+  createCanvas(600, 600);
+  pixelDensity(1);
+  noLoop();
+
+  pink = new Riso("fluorescentpink");
+}</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#createCanvas"><code>createCanvas()</code></a> makes the drawing surface. <a class="gref" href="../00-glossary/index.html#pixelDensity"><code>pixelDensity(1)</code></a> keeps one pixel in the sketch equal to one pixel in the exported file. <a class="gref" href="../00-glossary/index.html#noLoop"><code>noLoop()</code></a> tells p5 to run <a class="gref" href="../00-glossary/index.html#draw"><code>draw()</code></a> exactly once instead of 60 times a second — this sketch doesn't animate, so there's nothing to gain from looping. <a class="gref" href="../00-glossary/index.html#new-Riso"><code>new Riso()</code></a> creates one ink layer, stored in the variable <code>pink</code>.</p>
+
+    <h3>Picking the RISO color</h3>
+    <pre><code>pink = new Riso("fluorescentpink");</code></pre>
+    <p>The string passed to <code>new Riso()</code> is the ink name — this sketch uses <code>"fluorescentpink"</code>, one of 81 available colors. See the full <a class="gref" href="../00-glossary/index.html#RISOCOLORS"><code>RISOCOLORS</code></a> list, or try swapping in any other name, like <code>"blue"</code> or <code>"yellow"</code>.</p>
+
+    <h3>The nested loop</h3>
+    <pre><code>let cols = 6;
+let rows = 6;
+let spacing = width / cols;
+
+for (let row = 0; row &lt; rows; row++) {
+  for (let col = 0; col &lt; cols; col++) {
+    let x = col * spacing + spacing / 2;
+    let y = row * spacing + spacing / 2;
+
+    pink.noStroke();
+    pink.fill(255);
+    pink.circle(x, y, spacing * 0.6);
+  }
+}</code></pre>
+    <p>A single <a class="gref" href="../00-glossary/index.html#for-loop"><code>for</code> loop</a> can only count in one direction — to cover a grid, which has two directions, one loop goes inside another. The <strong>outer</strong> loop counts <code>row</code> from 0 to 5; for every single row, the <strong>inner</strong> loop counts <code>col</code> all the way from 0 to 5 before the outer loop moves on. That's 6 rows &times; 6 columns = 36 circles total.</p>
+    <p><code>spacing</code> divides the canvas width by the column count, so <code>col * spacing</code> lands each circle in its own cell, and <code>+ spacing / 2</code> centers it there instead of drawing from the corner.</p>
+
+    <h3>Drawing on the layer</h3>
+    <pre><code>pink.noStroke();
+pink.fill(255);
+pink.circle(x, y, spacing * 0.6);</code></pre>
+    <p>Shapes drawn with <code>pink.</code> in front go onto the <code>pink</code> ink layer instead of the canvas directly — see <a class="gref" href="../00-glossary/index.html#layer-shapes"><code>layer.circle() / .rect() / …</code></a>. <a class="gref" href="../00-glossary/index.html#layer-fill"><code>pink.fill(255)</code></a> sets full ink density; lower numbers print lighter, halftoned ink.</p>
+
+    <h3>Compositing and exporting</h3>
+    <pre><code>clearRiso(); // top of draw()
+// ...draw the grid...
+drawRiso();  // end of draw()
+
+function keyPressed() {
+  if (key === "e") {
+    exportRiso();
+  }
+}</code></pre>
+    <p><a class="gref" href="../00-glossary/index.html#clearRiso"><code>clearRiso()</code></a> wipes the layer clean before drawing — without it, redraws would stack on top of each other. <a class="gref" href="../00-glossary/index.html#drawRiso"><code>drawRiso()</code></a> composites the layer onto the canvas so it's actually visible; nothing appears without this call. <a class="gref" href="../00-glossary/index.html#keyPressed"><code>keyPressed()</code></a> runs once every time a key goes down — checking <code>key === "e"</code> means only the E key triggers <a class="gref" href="../00-glossary/index.html#exportRiso"><code>exportRiso()</code></a>, which saves the layer as a PNG.</p>
+
+    <h3>Where to go next</h3>
+    <p>This sketch is the minimum version of a pattern: one loop, one color, one export shortcut. <a href="../17-pattern-generator/index.html">Pattern Generator</a> builds on exactly this structure with two ink layers, two shape types, and rotation.</p>
+
+  </div>
+</body>
+</html>
